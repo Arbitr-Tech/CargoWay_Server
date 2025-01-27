@@ -31,6 +31,6 @@ public class IndividualDto {
     @Pattern(regexp = "\\d{3}-\\d{3}", message = "Код подразделения должен быть в формате XXX-XXX")
     private String departmentCode;
 
-    @Schema(description = "Фотографии пасспорта")
-    private List<Photo> photos;
+//    @Schema(description = "Фотографии пасспорта")
+//    private List<Photo> photos;
 }

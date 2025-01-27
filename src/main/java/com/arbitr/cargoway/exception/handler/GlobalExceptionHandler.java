@@ -1,5 +1,9 @@
 package com.arbitr.cargoway.exception.handler;
 
+import com.arbitr.cargoway.dto.rs.ErrorRs;
+import com.arbitr.cargoway.exception.NotFoundException;
+import com.arbitr.cargoway.exception.FileRemoveException;
+import com.arbitr.cargoway.exception.InternalServerError;
 import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -7,10 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ws.academy.auction.api.dto.rs.ErrorRs;
-import ws.academy.auction.core.exception.FileRemoveException;
-import ws.academy.auction.core.exception.InternalServerError;
-import ws.academy.auction.core.exception.NotFoundException;
 
 import java.io.FileNotFoundException;
 

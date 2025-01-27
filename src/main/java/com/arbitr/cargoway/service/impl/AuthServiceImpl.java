@@ -1,10 +1,11 @@
 package com.arbitr.cargoway.service.impl;
 
-import com.arbitr.cargoway.dto.CompanyDto;
-import com.arbitr.cargoway.dto.IndividualDto;
+import com.arbitr.cargoway.config.JwtProvider;
 import com.arbitr.cargoway.dto.rq.SignUpRequest;
 import com.arbitr.cargoway.dto.rs.JwtAuthenticationResponse;
+import com.arbitr.cargoway.entity.Company;
 import com.arbitr.cargoway.entity.Individual;
+import com.arbitr.cargoway.entity.Profile;
 import com.arbitr.cargoway.entity.User;
 import com.arbitr.cargoway.exception.BadRequestException;
 import com.arbitr.cargoway.mapper.UserMapper;
@@ -24,43 +25,65 @@ public class AuthServiceImpl implements AuthService {
     private final IndividualRepository individualRepository;
 
     private final PasswordEncoder passwordEncoder;
+    private final JwtProvider jwtProvider;
     private final UserMapper userMapper;
 
     @Override
     public JwtAuthenticationResponse register(String profileType, SignUpRequest signUpRequest) {
         if (profileType.equals("individual")) {
-            return this.registerIndividual(signUpRequest.getIndividual());
+            return this.registerIndividual(signUpRequest);
         }
 
         if (profileType.equals("company")) {
-            return this.registerCompany(signUpRequest.getCompany());
+            return this.registerCompany(signUpRequest);
         }
 
         throw new BadRequestException("Указан неверный тип профиля!");
     }
 
 
-    private JwtAuthenticationResponse registerCompany(CompanyDto companyDto) {
+    private JwtAuthenticationResponse registerCompany(SignUpRequest signUpRequest) {
         User newUser = userMapper.buildUserFrom(signUpRequest);
         newUser.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
 
-        profile.setUser(user);
-        profile.setCompany(company);
+        Company newCompany = userMapper.buildCompanyFrom(signUpRequest.getCompany());
 
-        user.setProfile(profile);
-        company.setProfile(profile);
+        Profile newProfile = new Profile();
 
-        userRepository.save(user);
-        companyRepository.save(company);
-        profileRepository.save(profile);
+        newProfile.setUser(newUser);
+        newProfile.setCompany(newCompany);
+
+        newUser.setProfile(newProfile);
+        newCompany.setProfile(newProfile);
+
+        userRepository.save(newUser);
+        profileRepository.save(newProfile);
+        companyRepository.save(newCompany);
+
+        String token = jwtProvider.generateToken(newUser);
+        return new JwtAuthenticationResponse(token);
     }
 
-
-    private JwtAuthenticationResponse registerIndividual(IndividualDto individualDto) {
+    private JwtAuthenticationResponse registerIndividual(SignUpRequest signUpRequest) {
         User newUser = userMapper.buildUserFrom(signUpRequest);
         newUser.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
 
-        Individual individual = userMapper.buildIndividualFrom(signUpRequest.getIndividual());
+        Individual newIndividual = userMapper.buildIndividualFrom(signUpRequest.getIndividual());
+
+        Profile newProfile = new Profile();
+
+        newProfile.setUser(newUser);
+        newProfile.setIndividual(newIndividual);
+
+        newUser.setProfile(newProfile);
+        newIndividual.setProfile(newProfile);
+
+        userRepository.save(newUser);
+        profileRepository.save(newProfile);
+        individualRepository.save(newIndividual);
+
+        String token = jwtProvider.generateToken(newUser);
+        return new JwtAuthenticationResponse(token);
     }
 
 }

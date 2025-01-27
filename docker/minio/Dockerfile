@@ -1,7 +1,7 @@
 FROM minio/minio:latest
 
-COPY docker/minio/init_minio.sh /usr/bin/init_minio.sh
+COPY /docker/minio/init_minio.sh /usr/bin/init_minio-1.sh
 
-RUN chmod +x /usr/bin/init_minio.sh
+RUN chmod 777 /usr/bin/init_minio-1.sh
 
-ENTRYPOINT ["/usr/bin/init_minio.sh"]
+ENTRYPOINT ["/usr/bin/init_minio-1.sh"]
