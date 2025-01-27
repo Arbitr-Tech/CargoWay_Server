@@ -7,7 +7,6 @@ import java.io.InputStream;
 /**
  * Сервис для операции над файлами в хранилище
  */
-@Service
 public interface StorageService {
     /**
      * Метод для загрузки файла в хранилище и получении его id

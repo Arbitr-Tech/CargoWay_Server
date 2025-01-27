@@ -7,9 +7,11 @@ import com.arbitr.cargoway.repository.ImageRepository;
 import com.arbitr.cargoway.service.ImageService;
 import com.arbitr.cargoway.service.StorageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
 
+@Service
 @RequiredArgsConstructor
 public class ImageServiceImpl implements ImageService {
     private final StorageService storageService;
