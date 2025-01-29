@@ -1,5 +1,6 @@
 package com.arbitr.cargoway.entity;
 
+import com.arbitr.cargoway.entity.security.User;
 import jakarta.persistence.*;
 import lombok.Data;
 

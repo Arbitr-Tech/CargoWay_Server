@@ -20,6 +20,9 @@ minio:
   secret-key: ${MINIO_ROOT_PASSWORD}
   bucket-name: ${MINIO_BUCKET_NAME}
 
-jwt:
-  secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
-  expiration-ms: 100000000000
+security:
+  jwt:
+    secret-key: "b2xvZnNmZGFzZmFkc2ZhZGZhc2RmYXNkZmFzZA=="
+    expiration: 86400000
+    refresh-token:
+      expiration: 604800000
