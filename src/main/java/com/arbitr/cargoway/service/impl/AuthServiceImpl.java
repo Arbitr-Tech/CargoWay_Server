@@ -75,8 +75,12 @@ public class AuthServiceImpl implements AuthService {
         profileRepository.save(newProfile);
         companyRepository.save(newCompany);
 
-        String token = jwtService.generateToken(newUser);
-        return new AuthenticationResponse(token);
+        String accessToken = jwtService.generateToken(newUser);
+        String refreshToken = jwtService.generateRefreshToken(newUser);
+
+        revokeAllUserTokens(newUser);
+        saveUserToken(newUser, accessToken);
+        return new AuthenticationResponse(accessToken, refreshToken);
     }
 
     private AuthenticationResponse registerIndividual(SignUpRequest signUpRequest) {
@@ -97,45 +101,12 @@ public class AuthServiceImpl implements AuthService {
         profileRepository.save(newProfile);
         individualRepository.save(newIndividual);
 
-        String token = jwtService.generateToken(newUser);
-        return new AuthenticationResponse(token);
-    }
+        String accessToken = jwtService.generateToken(newUser);
+        String refreshToken = jwtService.generateRefreshToken(newUser);
 
-    public AuthenticationResponse register(RegisterRequest request) {
-        var user = User.builder()
-                .firstname(request.getFirstname())
-                .lastname(request.getLastname())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(request.getRole())
-                .build();
-        var savedUser = repository.save(user);
-        var jwtToken = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
-        saveUserToken(savedUser, jwtToken);
-        return AuthenticationResponse.builder()
-                .accessToken(jwtToken)
-                .refreshToken(refreshToken)
-                .build();
-    }
-
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
-        var user = repository.findByEmail(request.getEmail())
-                .orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
-        revokeAllUserTokens(user);
-        saveUserToken(user, jwtToken);
-        return AuthenticationResponse.builder()
-                .accessToken(jwtToken)
-                .refreshToken(refreshToken)
-                .build();
+        revokeAllUserTokens(newUser);
+        saveUserToken(newUser, accessToken);
+        return new AuthenticationResponse(accessToken, refreshToken);
     }
 
     private void saveUserToken(User user, String jwtToken) {

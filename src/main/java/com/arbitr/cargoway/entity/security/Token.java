@@ -23,7 +23,7 @@ public class Token {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "token_type")
-    private TokenType tokenType = TokenType.Bearer;
+    private TokenType tokenType = TokenType.BEARER;
 
     @Column(name = "revoked")
     private boolean revoked = false;

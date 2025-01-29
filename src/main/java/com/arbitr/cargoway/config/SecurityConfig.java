@@ -20,7 +20,6 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final UserDetailsService customUserDetailsService;
-    private final AuthenticationProvider authenticationProvider;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final LogoutService logoutHandler;
 
@@ -37,7 +36,7 @@ public class SecurityConfig {
                         .authenticated()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
-            .authenticationProvider(authenticationProvider)
+            .authenticationProvider(authenticationProvider(passwordEncoder()))
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .logout(logout ->
                     logout.logoutUrl("/api/v1/auth/logout")
