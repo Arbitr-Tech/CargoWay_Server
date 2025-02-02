@@ -22,7 +22,7 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public ImageRef saveImage(InputStream inputStream, Long fileSize, String fileName) {
         Image image = new Image();
-        String pathToFile = storageService.uploadFile(inputStream, fileSize, image.getGuid().toString());
+        String pathToFile = storageService.uploadFile(inputStream, fileSize, image.getId().toString());
         image.setImagePath(pathToFile);
         image.setImageName(fileName);
         imageRepository.save(image);

@@ -1,5 +1,27 @@
 ### GET request to example server
-GET https://examples.http-client.intellij.net/get
-    ?generated-in=IntelliJ IDEA
+POST http://localhost:8080/api/v1/auth/register/?profile_type=company
+Content-Type: application/json
 
-###
+{
+  "username": "userRandom123",
+  "email": "random.user@example.com",
+  "password": "SecurePass456!",
+  "company": {
+    "name": "ООО \"Рога и Копыта\"",
+    "inn": "7707083893",
+    "ogrn": "1027700132195",
+    "bic": "044525225",
+    "correspondentAccount": "43294832",
+    "registrationDate": "2022-06-15"
+  }
+}
+
+### Метод для авторизации
+POST http://localhost:8080/api/v1/auth/login/
+Content-Type: application/json
+
+{
+  "email": "random.user@example.com",
+  "password": "SecurePass456!"
+}
+

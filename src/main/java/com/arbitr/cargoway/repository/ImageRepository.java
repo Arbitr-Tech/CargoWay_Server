@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Repository
 public interface ImageRepository extends JpaRepository<Image, UUID> {
-    Image findImagesByGuid(UUID guid);
+    Image findImagesById(UUID id);
 
-    List<Image> findImagesByGuidIn(List<UUID> guids);
+    List<Image> findImagesByIdIn(List<UUID> ids);
 }

@@ -21,10 +21,9 @@ import java.util.UUID;
 @Table(name = "users_cargoway")
 public class User implements UserDetails {
     @Id
-    @Builder.Default
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    private UUID id = UUID.randomUUID();
+    private UUID id;
 
     @Column(name = "username", unique = true, nullable = false)
     private String username;
@@ -35,7 +34,7 @@ public class User implements UserDetails {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Profile profile;
 
     @Enumerated(EnumType.STRING)

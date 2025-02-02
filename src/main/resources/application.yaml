@@ -10,9 +10,8 @@ spring:
     show-sql: false
     properties:
       hibernate:
-        format_sql: true
+        format_sql: false
     database: postgresql
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 minio:
   endpoint: ${MINIO_HOST}:${MINIO_API_PORT}
@@ -20,9 +19,9 @@ minio:
   secret-key: ${MINIO_ROOT_PASSWORD}
   bucket-name: ${MINIO_BUCKET_NAME}
 
-security:
-  jwt:
-    secret-key: "b2xvZnNmZGFzZmFkc2ZhZGZhc2RmYXNkZmFzZA=="
-    expiration: 86400000
-    refresh-token:
-      expiration: 604800000
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+  access-token:
+    expiration: ${ACCESS_TOKEN_EXPIRATION}
+  refresh-token:
+    expiration: ${REFRESH_TOKEN_EXPIRATION}

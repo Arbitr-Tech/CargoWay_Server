@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @Entity
 @Builder
@@ -14,9 +16,9 @@ import lombok.NoArgsConstructor;
 @Table(name = "tokens")
 public class Token {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false, unique = true)
-    private Long id;
+    private UUID id;
 
     @Column(name = "token", nullable = false, unique = true)
     private String token;

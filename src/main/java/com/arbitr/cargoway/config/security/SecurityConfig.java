@@ -1,10 +1,12 @@
-package com.arbitr.cargoway.config;
+package com.arbitr.cargoway.config.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,7 +31,7 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(req ->
                     req
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/v1/auth/**").permitAll()
 //                        .requestMatchers("/api/v1/management/**").hasAnyRole(ADMIN.name(), MANAGER.name())
 //                        .requestMatchers(HttpMethod.GET, "/api/v1/management/**").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
                         .anyRequest()
@@ -39,7 +41,7 @@ public class SecurityConfig {
             .authenticationProvider(authenticationProvider(passwordEncoder()))
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .logout(logout ->
-                    logout.logoutUrl("/api/v1/auth/logout")
+                    logout.logoutUrl("/api/v1/auth/logout/")
                             .addLogoutHandler(logoutHandler)
                             .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
             );
@@ -48,11 +50,18 @@ public class SecurityConfig {
     }
 
     @Bean
+    public AuthenticationManager authManager(HttpSecurity http) throws Exception {
+        AuthenticationManagerBuilder authenticationManagerBuilder =
+                http.getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder.authenticationProvider(authenticationProvider(passwordEncoder()));
+        return authenticationManagerBuilder.build();
+    }
+
+    @Bean
     public AuthenticationProvider authenticationProvider(PasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(customUserDetailsService);
         authenticationProvider.setPasswordEncoder(passwordEncoder);
-
         return authenticationProvider;
     }
 

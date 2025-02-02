@@ -1,6 +1,6 @@
 package com.arbitr.cargoway.service.impl;
 
-import com.arbitr.cargoway.config.JwtService;
+import com.arbitr.cargoway.config.security.JwtService;
 import com.arbitr.cargoway.dto.rq.SignInRequest;
 import com.arbitr.cargoway.dto.rq.SignUpRequest;
 import com.arbitr.cargoway.dto.rs.AuthenticationResponse;
@@ -9,6 +9,7 @@ import com.arbitr.cargoway.entity.Individual;
 import com.arbitr.cargoway.entity.Profile;
 import com.arbitr.cargoway.entity.security.User;
 import com.arbitr.cargoway.exception.BadRequestException;
+import com.arbitr.cargoway.exception.NotFoundException;
 import com.arbitr.cargoway.mapper.UserMapper;
 import com.arbitr.cargoway.repository.*;
 import com.arbitr.cargoway.service.AuthService;
@@ -19,6 +20,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,84 +36,99 @@ public class AuthServiceImpl implements AuthService {
     private final IndividualRepository individualRepository;
     private final TokenRepository tokenRepository;
 
+    private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
 
-
     @Override
     public AuthenticationResponse register(String profileType, SignUpRequest signUpRequest) {
-        if (profileType.equals("individual")) {
-            return this.registerIndividual(signUpRequest);
-        }
-
-        if (profileType.equals("company")) {
-            return this.registerCompany(signUpRequest);
-        }
-
-        throw new BadRequestException("Указан неверный тип профиля!");
+        return switch (profileType.toLowerCase()) {
+            case "individual" -> registerIndividual(signUpRequest);
+            case "company" -> registerCompany(signUpRequest);
+            default -> throw new BadRequestException("Указан неверный тип профиля!");
+        };
     }
 
     @Override
     public AuthenticationResponse login(SignInRequest signInRequest) {
-        return null;
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        signInRequest.getEmail(),
+                        signInRequest.getPassword()
+                )
+        );
+
+        User user = userRepository.findByEmail(signInRequest.getEmail())
+                .orElseThrow(() -> new NotFoundException("Участник с почтой %s не был найден!".formatted(signInRequest.getEmail())));
+
+        String jwtToken = jwtService.generateToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
+
+        revokeAllUserTokens(user);
+        saveUserToken(user, jwtToken);
+
+        return new AuthenticationResponse(jwtToken, refreshToken);
     }
 
-
     private AuthenticationResponse registerCompany(SignUpRequest signUpRequest) {
-        User newUser = userMapper.buildUserFrom(signUpRequest);
-        newUser.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
-
+        User newUser = createUser(signUpRequest);
         Company newCompany = userMapper.buildCompanyFrom(signUpRequest.getCompany());
+        Profile newProfile = createProfile(newUser, newCompany, null);
 
-        Profile newProfile = new Profile();
+        saveEntities(newUser, newProfile, newCompany, null);
 
-        newProfile.setUser(newUser);
-        newProfile.setCompany(newCompany);
-
-        newUser.setProfile(newProfile);
-        newCompany.setProfile(newProfile);
-
-        userRepository.save(newUser);
-        profileRepository.save(newProfile);
-        companyRepository.save(newCompany);
-
-        String accessToken = jwtService.generateToken(newUser);
-        String refreshToken = jwtService.generateRefreshToken(newUser);
-
-        revokeAllUserTokens(newUser);
-        saveUserToken(newUser, accessToken);
-        return new AuthenticationResponse(accessToken, refreshToken);
+        return generateAuthResponse(newUser);
     }
 
     private AuthenticationResponse registerIndividual(SignUpRequest signUpRequest) {
-        User newUser = userMapper.buildUserFrom(signUpRequest);
-        newUser.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
-
+        User newUser = createUser(signUpRequest);
         Individual newIndividual = userMapper.buildIndividualFrom(signUpRequest.getIndividual());
+        Profile newProfile = createProfile(newUser, null, newIndividual);
 
-        Profile newProfile = new Profile();
+        saveEntities(newUser, newProfile, null, newIndividual);
 
-        newProfile.setUser(newUser);
-        newProfile.setIndividual(newIndividual);
+        return generateAuthResponse(newUser);
+    }
 
-        newUser.setProfile(newProfile);
-        newIndividual.setProfile(newProfile);
+    private User createUser(SignUpRequest signUpRequest) {
+        User user = userMapper.buildUserFrom(signUpRequest);
+        user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
+        return user;
+    }
 
-        userRepository.save(newUser);
-        profileRepository.save(newProfile);
-        individualRepository.save(newIndividual);
+    private Profile createProfile(User user, Company company, Individual individual) {
+        Profile profile = new Profile();
+        profile.setUser(user);
+        if (company != null) {
+            profile.setCompany(company);
+            company.setProfile(profile);
+        }
+        if (individual != null) {
+            profile.setIndividual(individual);
+            individual.setProfile(profile);
+        }
+        user.setProfile(profile);
+        return profile;
+    }
 
-        String accessToken = jwtService.generateToken(newUser);
-        String refreshToken = jwtService.generateRefreshToken(newUser);
+    private void saveEntities(User user, Profile profile, Company company, Individual individual) {
+        profileRepository.save(profile);
+        if (company != null) companyRepository.save(company);
+        if (individual != null) individualRepository.save(individual);
+        userRepository.save(user);
+    }
 
-        revokeAllUserTokens(newUser);
-        saveUserToken(newUser, accessToken);
+    private AuthenticationResponse generateAuthResponse(User user) {
+        String accessToken = jwtService.generateToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
+        revokeAllUserTokens(user);
+        saveUserToken(user, accessToken);
         return new AuthenticationResponse(accessToken, refreshToken);
     }
 
     private void saveUserToken(User user, String jwtToken) {
-        var token = Token.builder()
+        Token token = Token.builder()
                 .user(user)
                 .token(jwtToken)
                 .tokenType(TokenType.BEARER)
@@ -122,8 +140,7 @@ public class AuthServiceImpl implements AuthService {
 
     private void revokeAllUserTokens(User user) {
         var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
-        if (validUserTokens.isEmpty())
-            return;
+        if (validUserTokens.isEmpty()) return;
         validUserTokens.forEach(token -> {
             token.setExpired(true);
             token.setRevoked(true);
@@ -131,21 +148,15 @@ public class AuthServiceImpl implements AuthService {
         tokenRepository.saveAll(validUserTokens);
     }
 
-    public void refreshToken(
-            HttpServletRequest request,
-            HttpServletResponse response
-    ) throws IOException {
+    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        final String refreshToken;
-        final String userEmail;
-        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return;
         }
-        refreshToken = authHeader.substring(7);
-        userEmail = jwtService.extractUsername(refreshToken);
+        final String refreshToken = authHeader.substring(7);
+        final String userEmail = jwtService.extractUsername(refreshToken);
         if (userEmail != null) {
-            var user = this.userRepository.findByEmail(userEmail)
-                    .orElseThrow();
+            var user = userRepository.findByEmail(userEmail).orElseThrow();
             if (jwtService.isTokenValid(refreshToken, user)) {
                 var accessToken = jwtService.generateToken(user);
                 revokeAllUserTokens(user);
@@ -159,3 +170,4 @@ public class AuthServiceImpl implements AuthService {
         }
     }
 }
+

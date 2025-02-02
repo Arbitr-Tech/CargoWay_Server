@@ -18,10 +18,9 @@ import java.util.UUID;
 @Table(name = "individuals")
 public class Individual {
     @Id
-    @Builder.Default
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    private UUID id = UUID.randomUUID();
+    private UUID id;
 
     @Column(name = "fullname", nullable = false, unique = false, length = 250)
     private String fullname;

@@ -8,6 +8,7 @@ import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -27,6 +28,17 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ErrorRs.builder()
                         .message(e.getMessage())
+                        .build());
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorRs> handleValidationException(BadCredentialsException e) {
+        log.error(e.getMessage(), e);
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ErrorRs.builder()
+                        .message("Неверный логин или пароль. Попробуйте еще раз!")
                         .build());
     }
 

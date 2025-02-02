@@ -19,7 +19,13 @@ public enum Role {
                     CARGO_CRUD,
                     TRANSPORT_CRUD
             )
-    );
+    ),
+    CARRIER(
+            Set.of(
+                    TRANSPORT_CRUD
+            )
+    )
+    ;
 
     private final Set<Permission> permissions;
 

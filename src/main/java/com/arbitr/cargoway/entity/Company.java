@@ -17,10 +17,9 @@ import java.util.UUID;
 @Table(name = "companies")
 public class Company {
     @Id
-    @Builder.Default
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    private UUID id = UUID.randomUUID();
+    private UUID id;
 
     @Column(name = "name", nullable = false, unique = false)
     private String name;
@@ -34,7 +33,7 @@ public class Company {
     @Column(name = "bic", nullable = false, unique = false, length = 9)
     private String bic;
 
-    @Column(name = "correspondent_account", nullable = false, unique = true, length = 9)
+    @Column(name = "correspondent_account", nullable = false, unique = true, length = 20)
     private String correspondentAccount;
 
     @Column(name = "registration_date", nullable = false)

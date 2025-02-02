@@ -13,15 +13,15 @@ public class Profile {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id = UUID.randomUUID();
+    private UUID id;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @OneToOne(mappedBy = "profile", targetEntity = Company.class)
+    @OneToOne(mappedBy = "profile", targetEntity = Company.class, cascade = CascadeType.ALL)
     private Company company;
 
-    @OneToOne(mappedBy = "profile", targetEntity = Individual.class)
+    @OneToOne(mappedBy = "profile", targetEntity = Individual.class, cascade = CascadeType.ALL)
     private Individual individual;
 }

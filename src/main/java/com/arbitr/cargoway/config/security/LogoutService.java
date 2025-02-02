@@ -1,4 +1,4 @@
-package com.arbitr.cargoway.config;
+package com.arbitr.cargoway.config.security;
 
 import com.arbitr.cargoway.repository.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;

@@ -12,7 +12,7 @@ public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    private UUID guid = UUID.randomUUID();
+    private UUID id;
 
     @Column(name = "image_name", nullable = false)
     private String imageName;
