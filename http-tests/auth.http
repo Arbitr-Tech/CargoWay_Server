@@ -1,4 +1,4 @@
-### GET request to example server
+### Метод для регистрации компании
 POST http://localhost:8080/api/v1/auth/register/?profile_type=company
 Content-Type: application/json
 
@@ -11,8 +11,34 @@ Content-Type: application/json
     "inn": "7707083893",
     "ogrn": "1027700132195",
     "bic": "044525225",
+    "role": "CARRIER",
     "correspondentAccount": "43294832",
     "registrationDate": "2022-06-15"
+  }
+}
+
+### Метод для регистрации физ лица
+POST http://localhost:8080/api/v1/auth/register/?profile_type=individual
+Content-Type: application/json
+
+{
+  "username": "userRandom123",
+  "email": "random.user@example.com",
+  "password": "SecurePass456!",
+  "individual": {
+    "fullname": "Иван Иванов",
+    "passportNum": 123456,
+    "passportSeries": 7890,
+    "whoGive": "УФМС России по г. Москве",
+    "departmentCode": "770-001",
+    "photos": [
+      {
+        "guid": "4b4d77cf-6b0d-4d82-adc8-9323419a9f68"
+      },
+      {
+        "guid": "031172a0-3ab8-4ed1-9136-5df937bc16f6"
+      }
+    ]
   }
 }
 
@@ -24,4 +50,3 @@ Content-Type: application/json
   "email": "random.user@example.com",
   "password": "SecurePass456!"
 }
-
