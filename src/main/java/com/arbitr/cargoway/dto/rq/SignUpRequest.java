@@ -26,6 +26,9 @@ public class SignUpRequest {
     @NotBlank(message = "Пароль не может быть пустым")
     private String password;
 
+    @Schema(description = "Роль пользователя в системе")
+    private CargoWayRole role;
+
     @Schema(description = "Данные физ. лица")
     private IndividualDto individual;
 

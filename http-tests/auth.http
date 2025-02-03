@@ -6,12 +6,12 @@ Content-Type: application/json
   "username": "userRandom123",
   "email": "random.user@example.com",
   "password": "SecurePass456!",
+  "role": "CARRIER",
   "company": {
     "name": "ООО \"Рога и Копыта\"",
     "inn": "7707083893",
     "ogrn": "1027700132195",
     "bic": "044525225",
-    "role": "CARRIER",
     "correspondentAccount": "43294832",
     "registrationDate": "2022-06-15"
   }
