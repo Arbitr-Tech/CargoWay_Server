@@ -28,8 +28,6 @@ public class IndividualDto {
     private String whoGive;
 
     @Schema(description = "Номер телефона", example = "+7 (999) 123-45-67")
-    @Pattern(regexp = "^\\+?\\(?\\d{1,4}\\)?[-\\s]?\\d{1,4}[-\\s]?\\d{1,4}[-\\s]?\\d{1,4}$",
-            message = "Номер телефона должен быть в формате: +7 (999) 123-45-67 или 8 (999) 123-45-67")
     private String phoneNumber;
 
     @Schema(description = "Код подразделения", example = "770-001")

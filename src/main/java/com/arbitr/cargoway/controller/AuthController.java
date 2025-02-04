@@ -28,9 +28,11 @@ public class AuthController {
     public AuthenticationResponse register(
             @Parameter(description = "Тип профиля пользователя (individual или company)", required = true)
             @RequestParam("profile_type") String profileType,
-            @RequestBody @Valid SignUpRequest signUpRequest) {
+            @RequestBody @Valid SignUpRequest signUpRequest,
+            HttpServletResponse response
+    ) {
 
-        return authService.register(profileType, signUpRequest);
+        return authService.register(profileType, signUpRequest, response);
     }
 
     @Operation(

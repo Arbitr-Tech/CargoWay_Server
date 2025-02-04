@@ -41,10 +41,10 @@ public class AuthServiceImpl implements AuthService {
     private final UserMapper userMapper;
 
     @Override
-    public AuthenticationResponse register(String profileType, SignUpRequest signUpRequest) {
+    public AuthenticationResponse register(String profileType, SignUpRequest signUpRequest, HttpServletResponse response) {
         return switch (profileType.toLowerCase()) {
-            case "individual" -> registerIndividual(signUpRequest);
-            case "company" -> registerCompany(signUpRequest);
+            case "individual" -> registerIndividual(signUpRequest, response);
+            case "company" -> registerCompany(signUpRequest, response);
             default -> throw new BadRequestException("Указан неверный тип профиля!");
         };
     }
@@ -71,24 +71,25 @@ public class AuthServiceImpl implements AuthService {
         return new AuthenticationResponse(accessToken);
     }
 
-    private AuthenticationResponse registerCompany(SignUpRequest signUpRequest) {
+    private AuthenticationResponse registerCompany(SignUpRequest signUpRequest, HttpServletResponse response) {
         User newUser = createUser(signUpRequest);
         Company newCompany = userMapper.buildCompanyFrom(signUpRequest.getCompany());
         Profile newProfile = createProfile(newUser, newCompany, null);
 
         saveEntities(newUser, newProfile, newCompany, null);
 
-        return generateAuthResponse(newUser);
+
+        return setupAuthResponse(newUser, response);
     }
 
-    private AuthenticationResponse registerIndividual(SignUpRequest signUpRequest) {
+    private AuthenticationResponse registerIndividual(SignUpRequest signUpRequest, HttpServletResponse response) {
         User newUser = createUser(signUpRequest);
         Individual newIndividual = userMapper.buildIndividualFrom(signUpRequest.getIndividual());
         Profile newProfile = createProfile(newUser, null, newIndividual);
 
         saveEntities(newUser, newProfile, null, newIndividual);
 
-        return generateAuthResponse(newUser);
+        return setupAuthResponse(newUser, response);
     }
 
     private User createUser(SignUpRequest signUpRequest) {
@@ -119,10 +120,15 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(user);
     }
 
-    private AuthenticationResponse generateAuthResponse(User user) {
+    private AuthenticationResponse setupAuthResponse(User user, HttpServletResponse response) {
         String accessToken = jwtService.generateToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
+
         revokeAllUserTokens(user);
+
         saveUserToken(user, accessToken);
+        setRefreshTokenInCookie(response, refreshToken);
+
         return new AuthenticationResponse(accessToken);
     }
 

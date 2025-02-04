@@ -25,7 +25,7 @@ Content-Type: application/json
   "username": "usersRandom123",
   "email": "random.user1@example.com",
   "password": "SecurePass456!",
-  "phoneNumber": "8961",
+  "phoneNumber": "+7 (999) 123-45-67",
   "role": "CARRIER",
   "individual": {
     "fullname": "Иван Иванов",
@@ -49,11 +49,11 @@ POST http://localhost:8080/api/v1/auth/login/
 Content-Type: application/json
 
 {
-  "email": "random.user@example.com",
+  "email": "random.useыr@example.com",
   "password": "SecurePass456!"
 }
 
 ### Метод для обновления токена доступа
 POST http://localhost:8080/api/v1/auth/refresh-token/
-Set-Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyUmFuZG9tMTIzIiwiaWF0IjoxNzM4NzAyNjgxLCJleHAiOjE3MzkzMDc0ODF9.2KA0CyALyC2Na9xWcS1K_OKSEMtq043bhnwdnWDrZ5g; Max-Age=604800; Expires=Tue, 11 Feb 2025 20:58:01 GMT; Path=/; HttpOnly
+Set-Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyUmFub20xMjMiLCJpYXQiOjE3Mzg3MDM5MzEsImV4cCI6MTczODc5MDMzMX0.02pavYB_CFvh6cVFe645udbLza2pFAgPspNzY_B4Jng; Max-Age=604800; Expires=Tue, 11 Feb 2025 20:58:01 GMT; Path=/; HttpOnly
 
