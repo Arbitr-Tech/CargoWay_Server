@@ -1,4 +1,4 @@
-package com.arbitr.cargoway.dto.rq;
+package com.arbitr.cargoway.dto;
 
 public enum CargoWayRole {
     CARRIER,

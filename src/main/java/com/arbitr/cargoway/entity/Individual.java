@@ -37,6 +37,9 @@ public class Individual {
     @Column(name = "department_code", nullable = false, unique = false, length = 10)
     private String departmentCode;
 
+    @Column(name = "phone_number", nullable = false, unique = false, length = 100)
+    private String phoneNumber;
+
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id", referencedColumnName = "id")
     private Profile profile;

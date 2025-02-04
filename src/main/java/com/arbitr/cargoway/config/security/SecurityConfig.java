@@ -40,7 +40,7 @@ public class SecurityConfig {
                     req.requestMatchers("/api/v1/auth/**").permitAll()
 //                        .requestMatchers("/api/v1/management/**").hasAnyRole(ADMIN.name(), MANAGER.name())
 //                        .requestMatchers(HttpMethod.GET, "/api/v1/management/**").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
-                        .anyRequest().permitAll())
+                        .anyRequest().authenticated())
             .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
             .authenticationProvider(authenticationProvider(passwordEncoder()))
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

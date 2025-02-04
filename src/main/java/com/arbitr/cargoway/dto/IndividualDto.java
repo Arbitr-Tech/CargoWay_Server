@@ -27,6 +27,11 @@ public class IndividualDto {
     @Size(max = 255, message = "Информация о выдаче паспорта не должна превышать 255 символов")
     private String whoGive;
 
+    @Schema(description = "Номер телефона", example = "+7 (999) 123-45-67")
+    @Pattern(regexp = "^\\+?\\(?\\d{1,4}\\)?[-\\s]?\\d{1,4}[-\\s]?\\d{1,4}[-\\s]?\\d{1,4}$",
+            message = "Номер телефона должен быть в формате: +7 (999) 123-45-67 или 8 (999) 123-45-67")
+    private String phoneNumber;
+
     @Schema(description = "Код подразделения", example = "770-001")
     @Pattern(regexp = "\\d{3}-\\d{3}", message = "Код подразделения должен быть в формате XXX-XXX")
     private String departmentCode;

@@ -2,7 +2,7 @@ package com.arbitr.cargoway.mapper;
 
 import com.arbitr.cargoway.dto.CompanyDto;
 import com.arbitr.cargoway.dto.IndividualDto;
-import com.arbitr.cargoway.dto.rq.CargoWayRole;
+import com.arbitr.cargoway.dto.CargoWayRole;
 import com.arbitr.cargoway.dto.rq.SignUpRequest;
 import com.arbitr.cargoway.entity.Company;
 import com.arbitr.cargoway.entity.Individual;

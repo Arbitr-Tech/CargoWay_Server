@@ -1,5 +1,6 @@
 package com.arbitr.cargoway.dto.rq;
 
+import com.arbitr.cargoway.dto.CargoWayRole;
 import com.arbitr.cargoway.dto.CompanyDto;
 import com.arbitr.cargoway.dto.IndividualDto;
 import io.swagger.v3.oas.annotations.media.Schema;
