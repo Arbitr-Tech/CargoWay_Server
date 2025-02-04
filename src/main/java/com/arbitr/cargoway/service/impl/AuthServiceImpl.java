@@ -9,23 +9,22 @@ import com.arbitr.cargoway.entity.Individual;
 import com.arbitr.cargoway.entity.Profile;
 import com.arbitr.cargoway.entity.security.User;
 import com.arbitr.cargoway.exception.BadRequestException;
+import com.arbitr.cargoway.exception.InvalidTokenException;
 import com.arbitr.cargoway.exception.NotFoundException;
+import com.arbitr.cargoway.exception.TokenValidationException;
 import com.arbitr.cargoway.mapper.UserMapper;
 import com.arbitr.cargoway.repository.*;
 import com.arbitr.cargoway.service.AuthService;
 import com.arbitr.cargoway.entity.security.Token;
 import com.arbitr.cargoway.entity.security.TokenType;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -51,7 +50,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public AuthenticationResponse login(SignInRequest signInRequest) {
+    public AuthenticationResponse login(SignInRequest signInRequest, HttpServletResponse response) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         signInRequest.getEmail(),
@@ -62,13 +61,14 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository.findByEmail(signInRequest.getEmail())
                 .orElseThrow(() -> new NotFoundException("Участник с почтой %s не был найден!".formatted(signInRequest.getEmail())));
 
-        String jwtToken = jwtService.generateToken(user);
+        String accessToken = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
 
         revokeAllUserTokens(user);
-        saveUserToken(user, jwtToken);
+        saveUserToken(user, accessToken);
+        setRefreshTokenInCookie(response, refreshToken);
 
-        return new AuthenticationResponse(jwtToken, refreshToken);
+        return new AuthenticationResponse(accessToken);
     }
 
     private AuthenticationResponse registerCompany(SignUpRequest signUpRequest) {
@@ -121,10 +121,9 @@ public class AuthServiceImpl implements AuthService {
 
     private AuthenticationResponse generateAuthResponse(User user) {
         String accessToken = jwtService.generateToken(user);
-        String refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, accessToken);
-        return new AuthenticationResponse(accessToken, refreshToken);
+        return new AuthenticationResponse(accessToken);
     }
 
     private void saveUserToken(User user, String jwtToken) {
@@ -148,26 +147,56 @@ public class AuthServiceImpl implements AuthService {
         tokenRepository.saveAll(validUserTokens);
     }
 
-    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return;
-        }
-        final String refreshToken = authHeader.substring(7);
-        final String userEmail = jwtService.extractUsername(refreshToken);
-        if (userEmail != null) {
-            var user = userRepository.findByEmail(userEmail).orElseThrow();
-            if (jwtService.isTokenValid(refreshToken, user)) {
-                var accessToken = jwtService.generateToken(user);
-                revokeAllUserTokens(user);
-                saveUserToken(user, accessToken);
-                var authResponse = AuthenticationResponse.builder()
-                        .accessToken(accessToken)
-                        .refreshToken(refreshToken)
-                        .build();
-                new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
+    private void setRefreshTokenInCookie(HttpServletResponse response, String refreshToken) {
+        Cookie cookie = new Cookie("refreshToken", refreshToken);
+
+        cookie.setHttpOnly(true);
+        cookie.setSecure(false);
+        cookie.setPath("/");
+        cookie.setMaxAge(7 * 24 * 60 * 60);
+
+        response.addCookie(cookie);
+    }
+
+    @Override
+    public AuthenticationResponse refreshToken(HttpServletRequest request, HttpServletResponse response) {
+        String refreshToken = null;
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if ("refreshToken".equals(cookie.getName())) {
+                    refreshToken = cookie.getValue();
+                    break;
+                }
             }
         }
+
+        if (refreshToken == null) {
+            throw new InvalidTokenException("Refresh токен отсутствует в куки!");
+        }
+
+        String userName = jwtService.extractUsername(refreshToken);
+
+        if (userName == null) {
+            throw new InvalidTokenException("Токен недействителен или поврежден!");
+        }
+
+        User foundUser = userRepository.findByUsername(userName)
+                .orElseThrow(() -> new NotFoundException("Пользователь с именем %s не был найден!".formatted(userName)));
+
+        if (!jwtService.isTokenValid(refreshToken, foundUser)) {
+            throw new TokenValidationException("Токен недействителен для пользователя: %s.".formatted(userName));
+        }
+
+        String accessToken = jwtService.generateToken(foundUser);
+        refreshToken = jwtService.generateRefreshToken(foundUser);
+
+        revokeAllUserTokens(foundUser);
+        saveUserToken(foundUser, accessToken);
+        setRefreshTokenInCookie(response, refreshToken);
+
+        return AuthenticationResponse.builder()
+                .accessToken(accessToken)
+                .build();
     }
 }
 

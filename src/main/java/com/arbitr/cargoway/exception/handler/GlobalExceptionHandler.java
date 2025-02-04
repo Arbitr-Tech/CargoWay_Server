@@ -1,9 +1,7 @@
 package com.arbitr.cargoway.exception.handler;
 
 import com.arbitr.cargoway.dto.rs.ErrorRs;
-import com.arbitr.cargoway.exception.NotFoundException;
-import com.arbitr.cargoway.exception.FileRemoveException;
-import com.arbitr.cargoway.exception.InternalServerError;
+import com.arbitr.cargoway.exception.*;
 import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,6 +24,28 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
+                .body(ErrorRs.builder()
+                        .message(e.getMessage())
+                        .build());
+    }
+
+    @ExceptionHandler(TokenValidationException.class)
+    public ResponseEntity<ErrorRs> handleTokenValidationException(TokenValidationException e) {
+        log.error(e.getMessage(), e);
+
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(ErrorRs.builder()
+                        .message(e.getMessage())
+                        .build());
+    }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<ErrorRs> handleInvalidTokenException(InvalidTokenException e) {
+        log.error(e.getMessage(), e);
+
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
                 .body(ErrorRs.builder()
                         .message(e.getMessage())
                         .build());

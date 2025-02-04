@@ -15,9 +15,5 @@ public class AuthenticationResponse {
     @Schema(description = "Токен доступа")
     @JsonProperty("access_token")
     private String accessToken;
-
-    @Schema(description = "Токен для обновления токена доступа")
-    @JsonProperty("refresh_token")
-    private String refreshToken;
 }
 
