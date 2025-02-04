@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.arbitr.cargoway.entity.security.Permission.CARGO_CRUD;
-import static com.arbitr.cargoway.entity.security.Permission.TRANSPORT_CRUD;
+import static com.arbitr.cargoway.entity.security.Permission.*;
 
 @Getter
 @RequiredArgsConstructor
@@ -17,15 +16,26 @@ public enum Role {
     ADMIN(
             Set.of(
                     CARGO_CRUD,
-                    TRANSPORT_CRUD
+                    TRANSPORT_CRUD,
+                    MANAGEMENT_CRUD
             )
     ),
     CARRIER(
             Set.of(
                     TRANSPORT_CRUD
             )
-    )
-    ;
+    ),
+    CUSTOMER(
+            Set.of(
+                    CARGO_CRUD
+            )
+    ),
+    FORWARDER(
+            Set.of(
+                    TRANSPORT_CRUD,
+                    CARGO_CRUD
+            )
+    );
 
     private final Set<Permission> permissions;
 
