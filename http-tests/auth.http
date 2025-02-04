@@ -25,6 +25,7 @@ Content-Type: application/json
   "username": "userRandom123",
   "email": "random.user@example.com",
   "password": "SecurePass456!",
+  "role": "CARRIER",
   "individual": {
     "fullname": "Иван Иванов",
     "passportNum": 123456,
