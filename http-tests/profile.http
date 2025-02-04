@@ -1,3 +1,3 @@
 ### Метод для получения данных о профиле
 GET http://localhost:8080/api/v1/profile/
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyUmFub20xMjMiLCJpYXQiOjE3Mzg3MDQzNzYsImV4cCI6MTczODc5MDc3Nn0.r97XoKNPxBhxBzdNkDhZ_ElHDk4dUCxGjTC4wR_0Mf4
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyUmFub20xMjMiLCJpYXQiOjE3Mzg3MDYzMTYsImV4cCI6MTczODc5MjcxNn0.zznJ6lp-LdaYu4U5WrJcCz5TLRqq0nqjiuybjSCKNBg

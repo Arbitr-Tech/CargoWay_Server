@@ -51,15 +51,15 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthenticationResponse login(SignInRequest signInRequest, HttpServletResponse response) {
+        User user = userRepository.findByEmail(signInRequest.getEmail())
+                .orElseThrow(() -> new NotFoundException("Участник с почтой %s не был найден!".formatted(signInRequest.getEmail())));
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        signInRequest.getEmail(),
+                        user.getUsername(),
                         signInRequest.getPassword()
                 )
         );
-
-        User user = userRepository.findByEmail(signInRequest.getEmail())
-                .orElseThrow(() -> new NotFoundException("Участник с почтой %s не был найден!".formatted(signInRequest.getEmail())));
 
         String accessToken = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
