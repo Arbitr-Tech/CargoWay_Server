@@ -1,10 +1,10 @@
 @baseUrl = http://localhost:8080/api/v1/cargos
-@authToken = Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2Vyc1JhbmRvbTEyMyIsImlhdCI6MTczOTA0Njg0MCwiZXhwIjoxNzM5MTMzMjQwfQ.3zrw2LslJODspqLIpJov6xxOivDNrZoQtJiO2_hYrzE
-@cargo_uuid =
-@photo_uuid =
+@authToken = Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2Vyc1JhbmRvbTEyMyIsImlhdCI6MTczOTA1MTc2MCwiZXhwIjoxNzM5MTM4MTYwfQ.uts6A9kfjSJrR-Tx-FsQGbScxRS0TNwN8UVAL13sw2o
+@cargo_uuid = 782c411c-c654-4c61-9ff7-6d45a394f36b
+@photo_uuid = 34d2e508-e9cb-46dd-8137-4e53fa1c89af
 
 ### Метод для создания груза
-POST {{baseUrl}}/
+POST {{baseUrl}}//
 Authorization: {{authToken}}
 Content-Type: application/json
 
@@ -25,7 +25,7 @@ Content-Type: application/json
   },
   "price": 99.99,
   "typePay": "НДС",
-  "readyDate": "2025-02-09",
+  "readyDate": "2025-02-10",
   "loadType": "Задняя",
   "unloadType": "Задняя",
   "status": "HIDDEN",
@@ -74,7 +74,6 @@ Content-Type: application/json
   "readyDate": "2025-02-15",
   "loadType": "Боковая",
   "unloadType": "Передняя",
-  "status": "ACTIVE",
   "deliveryDate": "2025-03-05",
   "photos": [
     {
@@ -84,7 +83,7 @@ Content-Type: application/json
 }
 
 ### Изменение статуса груза
-PATCH {{baseUrl}}/{{cargo_uuid}}/change-status/?status=PUBLISHED
+PATCH {{baseUrl}}/{{cargo_uuid}}/change-status/?status=HIDDEN
 Authorization: {{authToken}}
 
 ### Удаление груза

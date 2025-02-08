@@ -14,6 +14,7 @@ import com.arbitr.cargoway.repository.CargoRepository;
 import com.arbitr.cargoway.service.CargoService;
 import com.arbitr.cargoway.service.ImageService;
 import com.arbitr.cargoway.service.ProfileService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,6 +35,7 @@ public class CargoServiceImpl implements CargoService {
 
     private final CargoMapper cargoMapper;
 
+    @Transactional
     @Override
     public CargoDetailsRs createNewCargo(CargoCreateRq cargoCreateRq) {
         Cargo newCargo = cargoMapper.buildCargoFrom(cargoCreateRq);
@@ -70,6 +72,7 @@ public class CargoServiceImpl implements CargoService {
                 .toList();
     }
 
+    @Transactional
     @Override
     public CargoDetailsRs updateCargo(UUID cargoId, CargoUpdateRq cargoUpdateRq) {
         Cargo foundCargo = foundCargoOrElseThrowNotFound(cargoId);
@@ -159,9 +162,11 @@ public class CargoServiceImpl implements CargoService {
         return cargoMapper.buildCargoDetailsRs(foundCargo);
     }
 
+    @Transactional
     @Override
     public void deleteCargo(UUID cargoId) {
-        cargoRepository.deleteCargoById(cargoId);
+        Cargo foundCargo = foundCargoOrElseThrowNotFound(cargoId);
+        cargoRepository.delete(foundCargo);
     }
 
     private Cargo foundCargoOrElseThrowNotFound(UUID cargoId) {

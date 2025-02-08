@@ -8,6 +8,7 @@ import com.arbitr.cargoway.dto.rs.cargo.CargoDetailsRs;
 import com.arbitr.cargoway.service.CargoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class CargoController {
     private final CargoService cargoService;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public CargoDetailsRs createCargo(@RequestBody @Valid CargoCreateRq cargoCreateRq) {
         return cargoService.createNewCargo(cargoCreateRq);
     }
@@ -50,6 +52,7 @@ public class CargoController {
     }
 
     @DeleteMapping("{cargoId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCargo(@PathVariable UUID cargoId) {
         cargoService.deleteCargo(cargoId);
     }

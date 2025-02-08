@@ -1,11 +1,13 @@
 package com.arbitr.cargoway.dto.rs.cargo;
 
+import com.arbitr.cargoway.dto.rs.ImageRef;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -34,6 +36,9 @@ public class CargoDetailsRs {
     @Schema(description = "Тип выгрузки", example = "Боковая")
     private String unloadType;
 
+    @Schema(description = "Тип кузова для погрузки")
+    private String bodyType;
+
     @Schema(description = "Габариты груза")
     private Dimensions dimensions;
 
@@ -43,6 +48,9 @@ public class CargoDetailsRs {
     @Schema(description = "Стоимость груза", example = "999.99")
     private BigDecimal price;
 
+    @Schema(description = "Тип оплаты", example = "Карта")
+    private String typePay;
+
     @Schema(description = "Дата готовности груза", example = "2025-02-08")
     private LocalDate readyDate;
 
@@ -50,7 +58,7 @@ public class CargoDetailsRs {
     private LocalDate deliveryDate;
 
     @Schema(description = "Статус видимости груза", example = "PUBLIC")
-    private String visibility;
+    private String status;
 
     @Data
     @Builder
@@ -76,4 +84,7 @@ public class CargoDetailsRs {
         @Schema(description = "Пункт назначения", example = "Санкт-Петербург")
         private String to;
     }
+
+    @Schema(description = "Ссылки на фото груза")
+    List<ImageRef> photos;
 }
