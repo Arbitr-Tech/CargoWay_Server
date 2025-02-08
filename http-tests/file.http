@@ -1,0 +1,11 @@
+### Метод для загрузки файла
+POST http://localhost:8080/api/v1/file/
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2Vyc1JhbmRvbTEyMyIsImlhdCI6MTczOTAwMTg2NywiZXhwIjoxNzM5MDg4MjY3fQ.aCb-ynTE85M3APaZohSHzKYmKiuNHcHQP6zXecFimCQ
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="rabbitmq.png"
+Content-Type: image/png
+
+< docs/rabbitmq.png
+--boundary--

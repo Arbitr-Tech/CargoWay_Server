@@ -5,41 +5,58 @@ import com.arbitr.cargoway.exception.FileUploadException;
 import com.arbitr.cargoway.exception.InternalServerError;
 import com.arbitr.cargoway.service.StorageService;
 import com.arbitr.cargoway.config.properties.MinioProperties;
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
-import io.minio.RemoveObjectArgs;
+import io.minio.*;
+import io.minio.errors.MinioException;
+import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class MinioStorageServiceImpl implements StorageService {
     private final MinioClient minioClient;
-    private final String minioBucketName;
+    private final MinioProperties minioProperties;
 
-    @Autowired
-    public MinioStorageServiceImpl(MinioProperties minioProperties) {
-        minioBucketName = minioProperties.getBucketName();
-        minioClient = MinioClient.builder()
-                .endpoint(minioProperties.getEndpoint())
-                .credentials(minioProperties.getAccessKey(), minioProperties.getSecretKey())
-                .build();
+    @PostConstruct
+    public void setUpBuckets() {
+        try {
+            boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket(minioProperties.getBucketName()).build());
+            if (!found) {
+                minioClient.makeBucket(MakeBucketArgs.builder().bucket(minioProperties.getBucketName()).build());
+                log.info("Бакет '%s' создан.".formatted(minioProperties.getBucketName()));
+            } else {
+                log.info("Бакет '%s' уже существует.".formatted(minioProperties.getBucketName()));
+            }
+
+            minioClient.deleteBucketPolicy(DeleteBucketPolicyArgs.builder().bucket(minioProperties.getBucketName()).build());
+            log.info("Бакет '%s' остаётся приватным.".formatted(minioProperties.getBucketName()));
+
+        } catch (MinioException | IOException | NoSuchAlgorithmException | InvalidKeyException e) {
+            throw new InternalServerError(e.getMessage());
+        }
     }
 
     @Override
     public String uploadFile(InputStream inputStream, Long fileSize, String fileName) {
-        try {
+        try (inputStream) {
             minioClient.putObject(PutObjectArgs.builder()
-                    .bucket(minioBucketName)
+                    .bucket(minioProperties.getBucketName())
                     .object(fileName)
                     .stream(inputStream, fileSize, -1)
                     .build());
         } catch (Exception e) {
             throw new FileUploadException(e.getMessage());
         }
-        return "%s/%s".formatted(minioBucketName, fileName);
+        return "%s/%s".formatted(minioProperties.getBucketName(), fileName);
     }
 
     @Override
@@ -47,21 +64,12 @@ public class MinioStorageServiceImpl implements StorageService {
         try {
             minioClient.removeObject(
                     RemoveObjectArgs.builder()
-                            .bucket(minioBucketName)
+                            .bucket(minioProperties.getBucketName())
                             .object(fileName)
                             .build()
             );
         } catch (Exception e) {
             throw new FileRemoveException(e.getMessage());
-        }
-    }
-
-    @PreDestroy
-    private void closeMinioClient() {
-        try {
-            minioClient.close();
-        } catch (Exception e) {
-            throw new InternalServerError("Внутренняя ошибка сервера");
         }
     }
 }

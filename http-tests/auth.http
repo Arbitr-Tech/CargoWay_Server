@@ -25,10 +25,10 @@ Content-Type: application/json
   "username": "usersRandom123",
   "email": "random.user1@example.com",
   "password": "SecurePass456!",
-  "phoneNumber": "+7 (999) 123-45-67",
   "role": "CARRIER",
   "individual": {
     "fullname": "Иван Иванов",
+    "phoneNumber": "+7 (999) 123-45-67",
     "passportNum": 123456,
     "passportSeries": 7890,
     "whoGive": "УФМС России по г. Москве",
