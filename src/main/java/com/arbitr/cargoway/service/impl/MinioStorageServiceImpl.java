@@ -37,13 +37,33 @@ public class MinioStorageServiceImpl implements StorageService {
                 log.info("Бакет '%s' уже существует.".formatted(minioProperties.getBucketName()));
             }
 
-            minioClient.deleteBucketPolicy(DeleteBucketPolicyArgs.builder().bucket(minioProperties.getBucketName()).build());
-            log.info("Бакет '%s' остаётся приватным.".formatted(minioProperties.getBucketName()));
+            String policyJson = """
+                    {
+                        "Version": "2012-10-17",
+                        "Statement": [
+                            {
+                                "Effect": "Allow",
+                                "Principal": "*",
+                                "Action": ["s3:GetObject"],
+                                "Resource": ["arn:aws:s3:::%s/*"]
+                            }
+                        ]
+                    }
+                    """.formatted(minioProperties.getBucketName());
+
+            minioClient.setBucketPolicy(
+                    SetBucketPolicyArgs.builder()
+                            .bucket(minioProperties.getBucketName())
+                            .config(policyJson)
+                            .build());
+
+            log.info("Бакет '%s' теперь публичный для чтения.".formatted(minioProperties.getBucketName()));
 
         } catch (MinioException | IOException | NoSuchAlgorithmException | InvalidKeyException e) {
             throw new InternalServerError(e.getMessage());
         }
     }
+
 
     @Override
     public String uploadFile(InputStream inputStream, Long fileSize, String fileName) {

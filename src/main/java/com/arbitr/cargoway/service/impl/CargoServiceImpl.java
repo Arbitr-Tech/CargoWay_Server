@@ -71,7 +71,7 @@ public class CargoServiceImpl implements CargoService {
     }
 
     private Cargo foundCargoOrElseThrowNotFound(UUID cargoId) {
-        return cargoRepository.findById(cargoId)
+        return cargoRepository.findCargoById(cargoId)
                 .orElseThrow(() -> new NotFoundException("Груз с id = %s не был найден!".formatted(cargoId)));
     }
 }
