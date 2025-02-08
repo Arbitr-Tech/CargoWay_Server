@@ -8,5 +8,6 @@ import org.mapstruct.Mapping;
 @Mapper
 public interface ImageMapper {
     @Mapping(source = "imagePath", target = "path")
+    @Mapping(source = "id", target = "guid")
     ImageRef buildImageRef(Image image);
 }

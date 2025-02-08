@@ -4,6 +4,7 @@ import com.arbitr.cargoway.entity.security.User;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -24,4 +25,10 @@ public class Profile {
 
     @OneToOne(mappedBy = "profile", targetEntity = Individual.class, cascade = CascadeType.ALL)
     private Individual individual;
+
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Cargo> cargo;
+
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Transport> transport;
 }
