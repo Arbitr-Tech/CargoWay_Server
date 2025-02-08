@@ -1,0 +1,26 @@
+### Метод для создания груза
+POST http://localhost:8080/api/v1/cargos/
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2Vyc1JhbmRvbTEyMyIsImlhdCI6MTczOTA0Njg0MCwiZXhwIjoxNzM5MTMzMjQwfQ.3zrw2LslJODspqLIpJov6xxOivDNrZoQtJiO2_hYrzE
+Content-Type: application/json
+
+{
+  "name": "Box",
+  "description": "A large box",
+  "weight": 10,
+  "volume": 50,
+  "dimensions": {
+    "length": 10,
+    "width": 5,
+    "height": 20
+  },
+  "route": {
+    "from": "New York",
+    "to": "Los Angeles"
+  },
+  "price": 99.99,
+  "readyDate": "2025-02-09",
+  "loadType": "Forklift",
+  "unloadType": "Crane",
+  "status": "HIDDEN",
+  "deliveryDate": "2025-03-01"
+}

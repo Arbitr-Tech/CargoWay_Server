@@ -7,6 +7,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+@Data
 public class CargoCreateRq {
     @Schema(description = "Название предмета", example = "Box")
     @NotBlank(message = "Name must not be blank")
@@ -48,6 +49,9 @@ public class CargoCreateRq {
     @Schema(description = "Необходимая дата доставки")
     @Future(message = "Ready date must be in the future")
     private LocalDate deliveryDate;
+
+    @Schema(description = "Статус груза")
+    private CargoStatus status;
 
     @Data
     public static class DimensionsDto {

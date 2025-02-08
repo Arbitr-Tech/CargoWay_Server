@@ -4,15 +4,20 @@ import com.arbitr.cargoway.dto.rq.cargo.CargoCreateRq;
 import com.arbitr.cargoway.dto.rq.cargo.FilterCargoRq;
 import com.arbitr.cargoway.dto.rs.cargo.CargoDetailsRs;
 import com.arbitr.cargoway.entity.Cargo;
+import com.arbitr.cargoway.entity.Profile;
+import com.arbitr.cargoway.entity.security.User;
 import com.arbitr.cargoway.exception.NotFoundException;
 import com.arbitr.cargoway.mapper.CargoMapper;
 import com.arbitr.cargoway.repository.CargoRepository;
 import com.arbitr.cargoway.service.CargoService;
+import com.arbitr.cargoway.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +26,8 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class CargoServiceImpl implements CargoService {
+    private final ProfileService profileService;
+
     private final CargoRepository cargoRepository;
 
     private final CargoMapper cargoMapper;
@@ -28,6 +35,9 @@ public class CargoServiceImpl implements CargoService {
     @Override
     public CargoDetailsRs createNewCargo(CargoCreateRq cargoCreateRq) {
         Cargo newCargo = cargoMapper.buildCargoFrom(cargoCreateRq);
+
+        Profile userProfile = profileService.getAuthenticatedProfile();
+        newCargo.setProfile(userProfile);
 
         cargoRepository.save(newCargo);
 
