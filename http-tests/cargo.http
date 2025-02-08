@@ -1,13 +1,19 @@
+@baseUrl = http://localhost:8080/api/v1/cargos
+@authToken = Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2Vyc1JhbmRvbTEyMyIsImlhdCI6MTczOTA0Njg0MCwiZXhwIjoxNzM5MTMzMjQwfQ.3zrw2LslJODspqLIpJov6xxOivDNrZoQtJiO2_hYrzE
+@cargo_uuid =
+@photo_uuid =
+
 ### Метод для создания груза
-POST http://localhost:8080/api/v1/cargos/
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2Vyc1JhbmRvbTEyMyIsImlhdCI6MTczOTA0Njg0MCwiZXhwIjoxNzM5MTMzMjQwfQ.3zrw2LslJODspqLIpJov6xxOivDNrZoQtJiO2_hYrzE
+POST {{baseUrl}}/
+Authorization: {{authToken}}
 Content-Type: application/json
 
 {
   "name": "Box",
-  "description": "A large box",
+  "description": "Большая коробка",
   "weight": 10,
   "volume": 50,
+  "bodyType": "Тент",
   "dimensions": {
     "length": 10,
     "width": 5,
@@ -18,9 +24,69 @@ Content-Type: application/json
     "to": "Los Angeles"
   },
   "price": 99.99,
+  "typePay": "НДС",
   "readyDate": "2025-02-09",
-  "loadType": "Forklift",
-  "unloadType": "Crane",
+  "loadType": "Задняя",
+  "unloadType": "Задняя",
   "status": "HIDDEN",
-  "deliveryDate": "2025-03-01"
+  "deliveryDate": "2025-03-01",
+  "photos": [
+    {
+      "id": "{{photo_uuid}}"
+    }
+  ]
 }
+
+### Получение деталей груза
+GET {{baseUrl}}/{{cargo_uuid}}/
+Authorization: {{authToken}}
+
+### Поиск грузов с фильтрами
+GET {{baseUrl}}?weight=10&volume=50&loadType=Задняя&unloadType=Задняя&price=99.99&readyDate=2025-02-09&from=New York&to=Los Angeles
+Authorization: {{authToken}}
+
+### Получение последних X грузов
+GET {{baseUrl}}/count/5/
+Authorization: {{authToken}}
+
+### Обновление груза
+PATCH {{baseUrl}}/{{cargo_uuid}}/
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "Updated Box",
+  "description": "Обновленная коробка",
+  "weight": 15,
+  "volume": 55,
+  "bodyType": "Тент",
+  "dimensions": {
+    "length": 12,
+    "width": 6,
+    "height": 22
+  },
+  "route": {
+    "from": "Chicago",
+    "to": "San Francisco"
+  },
+  "price": 120.99,
+  "typePay": "Наличные",
+  "readyDate": "2025-02-15",
+  "loadType": "Боковая",
+  "unloadType": "Передняя",
+  "status": "ACTIVE",
+  "deliveryDate": "2025-03-05",
+  "photos": [
+    {
+      "id": "{{photo_uuid}}"
+    }
+  ]
+}
+
+### Изменение статуса груза
+PATCH {{baseUrl}}/{{cargo_uuid}}/change-status/?status=PUBLISHED
+Authorization: {{authToken}}
+
+### Удаление груза
+DELETE {{baseUrl}}/{{cargo_uuid}}
+Authorization: {{authToken}}

@@ -27,8 +27,8 @@ public class Profile {
     private Individual individual;
 
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Cargo> cargo;
+    private List<Cargo> cargos;
 
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Transport> transport;
+    private List<Transport> transports;
 }

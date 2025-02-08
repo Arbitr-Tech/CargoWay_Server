@@ -1,5 +1,6 @@
 package com.arbitr.cargoway.service.impl;
 
+import com.arbitr.cargoway.dto.Photo;
 import com.arbitr.cargoway.dto.rs.ImageRef;
 import com.arbitr.cargoway.entity.Image;
 import com.arbitr.cargoway.mapper.ImageMapper;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -32,5 +34,14 @@ public class ImageServiceImpl implements ImageService {
         imageRepository.save(image);
 
         return imageMapper.buildImageRef(image);
+    }
+
+    @Override
+    public List<Image> getImagesByIds(List<Photo> photos) {
+        List<UUID> imagesIds = photos.stream()
+                .map(Photo::getId)
+                .toList();
+
+        return imageRepository.findImagesByIdIn(imagesIds);
     }
 }

@@ -1,9 +1,9 @@
 package com.arbitr.cargoway.service;
 
-import com.arbitr.cargoway.dto.rq.cargo.TransportCreateRq;
-import com.arbitr.cargoway.dto.rs.transport.FilterTransportRq;
+import com.arbitr.cargoway.dto.rq.transaport.TransportCreateRq;
+import com.arbitr.cargoway.dto.rq.transaport.FilterTransportRq;
 import com.arbitr.cargoway.dto.rs.transport.TransportDetailsRs;
-import com.arbitr.cargoway.dto.rs.transport.TransportUpdateRq;
+import com.arbitr.cargoway.dto.rq.transaport.TransportUpdateRq;
 
 import java.util.List;
 import java.util.UUID;

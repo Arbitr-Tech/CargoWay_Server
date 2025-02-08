@@ -2,6 +2,7 @@ package com.arbitr.cargoway.controller;
 
 import com.arbitr.cargoway.dto.rq.cargo.CargoCreateRq;
 import com.arbitr.cargoway.dto.rq.cargo.CargoStatus;
+import com.arbitr.cargoway.dto.rq.cargo.CargoUpdateRq;
 import com.arbitr.cargoway.dto.rq.cargo.FilterCargoRq;
 import com.arbitr.cargoway.dto.rs.cargo.CargoDetailsRs;
 import com.arbitr.cargoway.service.CargoService;
@@ -19,7 +20,7 @@ public class CargoController {
     private final CargoService cargoService;
 
     @PostMapping
-    public CargoDetailsRs createCargo(@RequestBody CargoCreateRq cargoCreateRq) {
+    public CargoDetailsRs createCargo(@RequestBody @Valid CargoCreateRq cargoCreateRq) {
         return cargoService.createNewCargo(cargoCreateRq);
     }
 
@@ -29,7 +30,7 @@ public class CargoController {
     }
 
     @GetMapping
-    public List<CargoDetailsRs> searchCargos(FilterCargoRq filter) {
+    public List<CargoDetailsRs> searchCargos(@Valid FilterCargoRq filter) {
         return cargoService.searchCargos(filter);
     }
 
@@ -39,13 +40,13 @@ public class CargoController {
     }
 
     @PatchMapping("{cargoId}/")
-    public CargoDetailsRs updateCargo(@PathVariable UUID cargoId, @RequestBody CargoCreateRq cargoCreateRq) {
-        return cargoService.updateCargo(cargoId, cargoCreateRq);
+    public CargoDetailsRs updateCargo(@PathVariable UUID cargoId, @RequestBody @Valid CargoUpdateRq cargoUpdateRq) {
+        return cargoService.updateCargo(cargoId, cargoUpdateRq);
     }
 
     @PatchMapping("{cargoId}/change-status/")
     public CargoDetailsRs changeCargoStatus(@PathVariable UUID cargoId, @RequestParam @Valid CargoStatus status) {
-        return cargoService.changeCargoGlobalVisibility(cargoId, status.name());
+        return cargoService.changeCargoGlobalVisibility(cargoId, status);
     }
 
     @DeleteMapping("{cargoId}")

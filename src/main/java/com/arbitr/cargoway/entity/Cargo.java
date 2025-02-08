@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -41,6 +43,9 @@ public class Cargo {
     @Column(name = "unload_type", nullable = false)
     private String unloadType;
 
+    @Column(name = "body_type", nullable = false)
+    private String bodyType;
+
     @Embedded
     private Dimensions dimensions;
 
@@ -49,6 +54,9 @@ public class Cargo {
 
     @Column(name = "price", nullable = false)
     private BigDecimal price;
+
+    @Column(name = "type_pay", nullable = false)
+    private String typePay;
 
     @Column(name = "ready_date", nullable = false)
     private LocalDate readyDate;
@@ -86,4 +94,12 @@ public class Cargo {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id", referencedColumnName = "id", nullable = false)
     private Profile profile;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "cargos_images",
+            joinColumns = @JoinColumn(name = "cargo_id"),
+            inverseJoinColumns = @JoinColumn(name = "image_id")
+    )
+    private List<Image> images = new ArrayList<>();
 }

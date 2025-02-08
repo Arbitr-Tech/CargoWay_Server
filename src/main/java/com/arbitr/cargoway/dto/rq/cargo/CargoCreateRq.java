@@ -1,11 +1,13 @@
 package com.arbitr.cargoway.dto.rq.cargo;
 
+import com.arbitr.cargoway.dto.Photo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 public class CargoCreateRq {
@@ -30,6 +32,9 @@ public class CargoCreateRq {
     @Schema(description = "Тип выгрузки", example = "Задняя")
     private String unloadType;
 
+    @Schema(description = "Тип кузова машины для перевозки", example = "Тент")
+    private String bodyType;
+
     @Schema(description = "Размеры предмета")
     @NotNull(message = "Dimensions cannot be null")
     private DimensionsDto dimensions;
@@ -42,6 +47,9 @@ public class CargoCreateRq {
     @DecimalMin(value = "0.00", message = "Price must be greater than or equal to 0")
     private BigDecimal price;
 
+    @Schema(description = "Тип оплаты")
+    private String typePay;
+
     @Schema(description = "Дата готовности предмета", example = "2025-02-08")
     @Future(message = "Ready date must be in the future")
     private LocalDate readyDate;
@@ -52,6 +60,9 @@ public class CargoCreateRq {
 
     @Schema(description = "Статус груза")
     private CargoStatus status;
+
+    @Schema(description = "id фотографий груза")
+    private List<Photo> photos;
 
     @Data
     public static class DimensionsDto {
