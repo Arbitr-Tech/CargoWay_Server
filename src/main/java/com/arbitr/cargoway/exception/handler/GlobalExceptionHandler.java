@@ -20,7 +20,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<ErrorRs> handleValidationException(MethodArgumentNotValidException e) {
-        log.error(e.getMessage(), e);
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(TokenValidationException.class)
     public ResponseEntity<ErrorRs> handleTokenValidationException(TokenValidationException e) {
-        log.error(e.getMessage(), e);
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidTokenException.class)
     public ResponseEntity<ErrorRs> handleInvalidTokenException(InvalidTokenException e) {
-        log.error(e.getMessage(), e);
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
@@ -53,7 +53,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ErrorRs> handleValidationException(BadCredentialsException e) {
-        log.error(e.getMessage(), e);
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
@@ -62,9 +62,9 @@ public class GlobalExceptionHandler {
                         .build());
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(ValidationException.class)
     public ResponseEntity<ErrorRs> handleValidationException(ValidationException e) {
-        log.error(e.getMessage(), e);
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
@@ -75,7 +75,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorRs> handleNotFoundException(NotFoundException e) {
-        log.error(e.getMessage(), e);
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
@@ -86,7 +86,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(FileNotFoundException.class)
     public ResponseEntity<ErrorRs> handleFileLoadException(FileNotFoundException e) {
-        log.error(e.getMessage(), e);
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
@@ -97,7 +97,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(FileRemoveException.class)
     public ResponseEntity<ErrorRs> handleFileRemoveException(FileRemoveException e) {
-        log.error(e.getMessage(), e);
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -108,7 +108,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorRs> handleUnexpectedException(Exception e) {
-        log.error(e.getMessage(), e);
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -119,7 +119,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InternalServerError.class)
     public ResponseEntity<ErrorRs> handleUnexpectedException(InternalServerError e) {
-        log.error(e.getMessage(), e);
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
