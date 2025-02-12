@@ -128,9 +128,8 @@
 					<source>${java.version}</source>
 					<target>${java.version}</target>
 					<compilerArgs>
-						<compilerArg>
-							-Amapstruct.defaultComponentModel=spring
-						</compilerArg>
+							<arg>-Amapstruct.defaultComponentModel=spring</arg>
+							<arg>-parameters</arg>
 					</compilerArgs>
 					<annotationProcessorPaths>
 						<path>
