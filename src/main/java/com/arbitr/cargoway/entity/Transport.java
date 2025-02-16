@@ -6,6 +6,9 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -45,6 +48,9 @@ public class Transport {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
+    @Column(name = "type_pay", nullable = false)
+    private String typePay;
+
     @Column(name = "ready_date", nullable = false)
     private LocalDate readyDate;
 
@@ -52,8 +58,11 @@ public class Transport {
     private LocalDate deliveryDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "visibility")
+    @Column(name = "visibility", nullable = false)
     private VisibilityStatus visibility;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @Embeddable
     @Data
@@ -81,4 +90,12 @@ public class Transport {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id", referencedColumnName = "id", nullable = false)
     private Profile profile;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "transport_images",
+            joinColumns = @JoinColumn(name = "transport_id"),
+            inverseJoinColumns = @JoinColumn(name = "image_id")
+    )
+    private List<Image> images = new ArrayList<>();
 }

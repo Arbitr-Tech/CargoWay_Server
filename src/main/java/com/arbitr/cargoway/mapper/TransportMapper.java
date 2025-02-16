@@ -1,17 +1,18 @@
 package com.arbitr.cargoway.mapper;
 
-import com.arbitr.cargoway.dto.rq.cargo.CargoCreateRq;
-import com.arbitr.cargoway.dto.rs.cargo.CargoDetailsRs;
-import com.arbitr.cargoway.entity.Cargo;
+import com.arbitr.cargoway.dto.rq.transaport.TransportCreateRq;
+import com.arbitr.cargoway.dto.rs.transport.TransportDetailsRs;
+import com.arbitr.cargoway.entity.Transport;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper
-public interface CargoMapper extends GeneralMapper {
+public interface TransportMapper extends GeneralMapper{
+
     @Mapping(source = "status", target = "visibility", qualifiedByName = "mapStatusToVisibility")
-    Cargo buildCargoFrom(CargoCreateRq cargoCreateRq);
+    Transport buildTransportFrom(TransportCreateRq transportCreateRq);
 
     @Mapping(source = "visibility", target = "status", qualifiedByName = "mapVisibilityToStatus")
     @Mapping(source = "images", target = "photos", qualifiedByName = "mapImagesToImageRef")
-    CargoDetailsRs buildCargoDetailsRs(Cargo cargo);
+    TransportDetailsRs buildTransportDetailsRs(Transport transport);
 }

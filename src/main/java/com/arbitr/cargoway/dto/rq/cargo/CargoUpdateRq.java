@@ -64,7 +64,7 @@ public class CargoUpdateRq {
     private LocalDate deliveryDate;
 
     @Schema(description = "Статус груза", example = "ACTIVE")
-    private CargoStatus status;
+    private RecordStatus status;
 
     @Schema(description = "Список фотографий груза")
     private List<Photo> photos;

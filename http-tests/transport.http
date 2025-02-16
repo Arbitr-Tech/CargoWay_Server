@@ -1,0 +1,84 @@
+@baseUrl = http://localhost:8080/api/v1/transports
+@authToken = Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyUmFub20xMjMiLCJpYXQiOjE3Mzk3MzQyNjEsImV4cCI6MTczOTgyMDY2MX0.VTBWFkNSG8AJ6AlH_Zse0PWlW8b7UcHMQ7WMMwfgul0
+@transport_uuid = 95a529de-b39a-4cfd-8b7d-f7674bcaf0f9
+@photo_uuid = 65673995-f289-4d68-981e-23426b195d37
+
+### Метод для создания транспорта
+POST {{baseUrl}}//
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+  "type": "Грузовик",
+  "model": "Volvo FH16",
+  "capacity": 10000,
+  "volume": 50,
+  "loadType": "Верхняя",
+  "unloadType": "Задняя",
+  "dimensions": {
+    "length": 10,
+    "width": 2.5,
+    "height": 3
+  },
+  "route": {
+    "from": "Москва",
+    "to": "Санкт-Петербург"
+  },
+  "price": 5000.00,
+  "typePay": "Предоплата",
+  "readyDate": "2025-02-17",
+  "deliveryDate": "2025-02-19",
+  "status": "HIDDEN",
+  "photos": [
+    {
+      "id": "{{photo_uuid}}"
+    }
+  ]
+}
+
+### Получение деталей транспорта
+GET {{baseUrl}}/{{transport_uuid}}/
+Authorization: {{authToken}}
+
+### Поиск транспорта с фильтрами
+GET {{baseUrl}}?type=Грузовик&capacity=10000&volume=50&loadType=Верхняя&unloadType=Задняя&price=5000.00&readyDate=2025-02-08&from=Москва&to=Санкт-Петербург
+Authorization: {{authToken}}
+
+### Получение последних X транспортов
+GET {{baseUrl}}/count/5/
+Authorization: {{authToken}}
+
+### Обновление транспорта
+PATCH {{baseUrl}}/{{transport_uuid}}/
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+  "type": "Фура",
+  "model": "Scania R500",
+  "capacity": 12000,
+  "volume": 55,
+  "loadType": "Боковая",
+  "unloadType": "Передняя",
+  "route": {
+    "from": "Казань",
+    "to": "Екатеринбург"
+  },
+  "price": 5500.00,
+  "typePay": "Постоплата",
+  "readyDate": "2025-02-10",
+  "deliveryDate": "2025-02-18",
+  "photos": [
+    {
+      "id": "{{photo_uuid}}"
+    }
+  ]
+}
+
+### Изменение статуса транспорта
+PATCH {{baseUrl}}/{{transport_uuid}}/change-status/?status=HIDDEN
+Authorization: {{authToken}}
+
+### Удаление транспорта
+DELETE {{baseUrl}}/{{transport_uuid}}/
+Authorization: {{authToken}}

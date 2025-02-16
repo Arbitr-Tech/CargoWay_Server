@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -65,8 +66,11 @@ public class Cargo {
     private LocalDate deliveryDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "visibility")
+    @Column(name = "visibility", nullable = false)
     private VisibilityStatus visibility;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @Embeddable
     @Data

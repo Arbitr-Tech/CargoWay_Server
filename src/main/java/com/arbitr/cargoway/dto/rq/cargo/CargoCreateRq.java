@@ -59,7 +59,7 @@ public class CargoCreateRq {
     private LocalDate deliveryDate;
 
     @Schema(description = "Статус груза")
-    private CargoStatus status;
+    private RecordStatus status;
 
     @Schema(description = "id фотографий груза")
     private List<Photo> photos;

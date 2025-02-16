@@ -1,7 +1,7 @@
 package com.arbitr.cargoway.service;
 
 import com.arbitr.cargoway.dto.rq.cargo.CargoCreateRq;
-import com.arbitr.cargoway.dto.rq.cargo.CargoStatus;
+import com.arbitr.cargoway.dto.rq.cargo.RecordStatus;
 import com.arbitr.cargoway.dto.rq.cargo.CargoUpdateRq;
 import com.arbitr.cargoway.dto.rq.cargo.FilterCargoRq;
 import com.arbitr.cargoway.dto.rs.cargo.CargoDetailsRs;
@@ -15,6 +15,6 @@ public interface CargoService {
     List<CargoDetailsRs> searchCargos(FilterCargoRq filterCargoRq);
     List<CargoDetailsRs> getLastCargos(int number);
     CargoDetailsRs updateCargo(UUID cargoId, CargoUpdateRq cargoUpdateRq);
-    CargoDetailsRs changeCargoGlobalVisibility(UUID cargoId, CargoStatus status);
+    CargoDetailsRs changeCargoGlobalVisibility(UUID cargoId, RecordStatus status);
     void deleteCargo(UUID cargoId);
 }

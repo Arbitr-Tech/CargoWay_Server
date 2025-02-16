@@ -1,7 +1,7 @@
 package com.arbitr.cargoway.service.impl;
 
 import com.arbitr.cargoway.dto.rq.cargo.CargoCreateRq;
-import com.arbitr.cargoway.dto.rq.cargo.CargoStatus;
+import com.arbitr.cargoway.dto.rq.cargo.RecordStatus;
 import com.arbitr.cargoway.dto.rq.cargo.CargoUpdateRq;
 import com.arbitr.cargoway.dto.rq.cargo.FilterCargoRq;
 import com.arbitr.cargoway.dto.rs.cargo.CargoDetailsRs;
@@ -65,7 +65,7 @@ public class CargoServiceImpl implements CargoService {
 
     @Override
     public List<CargoDetailsRs> getLastCargos(int number) {
-        Pageable pageRequest = PageRequest.of(0, number, Sort.by("id").descending());
+        Pageable pageRequest = PageRequest.of(0, number, Sort.by("createdAt").descending());
         Page<Cargo> cargosPage = cargoRepository.findAll(pageRequest);
         return cargosPage.getContent().stream()
                 .map(cargoMapper::buildCargoDetailsRs)
@@ -154,7 +154,7 @@ public class CargoServiceImpl implements CargoService {
     }
 
     @Override
-    public CargoDetailsRs changeCargoGlobalVisibility(UUID cargoId, CargoStatus status) {
+    public CargoDetailsRs changeCargoGlobalVisibility(UUID cargoId, RecordStatus status) {
         Cargo foundCargo = foundCargoOrElseThrowNotFound(cargoId);
         foundCargo.setVisibility(cargoMapper.mapStatusToVisibility(status));
 

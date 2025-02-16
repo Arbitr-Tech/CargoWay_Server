@@ -1,7 +1,7 @@
 package com.arbitr.cargoway.controller;
 
 import com.arbitr.cargoway.dto.rq.cargo.CargoCreateRq;
-import com.arbitr.cargoway.dto.rq.cargo.CargoStatus;
+import com.arbitr.cargoway.dto.rq.cargo.RecordStatus;
 import com.arbitr.cargoway.dto.rq.cargo.CargoUpdateRq;
 import com.arbitr.cargoway.dto.rq.cargo.FilterCargoRq;
 import com.arbitr.cargoway.dto.rs.cargo.CargoDetailsRs;
@@ -47,7 +47,7 @@ public class CargoController {
     }
 
     @PatchMapping("{cargoId}/change-status/")
-    public CargoDetailsRs changeCargoStatus(@PathVariable UUID cargoId, @RequestParam @Valid CargoStatus status) {
+    public CargoDetailsRs changeCargoStatus(@PathVariable UUID cargoId, @RequestParam @Valid RecordStatus status) {
         return cargoService.changeCargoGlobalVisibility(cargoId, status);
     }
 
