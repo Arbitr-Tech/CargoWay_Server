@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:8080/api/v1/transports
-@authToken = Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyUmFub20xMjMiLCJpYXQiOjE3Mzk3MzQyNjEsImV4cCI6MTczOTgyMDY2MX0.VTBWFkNSG8AJ6AlH_Zse0PWlW8b7UcHMQ7WMMwfgul0
+@authToken = Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyUmFub20xMjMiLCJpYXQiOjE3Mzk4MTg2NTYsImV4cCI6MTczOTkwNTA1Nn0.3s080lc-vqOFUXMJ5Yqc3dkE4d5wAZUgD7mCN1r0JPM
 @transport_uuid = 95a529de-b39a-4cfd-8b7d-f7674bcaf0f9
 @photo_uuid = 65673995-f289-4d68-981e-23426b195d37
 
@@ -23,6 +23,15 @@ Content-Type: application/json
   "route": {
     "from": "Москва",
     "to": "Санкт-Петербург"
+  },
+  "trailerDetails": {
+    "dimensions": {
+    "length": 10,
+    "width": 2.5,
+    "height": 3
+    },
+    "volume": 10,
+    "trailerNumber": "43kl43"
   },
   "price": 5000.00,
   "typePay": "Предоплата",

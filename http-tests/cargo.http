@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:8080/api/v1/cargos
-@authToken = Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyUmFub20xMjMiLCJpYXQiOjE3MzkzODUyMDgsImV4cCI6MTczOTQ3MTYwOH0.0M2mD4VsO6rl-LGUzSgJFg_KGCMc-NqXGauNU-i5CdM
+@authToken = Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyUmFub20xMjMiLCJpYXQiOjE3Mzk4MTg2NTYsImV4cCI6MTczOTkwNTA1Nn0.3s080lc-vqOFUXMJ5Yqc3dkE4d5wAZUgD7mCN1r0JPM
 @cargo_uuid = e7e35105-dcc6-4689-a10b-747e6826a17d
 @photo_uuid =
 

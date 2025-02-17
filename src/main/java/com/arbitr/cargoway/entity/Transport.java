@@ -2,7 +2,10 @@ package com.arbitr.cargoway.entity;
 
 import com.arbitr.cargoway.entity.enums.VisibilityStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -13,6 +16,9 @@ import java.util.UUID;
 
 @Data
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "transports")
 public class Transport {
 
@@ -61,6 +67,7 @@ public class Transport {
     @Column(name = "visibility", nullable = false)
     private VisibilityStatus visibility;
 
+    @Builder.Default
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 

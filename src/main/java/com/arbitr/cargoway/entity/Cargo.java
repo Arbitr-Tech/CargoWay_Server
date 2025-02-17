@@ -69,6 +69,7 @@ public class Cargo {
     @Column(name = "visibility", nullable = false)
     private VisibilityStatus visibility;
 
+    @Builder.Default
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
