@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:8080/api/v1/cargos
-@authToken = Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyUmFub20xMjMiLCJpYXQiOjE3Mzk4MTg2NTYsImV4cCI6MTczOTkwNTA1Nn0.3s080lc-vqOFUXMJ5Yqc3dkE4d5wAZUgD7mCN1r0JPM
+@authToken = Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyUmFub20xMjMiLCJpYXQiOjE3Mzk5MDkyMTYsImV4cCI6MTczOTk5NTYxNn0.g17CUnDmEN2aw7ykflQ76xJiXGzlK7kfczbat78zbCg
 @cargo_uuid = e7e35105-dcc6-4689-a10b-747e6826a17d
 @photo_uuid =
 
@@ -12,7 +12,7 @@ Content-Type: application/json
   "name": "Box",
   "description": "Большая коробка",
   "weight": 10,
-  "volume": 50,
+  "volume": 100,
   "bodyType": "Тент",
   "dimensions": {
     "length": 10,
@@ -25,7 +25,7 @@ Content-Type: application/json
   },
   "price": 99.99,
   "typePay": "НДС",
-  "readyDate": "2025-02-18",
+  "readyDate": "2025-02-22",
   "loadType": "Задняя",
   "unloadType": "Задняя",
   "status": "HIDDEN",
@@ -42,11 +42,15 @@ GET {{baseUrl}}/{{cargo_uuid}}/
 Authorization: {{authToken}}
 
 ### Поиск грузов с фильтрами
-GET {{baseUrl}}?weight=10&volume=50&loadType=Задняя&unloadType=Задняя&price=99.99&readyDate=2025-02-09&from=New York&to=Los Angeles
+GET {{baseUrl}}//?weightFrom=1&weightTo=13&volumeFrom=80&volumeTo=150
 Authorization: {{authToken}}
 
 ### Получение последних X грузов
 GET {{baseUrl}}/count/5/
+Authorization: {{authToken}}
+
+### Получение всех грузов профиля
+GET {{baseUrl}}/profile/
 Authorization: {{authToken}}
 
 ### Обновление груза

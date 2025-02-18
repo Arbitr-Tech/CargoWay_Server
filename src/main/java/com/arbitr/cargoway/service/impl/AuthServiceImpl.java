@@ -7,6 +7,7 @@ import com.arbitr.cargoway.dto.rs.AuthenticationResponse;
 import com.arbitr.cargoway.entity.Company;
 import com.arbitr.cargoway.entity.Individual;
 import com.arbitr.cargoway.entity.Profile;
+import com.arbitr.cargoway.entity.enums.ProfileType;
 import com.arbitr.cargoway.entity.security.User;
 import com.arbitr.cargoway.exception.BadRequestException;
 import com.arbitr.cargoway.exception.InvalidTokenException;
@@ -103,10 +104,12 @@ public class AuthServiceImpl implements AuthService {
         profile.setUser(user);
         if (company != null) {
             profile.setCompany(company);
+            profile.setProfileType(ProfileType.COMPANY);
             company.setProfile(profile);
         }
         if (individual != null) {
             profile.setIndividual(individual);
+            profile.setProfileType(ProfileType.INDIVIDUAL);
             individual.setProfile(profile);
         }
         user.setProfile(profile);

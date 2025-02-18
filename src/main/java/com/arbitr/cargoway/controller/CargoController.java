@@ -41,6 +41,11 @@ public class CargoController {
         return cargoService.getLastCargos(number);
     }
 
+    @GetMapping("profile/")
+    public List<CargoDetailsRs> getProfileCargos() {
+        return cargoService.getAllProfileCargos();
+    }
+
     @PatchMapping("{cargoId}/")
     public CargoDetailsRs updateCargo(@PathVariable UUID cargoId, @RequestBody @Valid CargoUpdateRq cargoUpdateRq) {
         return cargoService.updateCargo(cargoId, cargoUpdateRq);

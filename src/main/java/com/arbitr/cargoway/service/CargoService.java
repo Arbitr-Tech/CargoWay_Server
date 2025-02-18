@@ -14,6 +14,7 @@ public interface CargoService {
     CargoDetailsRs getCargo(UUID cargoId);
     List<CargoDetailsRs> searchCargos(FilterCargoRq filterCargoRq);
     List<CargoDetailsRs> getLastCargos(int number);
+    List<CargoDetailsRs> getAllProfileCargos();
     CargoDetailsRs updateCargo(UUID cargoId, CargoUpdateRq cargoUpdateRq);
     CargoDetailsRs changeCargoGlobalVisibility(UUID cargoId, RecordStatus status);
     void deleteCargo(UUID cargoId);

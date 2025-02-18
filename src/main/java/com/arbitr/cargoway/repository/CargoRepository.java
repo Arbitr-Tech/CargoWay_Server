@@ -10,11 +10,14 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface CargoRepository extends JpaRepository<Cargo, UUID> {
+
     Optional<Cargo> findCargoById(UUID id);
 
     void deleteCargoById(UUID id);
 
     @Query("SELECT c FROM Cargo c")
     List<Cargo> findLimitCargos(Pageable pageable);
+
+    List<Cargo> findAllByProfileId(UUID profileId);
 
 }
