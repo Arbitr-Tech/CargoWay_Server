@@ -43,7 +43,7 @@ public class Company {
     @Column(name = "created_date", nullable = false)
     private LocalDate createdDate = LocalDate.now();
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id", referencedColumnName = "id")
     private Profile profile;
 }
