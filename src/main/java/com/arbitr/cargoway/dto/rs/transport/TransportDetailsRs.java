@@ -2,37 +2,37 @@ package com.arbitr.cargoway.dto.rs.transport;
 
 import com.arbitr.cargoway.dto.rs.ImageRef;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.Year;
 import java.util.List;
 import java.util.UUID;
 
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Schema(description = "Детальная информация о транспорте")
 public class TransportDetailsRs {
 
     @Schema(description = "Идентификатор транспорта", example = "550e8400-e29b-41d4-a716-446655440000")
     private UUID id;
 
-    @Schema(description = "Тип транспорта", example = "Грузовик")
-    private String type;
+    @Schema(description = "Марка транспорта", example = "Volvo")
+    private String brand;
 
-    @Schema(description = "Модель транспорта", example = "Volvo FH16")
+    @Schema(description = "Модель транспорта", example = "FH16")
     private String model;
 
-    @Schema(description = "Грузоподъемность транспорта (в кг)", example = "10000")
-    private Integer capacity;
+    @Schema(description = "Год выпуска транспорта", example = "2020")
+    private Year year;
 
-    @Schema(description = "Объем транспорта (в м³)", example = "50")
-    private Integer volume;
+    @Schema(description = "Номер транспорта", example = "A123BC")
+    private String transportNumber;
+
+    @Schema(description = "Грузоподъемность транспорта (в кг)", example = "10000")
+    private Integer liftingCapacity;
 
     @Schema(description = "Тип загрузки", example = "Верхняя")
     private String loadType;
@@ -40,11 +40,14 @@ public class TransportDetailsRs {
     @Schema(description = "Тип выгрузки", example = "Задняя")
     private String unloadType;
 
-    @Schema(description = "Габариты транспорта")
-    private Dimensions dimensions;
+    @Schema(description = "Тип кузова", example = "Тент")
+    private String bodyType;
 
     @Schema(description = "Маршрут транспорта")
     private Route route;
+
+    @Schema(description = "Детали прицепа")
+    private TrailerDetails trailerDetails;
 
     @Schema(description = "Цена за перевозку", example = "5000.00")
     private BigDecimal price;
@@ -55,9 +58,6 @@ public class TransportDetailsRs {
     @Schema(description = "Дата готовности транспорта", example = "2025-02-08")
     private LocalDate readyDate;
 
-    @Schema(description = "Необходимая дата доставки", example = "2025-02-15")
-    private LocalDate deliveryDate;
-
     @Schema(description = "Статус видимости транспорта", example = "PUBLIC")
     private String status;
 
@@ -65,19 +65,7 @@ public class TransportDetailsRs {
     private List<ImageRef> photos;
 
     @Data
-    @Schema(description = "Габариты транспорта")
-    public static class Dimensions {
-        @Schema(description = "Длина транспорта (в метрах)", example = "10")
-        private Integer length;
-
-        @Schema(description = "Ширина транспорта (в метрах)", example = "2.5")
-        private Integer width;
-
-        @Schema(description = "Высота транспорта (в метрах)", example = "3")
-        private Integer height;
-    }
-
-    @Data
+    @Builder
     @Schema(description = "Маршрут транспорта")
     public static class Route {
         @Schema(description = "Место отправления", example = "Москва")
@@ -85,5 +73,25 @@ public class TransportDetailsRs {
 
         @Schema(description = "Место назначения", example = "Санкт-Петербург")
         private String to;
+    }
+
+    @Data
+    @Builder
+    @Schema(description = "Детали прицепа")
+    public static class TrailerDetails {
+        @Schema(description = "Длина прицепа (в метрах)", example = "10")
+        private Integer length;
+
+        @Schema(description = "Ширина прицепа (в метрах)", example = "2.5")
+        private Integer width;
+
+        @Schema(description = "Высота прицепа (в метрах)", example = "3")
+        private Integer height;
+
+        @Schema(description = "Объем прицепа (в м³)", example = "30")
+        private Integer volume;
+
+        @Schema(description = "Номер прицепа", example = "A123BC")
+        private String trailerNumber;
     }
 }

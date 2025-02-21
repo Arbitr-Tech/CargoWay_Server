@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -21,23 +22,25 @@ import java.util.UUID;
 @AllArgsConstructor
 @Table(name = "transports")
 public class Transport {
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    @Column(name = "type", nullable = false)
-    private String type;
+    @Column(name = "brand", nullable = false)
+    private String brand;
 
     @Column(name = "model", nullable = false)
     private String model;
 
-    @Column(name = "capacity", nullable = false)
-    private Integer capacity;
+    @Column(name = "year", nullable = false)
+    private Year year;
 
-    @Column(name = "volume", nullable = false)
-    private Integer volume;
+    @Column(name = "transport_number", nullable = false)
+    private String transportNumber;
+
+    @Column(name = "lifting_capacity", nullable = false)
+    private Integer liftingCapacity;
 
     @Column(name = "load_type", nullable = false)
     private String loadType;
@@ -45,8 +48,8 @@ public class Transport {
     @Column(name = "unload_type", nullable = false)
     private String unloadType;
 
-    @Embedded
-    private Dimensions dimensions;
+    @Column(name = "bodyType", nullable = false)
+    private String bodyType;
 
     @Embedded
     private Route route;
@@ -60,9 +63,6 @@ public class Transport {
     @Column(name = "ready_date", nullable = false)
     private LocalDate readyDate;
 
-    @Column(name = "delivery_date", nullable = false)
-    private LocalDate deliveryDate;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "visibility", nullable = false)
     private VisibilityStatus visibility;
@@ -73,7 +73,17 @@ public class Transport {
 
     @Embeddable
     @Data
-    public static class Dimensions {
+    public static class Route {
+        @Column(name = "route_from", nullable = false)
+        private String from;
+
+        @Column(name = "route_to", nullable = false)
+        private String to;
+    }
+
+    @Embeddable
+    @Data
+    public static class TrailerDetails {
         @Column(name = "length", nullable = false)
         private Integer length;
 
@@ -82,16 +92,12 @@ public class Transport {
 
         @Column(name = "height", nullable = false)
         private Integer height;
-    }
 
-    @Embeddable
-    @Data
-    public static class Route {
-        @Column(name = "route_from", nullable = false)
-        private String from;
+        @Column(name = "trailer_volume", nullable = false)
+        private Integer volume;
 
-        @Column(name = "route_to", nullable = false)
-        private String to;
+        @Column(name = "trailer_number", nullable = false)
+        private String trailerNumber;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
