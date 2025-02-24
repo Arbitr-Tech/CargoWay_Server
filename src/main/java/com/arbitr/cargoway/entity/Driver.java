@@ -1,0 +1,49 @@
+package com.arbitr.cargoway.entity;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+import java.util.UUID;
+
+@Data
+@Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "driver")
+public class Driver {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id")
+    private UUID id;
+
+    @Pattern(regexp = "[A-E]", message = "Категория прав должна быть одной из букв: A, B, C, D, E")
+    @Column(name = "license_category", nullable = false, length = 1)
+    private String licenseCategory;
+
+    @Pattern(regexp = "\\d{4} \\d{6}", message = "Номер прав должен быть в формате 'XXXX XXXXXX'")
+    @Column(name = "license_number", nullable = false, unique = true, length = 11)
+    private String licenseNumber;
+
+    @PastOrPresent(message = "Дата выдачи прав не может быть в будущем")
+    @Column(name = "issue_date", nullable = false)
+    private LocalDate issueDate;
+
+    @FutureOrPresent(message = "Дата окончания действия прав не может быть в прошлом")
+    @Column(name = "expiration_date", nullable = false)
+    private LocalDate expirationDate;
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "profile_id", referencedColumnName = "id", nullable = false)
+    private Profile profile;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    private Transport transport;
+}

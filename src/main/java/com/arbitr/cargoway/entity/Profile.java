@@ -38,5 +38,8 @@ public class Profile {
     private List<Cargo> cargos;
 
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Driver> drivers;
+
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Transport> transports;
 }
