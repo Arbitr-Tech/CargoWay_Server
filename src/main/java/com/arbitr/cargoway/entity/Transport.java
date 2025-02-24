@@ -104,6 +104,10 @@ public class Transport {
     @JoinColumn(name = "profile_id", referencedColumnName = "id", nullable = false)
     private Profile profile;
 
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
+    @JoinColumn(name = "driver_id", referencedColumnName = "id", nullable = false)
+    private Driver driver;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "transport_images",
