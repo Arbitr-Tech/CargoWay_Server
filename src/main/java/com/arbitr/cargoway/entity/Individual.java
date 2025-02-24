@@ -21,10 +21,10 @@ public class Individual {
     private UUID id;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "profile_id", referencedColumnName = "id")
+    @JoinColumn(name = "profile_id", referencedColumnName = "id", nullable = false)
     private Profile profile;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "passport_data_id", referencedColumnName = "id")
+    @JoinColumn(name = "passport_data_id", referencedColumnName = "id", nullable = false)
     private PassportData passportData;
 }
