@@ -31,6 +31,9 @@ public class Profile {
     @OneToOne(mappedBy = "profile", targetEntity = Individual.class, cascade = CascadeType.ALL)
     private Individual individual;
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private ContactData contactData;
+
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Cargo> cargos;
 
