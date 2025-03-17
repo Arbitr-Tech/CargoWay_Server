@@ -59,12 +59,12 @@ public class AuthController {
     }
 
     @PostMapping("password-recovery/")
-    public void passwordRecovery(RecoveryEmailRq recoveryEmailRq) {
+    public void passwordRecovery(@RequestBody @Valid RecoveryEmailRq recoveryEmailRq) {
         passwordManagementService.recoveryUserPassword(recoveryEmailRq);
     }
 
     @PostMapping("reset-password/")
-    public void resetPassword(String resetToken, ResetPasswordRq resetPasswordRq) {
+    public void resetPassword(@RequestParam("token") String resetToken, @RequestBody @Valid ResetPasswordRq resetPasswordRq) {
         passwordManagementService.resetPassword(resetToken, resetPasswordRq);
     }
 }
