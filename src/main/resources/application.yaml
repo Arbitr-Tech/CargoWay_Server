@@ -7,11 +7,45 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
-    show-sql: false
+    show-sql: true
     properties:
       hibernate:
-        format_sql: false
+        format_sql: true
     database: postgresql
+
+  kafka:
+    bootstrap-servers: localhost:29092
+    consumer:
+      enable-auto-commit: true
+      auto-offset-reset: earliest
+      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: '*'
+        spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: "89615854074a@gmail.com"
+    password: "ophu ohqb earg mzbr"
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+kafka:
+  email-topic: emails
+  email-topic-processor-group: email-group
 
 minio:
   endpoint: ${MINIO_HOST}:${MINIO_API_PORT}
@@ -25,3 +59,10 @@ jwt:
     expiration: ${ACCESS_TOKEN_EXPIRATION}
   refresh-token:
     expiration: ${REFRESH_TOKEN_EXPIRATION}
+
+frontend:
+  recovery-password:
+    url: "https://random.site.net/password-reset/"
+    expiration-minutes: 15
+
+debug: true

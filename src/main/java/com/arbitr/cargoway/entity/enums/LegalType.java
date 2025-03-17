@@ -1,6 +1,6 @@
 package com.arbitr.cargoway.entity.enums;
 
-public enum ProfileType {
+public enum LegalType {
     INDIVIDUAL,
     COMPANY
 }

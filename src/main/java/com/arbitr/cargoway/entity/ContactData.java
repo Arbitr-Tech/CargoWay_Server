@@ -30,6 +30,6 @@ public class ContactData {
     private String phoneNumber;
 
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.LAZY)
-    @JoinColumn(name = "profile_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "profile_id", referencedColumnName = "id")
     private Profile profile;
 }

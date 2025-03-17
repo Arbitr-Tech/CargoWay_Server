@@ -1,6 +1,6 @@
 package com.arbitr.cargoway.entity;
 
-import com.arbitr.cargoway.entity.enums.ProfileType;
+import com.arbitr.cargoway.entity.enums.LegalType;
 import com.arbitr.cargoway.entity.security.User;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -18,8 +18,8 @@ public class Profile {
     private UUID id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "profile_type", nullable = false)
-    private ProfileType profileType;
+    @Column(name = "legal_type", nullable = false)
+    private LegalType legalType;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")

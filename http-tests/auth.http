@@ -1,47 +1,13 @@
 ### Метод для регистрации компании
-POST http://localhost:8080/api/v1/auth/register/?profile_type=company
+POST http://localhost:8080/api/v1/auth/register/
 Content-Type: application/json
 
 {
   "username": "userRanom123",
-  "email": "random.useыr@example.com",
+  "email": "papasagid@gmail.com",
   "password": "SecurePass456!",
-  "role": "ADMIN",
-  "company": {
-    "name": "ООО \"Рога и Копыта\"",
-    "inn": "7707983893",
-    "ogrn": "1027710132195",
-    "bic": "074525225",
-    "correspondentAccount": "43274832",
-    "registrationDate": "2022-06-15"
-  }
-}
-
-### Метод для регистрации физ лица
-POST http://localhost:8080/api/v1/auth/register/?profile_type=individual
-Content-Type: application/json
-
-{
-  "username": "usersRandom123",
-  "email": "random.user1@example.com",
-  "password": "SecurePass456!",
-  "role": "CARRIER",
-  "individual": {
-    "fullname": "Иван Иванов",
-    "phoneNumber": "+7 (999) 123-45-67",
-    "passportNum": 123456,
-    "passportSeries": 7890,
-    "whoGive": "УФМС России по г. Москве",
-    "departmentCode": "770-001",
-    "photos": [
-      {
-        "guid": "34d2e508-e9cb-46dd-8137-4e53fa1c89af"
-      },
-      {
-        "guid": "031172a0-3ab8-4ed1-9136-5df937bc16f6"
-      }
-    ]
-  }
+  "legalTypeDto": "INDIVIDUAL",
+  "role": "ADMIN"
 }
 
 ### Метод для авторизации
@@ -49,11 +15,32 @@ POST http://localhost:8080/api/v1/auth/login/
 Content-Type: application/json
 
 {
-  "email": "random.useыr@example.com",
+  "email": "papasagid@gmail.com",
   "password": "SecurePass456!"
 }
 
 ### Метод для обновления токена доступа
 POST http://localhost:8080/api/v1/auth/refresh-token/
-Set-Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyUmFub20xMjMiLCJpYXQiOjE3Mzg3MDM5MzEsImV4cCI6MTczODc5MDMzMX0.02pavYB_CFvh6cVFe645udbLza2pFAgPspNzY_B4Jng; Max-Age=604800; Expires=Tue, 11 Feb 2025 20:58:01 GMT; Path=/; HttpOnly
+Set-Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyUmFub20xMjMiLCJpYXQiOjE3NDIyMzQ1MzksImV4cCI6MTc0MjgzOTMzOX0.Qbp9CGduDXFfzvCWkEqySFbVS8hGKZhVe6nrE_pIemE; Max-Age=604800; Expires=Mon, 24 Mar 2025 18:02:19 GMT; Path=/; HttpOnly
+
+### Метод для сбора пароля
+POST http://localhost:8080/api/v1/auth/password-recovery/
+Content-Type: application/json
+
+{
+  "email": "papasagid@gmail.com"
+}
+
+### Метод для установки нового пароля
+POST http://localhost:8080/api/v1/auth/reset-password/?token=-TRYAwZaoINbJlUj0cZgvI56PJwbkK-HRZq5FdzsYg0
+Content-Type: application/json
+
+{
+  "newPassword": "k.,k.linux"
+}
+
+### Метод для выхода из системы
+POST http://localhost:8080/api/v1/auth/logout/
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsb2zQstCyadCwayIsImlhdCI6MTczODU2NDc3NywiZXhwIjoxNzM4NjUxMTc3fQ.az8loA4IKC4rjWviK3AsycyH3-Awubnd4iqmVUiyZfA
+
 

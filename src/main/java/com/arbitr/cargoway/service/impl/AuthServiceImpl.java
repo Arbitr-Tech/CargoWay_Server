@@ -1,19 +1,18 @@
 package com.arbitr.cargoway.service.impl;
 
 import com.arbitr.cargoway.config.security.JwtService;
+import com.arbitr.cargoway.dto.internal.email.EmailDto;
 import com.arbitr.cargoway.dto.rq.SignInRequest;
 import com.arbitr.cargoway.dto.rq.SignUpRequest;
 import com.arbitr.cargoway.dto.rs.AuthenticationResponse;
-import com.arbitr.cargoway.entity.Company;
-import com.arbitr.cargoway.entity.Individual;
 import com.arbitr.cargoway.entity.Profile;
-import com.arbitr.cargoway.entity.enums.ProfileType;
+import com.arbitr.cargoway.entity.enums.LegalType;
 import com.arbitr.cargoway.entity.security.User;
-import com.arbitr.cargoway.exception.BadRequestException;
 import com.arbitr.cargoway.exception.InvalidTokenException;
 import com.arbitr.cargoway.exception.NotFoundException;
 import com.arbitr.cargoway.exception.TokenValidationException;
 import com.arbitr.cargoway.mapper.UserMapper;
+import com.arbitr.cargoway.publisher.EmailEventPublisher;
 import com.arbitr.cargoway.repository.*;
 import com.arbitr.cargoway.service.AuthService;
 import com.arbitr.cargoway.entity.security.Token;
@@ -31,23 +30,36 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
-    private final ProfileRepository profileRepository;
-    private final CompanyRepository companyRepository;
-    private final IndividualRepository individualRepository;
     private final TokenRepository tokenRepository;
 
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final EmailEventPublisher emailEventPublisher;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
 
     @Override
-    public AuthenticationResponse register(String profileType, SignUpRequest signUpRequest, HttpServletResponse response) {
-        return switch (profileType.toLowerCase()) {
-            case "individual" -> registerIndividual(signUpRequest, response);
-            case "company" -> registerCompany(signUpRequest, response);
-            default -> throw new BadRequestException("Указан неверный тип профиля!");
-        };
+    public AuthenticationResponse register(SignUpRequest signUpRequest, HttpServletResponse response) {
+        User user = userMapper.buildUserFrom(signUpRequest);
+        user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
+
+        Profile profile = new Profile();
+        profile.setUser(user);
+        profile.setLegalType(LegalType.valueOf(signUpRequest.getLegalTypeDto().name()));
+
+        user.setProfile(profile);
+
+        userRepository.save(user);
+
+        emailEventPublisher.sendEmailEvent(
+                EmailDto.builder()
+                        .toEmail(user.getEmail())
+                        .subject("CargoWay: успешная регистрация")
+                        .body("Уважаемый %s, вы успешно зарегистрировались на сервисе CargoWay!".formatted(user.getUsername()))
+                        .build()
+        );
+
+        return setupAuthResponse(user, response);
     }
 
     @Override
@@ -70,57 +82,6 @@ public class AuthServiceImpl implements AuthService {
         setRefreshTokenInCookie(response, refreshToken);
 
         return new AuthenticationResponse(accessToken);
-    }
-
-    private AuthenticationResponse registerCompany(SignUpRequest signUpRequest, HttpServletResponse response) {
-        User newUser = createUser(signUpRequest);
-        Company newCompany = userMapper.buildCompanyFrom(signUpRequest.getCompany());
-        Profile newProfile = createProfile(newUser, newCompany, null);
-
-        saveEntities(newUser, newProfile, newCompany, null);
-
-
-        return setupAuthResponse(newUser, response);
-    }
-
-    private AuthenticationResponse registerIndividual(SignUpRequest signUpRequest, HttpServletResponse response) {
-        User newUser = createUser(signUpRequest);
-        Individual newIndividual = userMapper.buildIndividualFrom(signUpRequest.getIndividual());
-        Profile newProfile = createProfile(newUser, null, newIndividual);
-
-        saveEntities(newUser, newProfile, null, newIndividual);
-
-        return setupAuthResponse(newUser, response);
-    }
-
-    private User createUser(SignUpRequest signUpRequest) {
-        User user = userMapper.buildUserFrom(signUpRequest);
-        user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
-        return user;
-    }
-
-    private Profile createProfile(User user, Company company, Individual individual) {
-        Profile profile = new Profile();
-        profile.setUser(user);
-        if (company != null) {
-            profile.setCompany(company);
-            profile.setProfileType(ProfileType.COMPANY);
-            company.setProfile(profile);
-        }
-        if (individual != null) {
-            profile.setIndividual(individual);
-            profile.setProfileType(ProfileType.INDIVIDUAL);
-            individual.setProfile(profile);
-        }
-        user.setProfile(profile);
-        return profile;
-    }
-
-    private void saveEntities(User user, Profile profile, Company company, Individual individual) {
-        profileRepository.save(profile);
-        if (company != null) companyRepository.save(company);
-        if (individual != null) individualRepository.save(individual);
-        userRepository.save(user);
     }
 
     private AuthenticationResponse setupAuthResponse(User user, HttpServletResponse response) {
