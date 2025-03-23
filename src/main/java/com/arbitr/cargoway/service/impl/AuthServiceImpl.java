@@ -23,6 +23,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +48,6 @@ public class AuthServiceImpl implements AuthService {
         Profile profile = new Profile();
         profile.setUser(user);
         profile.setLegalType(LegalType.valueOf(signUpRequest.getLegalTypeDto().name()));
-
         user.setProfile(profile);
 
         userRepository.save(user);
@@ -167,6 +168,20 @@ public class AuthServiceImpl implements AuthService {
         return AuthenticationResponse.builder()
                 .accessToken(accessToken)
                 .build();
+    }
+
+    @Override
+    public User getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || authentication.getPrincipal() == null) {
+            throw new RuntimeException("Произошла ошибка! Пользователь не аутентифицирован!");
+        }
+
+        String username = authentication.getName();
+
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("Пользователь не был найден! Попробуйте еще раз."));
     }
 }
 

@@ -3,8 +3,8 @@ POST http://localhost:8080/api/v1/auth/register/
 Content-Type: application/json
 
 {
-  "username": "userRanom123",
-  "email": "papasagid@gmail.com",
+  "username": "ufserRanom123",
+  "email": "ann.ten.tkdlove@mail.com",
   "password": "SecurePass456!",
   "legalTypeDto": "INDIVIDUAL",
   "role": "ADMIN"
@@ -15,7 +15,7 @@ POST http://localhost:8080/api/v1/auth/login/
 Content-Type: application/json
 
 {
-  "email": "papasagid@gmail.com",
+  "email": "ann.ten.tkdlove@mail.com",
   "password": "SecurePass456!"
 }
 
@@ -28,11 +28,11 @@ POST http://localhost:8080/api/v1/auth/password-recovery/
 Content-Type: application/json
 
 {
-  "email": "papasagid@gmail.com"
+  "email": "ann.ten.tkdlove@mail.com"
 }
 
 ### Метод для установки нового пароля
-POST http://localhost:8080/api/v1/auth/reset-password/?token=-TRYAwZaoINbJlUj0cZgvI56PJwbkK-HRZq5FdzsYg0
+POST http://localhost:8080/api/v1/auth/reset-password/?token=cA-EDhswh_JPVz5e8f-G9Ew9YNuVccYfkA0mubNSIsA
 Content-Type: application/json
 
 {
@@ -42,5 +42,3 @@ Content-Type: application/json
 ### Метод для выхода из системы
 POST http://localhost:8080/api/v1/auth/logout/
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsb2zQstCyadCwayIsImlhdCI6MTczODU2NDc3NywiZXhwIjoxNzM4NjUxMTc3fQ.az8loA4IKC4rjWviK3AsycyH3-Awubnd4iqmVUiyZfA
-
-

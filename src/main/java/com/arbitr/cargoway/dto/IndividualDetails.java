@@ -10,7 +10,7 @@ import java.util.List;
 
 @Data
 @Schema(description = "DTO для физ. лица")
-public class IndividualDto {
+public class IndividualDetails {
     @Schema(description = "Полное имя", example = "Иван Иванов")
     @Size(max = 100, message = "Полное имя не должно превышать 100 символов")
     private String fullname;

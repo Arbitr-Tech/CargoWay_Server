@@ -24,35 +24,17 @@ public class AuthController {
     private final AuthService authService;
     private final PasswordManagementService passwordManagementService;
 
-    @Operation(
-            summary = "Регистрация пользователя",
-            description = "Регистрация нового пользователя с указанием типа профиля (индивидуальный или компания)."
-    )
     @PostMapping("register/")
-    public AuthenticationResponse register(
-            @RequestBody @Valid SignUpRequest signUpRequest,
-            HttpServletResponse response
-    ) {
-
+    public AuthenticationResponse register(@RequestBody @Valid SignUpRequest signUpRequest,
+                                           HttpServletResponse response) {
         return authService.register(signUpRequest, response);
     }
 
-    @Operation(
-            summary = "Авторизация пользователя",
-            description = "Авторизация пользователя по почте и паролю"
-    )
     @PostMapping("login/")
-    public AuthenticationResponse login(
-        @RequestBody @Valid SignInRequest signInRequest,
-        HttpServletResponse response
-    ) {
+    public AuthenticationResponse login(@RequestBody @Valid SignInRequest signInRequest, HttpServletResponse response) {
         return authService.login(signInRequest, response);
     }
 
-    @Operation(
-            summary = "Обновление токена доступа",
-            description = "Обновление токена доступа с помощью refresh-токена"
-    )
     @PostMapping("refresh-token/")
     AuthenticationResponse refreshToken(HttpServletRequest request, HttpServletResponse response) {
         return authService.refreshToken(request, response);
@@ -64,7 +46,8 @@ public class AuthController {
     }
 
     @PostMapping("reset-password/")
-    public void resetPassword(@RequestParam("token") String resetToken, @RequestBody @Valid ResetPasswordRq resetPasswordRq) {
+    public void resetPassword(@RequestParam("token") String resetToken,
+                              @RequestBody @Valid ResetPasswordRq resetPasswordRq) {
         passwordManagementService.resetPassword(resetToken, resetPasswordRq);
     }
 }

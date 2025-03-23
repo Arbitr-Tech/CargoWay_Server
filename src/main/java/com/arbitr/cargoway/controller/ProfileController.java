@@ -1,12 +1,12 @@
 package com.arbitr.cargoway.controller;
 
-import com.arbitr.cargoway.dto.rs.UserProfileRs;
+import com.arbitr.cargoway.dto.rq.profile.ProfileUpdateRq;
+import com.arbitr.cargoway.dto.rs.profile.ProfileRs;
 import com.arbitr.cargoway.service.ProfileService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/profile/")
@@ -16,7 +16,12 @@ public class ProfileController {
     private final ProfileService profileService;
 
     @GetMapping
-    public UserProfileRs getUserProfile() {
-        return profileService.getUserProfile();
+    public ProfileRs getProfile() {
+        return profileService.getProfile();
+    }
+
+    @PatchMapping
+    public ProfileRs updateProfile(@RequestBody @Valid ProfileUpdateRq profileUpdateRq) {
+        return profileService.updateProfile(profileUpdateRq);
     }
 }

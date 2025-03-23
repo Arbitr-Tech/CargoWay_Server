@@ -10,7 +10,7 @@ import java.time.LocalDate;
 
 @Data
 @Schema(description = "DTO для компании")
-public class CompanyDto {
+public class CompanyDetails {
     @Schema(description = "Название компании", example = "ООО 'Рога и Копыта'")
     @Size(max = 255, message = "Название компании не должно превышать 255 символов")
     private String name;

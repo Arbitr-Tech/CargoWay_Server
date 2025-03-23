@@ -13,13 +13,22 @@ import java.util.UUID;
 @Table(name = "profiles")
 public class Profile {
     @Id
-    @Column(name = "id")
+    @Column(name = "id", updatable = false, nullable = false)
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "legal_type", nullable = false)
     private LegalType legalType;
+
+    @Column(name = "user_rating", nullable = false)
+    private Double userRating = 0.0;
+
+    @Column(name = "user_rating", nullable = false)
+    private Double systemRating = 0.0;
+
+    @Column(name = "activated", nullable = false)
+    private Boolean activated = false;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -42,4 +51,7 @@ public class Profile {
 
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Transport> transports;
+
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Review> reviews;
 }

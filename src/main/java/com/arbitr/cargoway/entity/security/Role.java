@@ -29,12 +29,6 @@ public enum Role {
             Set.of(
                     CARGO_CRUD
             )
-    ),
-    FORWARDER(
-            Set.of(
-                    TRANSPORT_CRUD,
-                    CARGO_CRUD
-            )
     );
 
     private final Set<Permission> permissions;
