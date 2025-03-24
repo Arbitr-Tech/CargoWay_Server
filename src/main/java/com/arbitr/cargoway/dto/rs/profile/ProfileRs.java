@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -18,6 +19,9 @@ import java.util.List;
 @AllArgsConstructor
 @Schema(description = "DTO-класс с информацией о профиле пользователя")
 public class ProfileRs {
+    @Schema(description = "id профиля")
+    UUID id;
+
     @Schema(description = "Правовая форма профиля (физ. или юр. лицо)")
     LegalTypeDto legalType;
 

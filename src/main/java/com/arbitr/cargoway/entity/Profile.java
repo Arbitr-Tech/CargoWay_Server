@@ -24,7 +24,7 @@ public class Profile {
     @Column(name = "user_rating", nullable = false)
     private Double userRating = 0.0;
 
-    @Column(name = "user_rating", nullable = false)
+    @Column(name = "system_rating", nullable = false)
     private Double systemRating = 0.0;
 
     @Column(name = "activated", nullable = false)

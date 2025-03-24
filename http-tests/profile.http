@@ -1,3 +1,17 @@
+### Метод для авторизации
+POST http://localhost:8080/api/v1/auth/login/
+Content-Type: application/json
+
+{
+  "email": "ann.ten.tkdlove@mail.com",
+  "password": "SecurePass456!"
+}
+
+> {%
+    client.global.set("access_token", response.body.access_token);
+%}
+
+
 ### Метод для получения данных о профиле
 GET http://localhost:8080/api/v1/profile/
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyUmFub20xMjMiLCJpYXQiOjE3Mzk5MDkyMTYsImV4cCI6MTczOTk5NTYxNn0.g17CUnDmEN2aw7ykflQ76xJiXGzlK7kfczbat78zbCg
+Authorization: Bearer {{access_token}}

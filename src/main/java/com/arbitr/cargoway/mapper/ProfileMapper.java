@@ -16,11 +16,9 @@ import java.util.List;
 @Mapper(componentModel = "spring", uses = {UserMapper.class})
 public interface ProfileMapper {
 
+    @Mapping(source = "reviews", target = "reviews", qualifiedByName = "mapReviewToReviewRs")
     @Mapping(source = "user", target = "userData")
     ProfileRs buildProfileRsFrom(Profile profile);
-
-    @Mapping(source = "userData", target = "user")
-    Profile buildProfileFrom(ProfileRs profileRs);
 
     Individual buildIndividualFrom(IndividualDetails individualDetails);
 
@@ -32,18 +30,17 @@ public interface ProfileMapper {
 
     ContactData buildContactDataFrom(ContactDataDetails contactDataDetails);
 
-//    // Преобразование Review в ReviewRs
-//    @Named("mapReviews")
-//    default List<ReviewRs> mapReviews(List<Review> reviews) {
-//        if (reviews == null) return Collections.emptyList();
-//        return reviews.stream()
-//                .map(review -> new ReviewRs(
-//                        review.getId(),
-//                        review.getTitle(),
-//                        review.getComment(),
-//                        review.getRating(),
-//                        review.getCreatedAt()
-//                ))
-//                .toList();
-//    }
+    // Преобразование Review в ReviewRs
+    @Named("mapReviewToReviewRs")
+    default List<ReviewRs> mapReviews(List<Review> reviews) {
+        if (reviews == null) return Collections.emptyList();
+        return reviews.stream()
+                .map(review -> ReviewRs.builder()
+                                .id(review.getId())
+                                .title(review.getTitle())
+                                .comment(review.getComment())
+                                .rating(review.getRating())
+                                .build())
+                .toList();
+    }
 }

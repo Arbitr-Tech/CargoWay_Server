@@ -7,7 +7,7 @@ Content-Type: application/json
   "email": "ann.ten.tkdlove@mail.com",
   "password": "SecurePass456!",
   "legalTypeDto": "INDIVIDUAL",
-  "role": "ADMIN"
+  "role": "CARRIER"
 }
 
 ### Метод для авторизации
