@@ -11,7 +11,27 @@ Content-Type: application/json
     client.global.set("access_token", response.body.access_token);
 %}
 
-
 ### Метод для получения данных о профиле
 GET http://localhost:8080/api/v1/profile/
 Authorization: Bearer {{access_token}}
+
+### Метод для обновления данных профиля
+PATCH http://localhost:8080/api/v1/profile/
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "contactData": {
+    "telegramLink": "user@example.com",
+    "whatsappLink": "+1234567890",
+    "phoneNumber": "123 Main Street, City, Country"
+  },
+  "company": {
+    "name": "Example Corp",
+    "inn": "1234567890",
+    "ogrn": "1122334455667",
+    "bic": "044525225",
+    "correspondentAccount": "30101810400000000225",
+    "registrationDate": "2020-01-01"
+  }
+}

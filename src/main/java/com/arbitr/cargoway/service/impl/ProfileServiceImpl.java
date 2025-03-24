@@ -2,6 +2,9 @@ package com.arbitr.cargoway.service.impl;
 
 import com.arbitr.cargoway.dto.rq.profile.ProfileUpdateRq;
 import com.arbitr.cargoway.dto.rs.profile.ProfileRs;
+import com.arbitr.cargoway.entity.Company;
+import com.arbitr.cargoway.entity.ContactData;
+import com.arbitr.cargoway.entity.Individual;
 import com.arbitr.cargoway.entity.Profile;
 import com.arbitr.cargoway.entity.security.User;
 import com.arbitr.cargoway.mapper.ProfileMapper;
@@ -32,13 +35,19 @@ public class ProfileServiceImpl implements ProfileService {
         Profile profile = user.getProfile();
 
         if (profileUpdateRq.getContactData() != null) {
-            profile.setContactData(profileMapper.buildContactDataFrom(profileUpdateRq.getContactData()));
+            ContactData newContactData = profileMapper.buildContactDataFrom(profileUpdateRq.getContactData());
+            profile.setContactData(newContactData);
+            newContactData.setProfile(profile);
         }
         if (profileUpdateRq.getCompany() != null) {
-            profile.setCompany(profileMapper.buildCompanyFrom(profileUpdateRq.getCompany()));
+            Company newCompany = profileMapper.buildCompanyFrom(profileUpdateRq.getCompany());
+            profile.setCompany(newCompany);
+            newCompany.setProfile(profile);
         }
         if (profileUpdateRq.getIndividual() != null) {
-            profile.setIndividual(profileMapper.buildIndividualFrom(profileUpdateRq.getIndividual()));
+            Individual newIndividual = profileMapper.buildIndividualFrom(profileUpdateRq.getIndividual());
+            profile.setIndividual(newIndividual);
+            newIndividual.setProfile(profile);
         }
 
         profileRepository.save(profile);
