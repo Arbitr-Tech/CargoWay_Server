@@ -23,7 +23,7 @@ public class Company {
     @Column(name = "id")
     private UUID id;
 
-    @Column(name = "name", nullable = false, unique = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Pattern(regexp = "\\d{10}|\\d{12}", message = "ИНН должен состоять из 10 или 12 цифр")
@@ -35,7 +35,7 @@ public class Company {
     private String ogrn;
 
     @Pattern(regexp = "\\d{9}", message = "БИК должен состоять из 9 цифр")
-    @Column(name = "bic", nullable = false, unique = false, length = 9)
+    @Column(name = "bic", nullable = false, length = 9)
     private String bic;
 
     @Pattern(regexp = "\\d{20}", message = "Корреспондентский счёт должен состоять из 20 цифр")
