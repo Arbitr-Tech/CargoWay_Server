@@ -45,9 +45,11 @@ public class AuthServiceImpl implements AuthService {
         User user = userMapper.buildUserFrom(signUpRequest);
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
 
-        Profile profile = new Profile();
-        profile.setUser(user);
-        profile.setLegalType(LegalType.valueOf(signUpRequest.getLegalTypeDto().name()));
+        Profile.ProfileBuilder profileBuilder = Profile.builder();
+        profileBuilder.user(user);
+        profileBuilder.legalType(LegalType.valueOf(signUpRequest.getLegalType().name()));
+        Profile profile = profileBuilder.build();
+
         user.setProfile(profile);
 
         userRepository.save(user);
