@@ -1,4 +1,19 @@
 services:
+  cargo-way-app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    depends_on:
+      - cargo-way-postgres
+      - cargo-way-minio
+      - cargo-way-kafka
+    networks:
+      - app-network
+
   cargo-way-postgres:
     image: postgres:16-alpine
     environment:
@@ -12,9 +27,8 @@ services:
     networks:
       - app-network
 
-  minio:
+  cargo-way-minio:
     image: minio/minio:latest
-    container_name: minio
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
@@ -30,7 +44,7 @@ services:
     networks:
       - app-network
 
-  zookeeper:
+  cargo-way-zookeeper:
     image: confluentinc/cp-zookeeper:latest
     container_name: zookeeper
     environment:
@@ -41,11 +55,11 @@ services:
     networks:
       - app-network
 
-  kafka:
+  cargo-way-kafka:
     image: confluentinc/cp-kafka:latest
     container_name: kafka
     depends_on:
-      - zookeeper
+      - cargo-way-zookeeper
     ports:
       - "${KAFKA_INTERNAL_HOST_PORT}:9092"
       - "${KAFKA_EXTERNAL_HOST_PORT}:29092"
@@ -59,11 +73,11 @@ services:
     networks:
       - app-network
 
-  mailhog:
+  cargo-way-mailhog:
     image: mailhog/mailhog:v1.0.1
     ports:
-      - "${SMTP_PORT:-1025}:${SMTP_PORT:-1025}"
-      - "${SMTP_UI_PORT:-8025}:${SMTP_UI_PORT:-8025}"
+      - "${SMTP_PORT}:${SMTP_PORT}"
+      - "${SMTP_UI_PORT}:${SMTP_UI_PORT}"
     networks:
       - app-network
 
