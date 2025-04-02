@@ -3,13 +3,19 @@ package com.arbitr.cargoway.entity;
 import com.arbitr.cargoway.entity.enums.LegalType;
 import com.arbitr.cargoway.entity.security.User;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.UUID;
 
 @Data
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "profiles")
 public class Profile {
     @Id
@@ -21,12 +27,15 @@ public class Profile {
     @Column(name = "legal_type", nullable = false)
     private LegalType legalType;
 
+    @Builder.Default
     @Column(name = "user_rating", nullable = false)
     private Double userRating = 0.0;
 
+    @Builder.Default
     @Column(name = "system_rating", nullable = false)
     private Double systemRating = 0.0;
 
+    @Builder.Default
     @Column(name = "activated", nullable = false)
     private Boolean activated = false;
 

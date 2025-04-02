@@ -26,12 +26,27 @@ Content-Type: application/json
     "whatsappLink": "+1234567890",
     "phoneNumber": "123 Main Street, City, Country"
   },
-  "company": {
-    "name": "Example Corp",
-    "inn": "1234567890",
-    "ogrn": "1122334455667",
-    "bic": "044525225",
-    "correspondentAccount": "30101810400000000225",
-    "registrationDate": "2020-01-01"
+  "individual": {
+    "fullName": "Иван Иванов",
+    "passportNumber": "1234 567890",
+    "issuedBy": "УФМС России по г. Москве",
+    "issueDate": "2020-01-15",
+    "departmentCode": "770-001",
+    "registrationAddress": "г. Москва, ул. Ленина, д. 10"
   }
+}
+
+###
+#{
+#  "contactData": {
+#    "telegramLink": "user@ example.com",
+#    "whatsappLink": "+1234567890",
+#    "phoneNumber": "123 Main Street, City, Country"
+#  },
+#  "company": {
+#    "name": "Example Corp",
+#    "inn": "1234567890",
+#    "ogrn": "1122334455667",
+#    "bic": "044525225"
+#  }
 }

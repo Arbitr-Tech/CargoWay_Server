@@ -1,6 +1,6 @@
 package com.arbitr.cargoway.dto;
 
-public enum CargoWayRole {
+public enum RoleDto {
     ADMIN,
     CARRIER,
     CUSTOMER

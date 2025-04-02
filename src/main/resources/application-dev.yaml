@@ -14,7 +14,7 @@ spring:
     database: postgresql
 
   kafka:
-    bootstrap-servers: ${EXTERNAL_HOST}:${KAFKA_EXTERNAL_HOST_PORT}
+    bootstrap-servers: cargo-way-kafka:9092
     consumer:
       enable-auto-commit: true
       auto-offset-reset: earliest
@@ -32,8 +32,8 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
   mail:
-    host: ${SMTP_HOST}
-    port: ${SMTP_PORT}
+    host: cargo-way-mailhog
+    port: 1025
     username: ${SMTP_USER}
     password: ${SMTP_PASSWORD}
     properties:
@@ -54,7 +54,7 @@ kafka:
   email-topic-processor-group: email-group
 
 minio:
-  endpoint: http://cargo-way-minio
+  endpoint: http://cargo-way-minio:9000
   access-key: ${MINIO_ROOT_USER}
   secret-key: ${MINIO_ROOT_PASSWORD}
   bucket-name: ${MINIO_BUCKET_NAME}

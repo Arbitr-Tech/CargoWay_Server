@@ -1,6 +1,6 @@
 package com.arbitr.cargoway.dto.rq;
 
-import com.arbitr.cargoway.dto.CargoWayRole;
+import com.arbitr.cargoway.dto.RoleDto;
 import com.arbitr.cargoway.dto.LegalTypeDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
@@ -27,8 +27,8 @@ public class SignUpRequest {
     private String password;
 
     @Schema(description = "Тип компании", example = "INDIVIDUAL")
-    private LegalTypeDto legalTypeDto;
+    private LegalTypeDto legalType;
 
     @Schema(description = "Роль пользователя в системе")
-    private CargoWayRole role;
+    private RoleDto role;
 }

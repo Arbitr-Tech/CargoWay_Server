@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.UUID;
 
 @Data
-@Schema(description = "DTO для id фото")
+@Schema(description = "UUID фотографии для создания новой сущности")
 public class Photo {
     @Schema(description = "UUID фотографии")
     private UUID id;

@@ -8,6 +8,7 @@ import com.arbitr.cargoway.dto.rs.profile.ReviewRs;
 import com.arbitr.cargoway.entity.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 
 import java.util.Collections;
@@ -30,17 +31,22 @@ public interface ProfileMapper {
 
     ContactData buildContactDataFrom(ContactDataDetails contactDataDetails);
 
-    // Преобразование Review в ReviewRs
+    void updateContactData(@MappingTarget ContactData target, ContactData source);
+
+    void updateIndividual(@MappingTarget Individual target, Individual source);
+
+    void updateCompany(@MappingTarget Company target, Company source);
+
     @Named("mapReviewToReviewRs")
     default List<ReviewRs> mapReviews(List<Review> reviews) {
         if (reviews == null) return Collections.emptyList();
         return reviews.stream()
                 .map(review -> ReviewRs.builder()
-                                .id(review.getId())
-                                .title(review.getTitle())
-                                .comment(review.getComment())
-                                .rating(review.getRating())
-                                .build())
+                        .id(review.getId())
+                        .title(review.getTitle())
+                        .comment(review.getComment())
+                        .rating(review.getRating())
+                        .build())
                 .toList();
     }
 }

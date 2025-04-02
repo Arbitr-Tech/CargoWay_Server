@@ -1,6 +1,6 @@
 package com.arbitr.cargoway.mapper;
 
-import com.arbitr.cargoway.dto.CargoWayRole;
+import com.arbitr.cargoway.dto.RoleDto;
 import com.arbitr.cargoway.dto.rq.SignUpRequest;
 import com.arbitr.cargoway.dto.rs.profile.UserRs;
 import com.arbitr.cargoway.entity.security.User;
@@ -16,7 +16,7 @@ public interface UserMapper {
     UserRs buildUserRsFrom(User user);
 
     @Named("mapCargoWayRoleToUserRole")
-    default String mapCargoWayRoleToUserRole(CargoWayRole role) {
+    default String mapCargoWayRoleToUserRole(RoleDto role) {
         return role.name();
     }
 }
