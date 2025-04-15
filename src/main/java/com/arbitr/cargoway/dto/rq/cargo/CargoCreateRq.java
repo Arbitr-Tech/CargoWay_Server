@@ -37,11 +37,11 @@ public class CargoCreateRq {
 
     @Schema(description = "Размеры предмета")
     @NotNull(message = "Dimensions cannot be null")
-    private DimensionsDto dimensions;
+    private CargoCreateRq.Dimensions dimensions;
 
     @Schema(description = "Маршрут предмета")
     @NotNull(message = "Route cannot be null")
-    private RouteDto route;
+    private CargoCreateRq.Route route;
 
     @Schema(description = "Цена предмета", example = "99.99")
     @DecimalMin(value = "0.00", message = "Price must be greater than or equal to 0")
@@ -58,14 +58,11 @@ public class CargoCreateRq {
     @Future(message = "Ready date must be in the future")
     private LocalDate deliveryDate;
 
-    @Schema(description = "Статус груза")
-    private RecordStatus status;
-
     @Schema(description = "id фотографий груза")
     private List<Photo> photos;
 
     @Data
-    public static class DimensionsDto {
+    public static class Dimensions {
         @Schema(description = "Длина предмета", example = "10")
         @Min(value = 0, message = "Length must be positive")
         private Integer length;
@@ -80,7 +77,7 @@ public class CargoCreateRq {
     }
 
     @Data
-    public static class RouteDto {
+    public static class Route {
         @Schema(description = "Место отправления", example = "New York")
         @NotBlank(message = "From location must not be blank")
         private String from;

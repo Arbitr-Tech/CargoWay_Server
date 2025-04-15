@@ -53,7 +53,7 @@ public class Profile {
     private ContactData contactData;
 
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Cargo> cargos;
+    private List<CargoOrder> orders;
 
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Driver> drivers;

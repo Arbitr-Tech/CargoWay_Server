@@ -3,7 +3,7 @@ POST http://localhost:8080/api/v1/auth/login/
 Content-Type: application/json
 
 {
-  "email": "ann.ten.tkdlove@mail.com",
+  "email": "annten@mail.com",
   "password": "SecurePass456!"
 }
 

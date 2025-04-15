@@ -1,11 +1,34 @@
 @baseUrl = http://localhost:8080/api/v1/cargos
-@authToken = Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyUmFub20xMjMiLCJpYXQiOjE3Mzk5MDkyMTYsImV4cCI6MTczOTk5NTYxNn0.g17CUnDmEN2aw7ykflQ76xJiXGzlK7kfczbat78zbCg
-@cargo_uuid = e7e35105-dcc6-4689-a10b-747e6826a17d
-@photo_uuid =
+@cargo_uuid = ab053c05-57fe-4d60-8a21-1a921cbe7132
+
+### Метод для регистрации компании
+POST http://localhost:8080/api/v1/auth/register/
+Content-Type: application/json
+
+{
+  "username": "lolik",
+  "email": "annten@mail.com",
+  "password": "SecurePass456!",
+  "legalType": "INDIVIDUAL",
+  "role": "CUSTOMER"
+}
+
+### Метод для авторизации
+POST http://localhost:8080/api/v1/auth/login/
+Content-Type: application/json
+
+{
+  "email": "annten@mail.com",
+  "password": "SecurePass456!"
+}
+
+> {%
+    client.global.set("access_token", response.body.access_token);
+%}
 
 ### Метод для создания груза
 POST {{baseUrl}}//
-Authorization: {{authToken}}
+Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
@@ -13,6 +36,8 @@ Content-Type: application/json
   "description": "Большая коробка",
   "weight": 10,
   "volume": 100,
+  "loadType": "Задняя",
+  "unloadType": "Задняя",
   "bodyType": "Тент",
   "dimensions": {
     "length": 10,
@@ -25,71 +50,16 @@ Content-Type: application/json
   },
   "price": 99.99,
   "typePay": "НДС",
-  "readyDate": "2025-02-22",
-  "loadType": "Задняя",
-  "unloadType": "Задняя",
-  "status": "HIDDEN",
-  "deliveryDate": "2025-03-01",
-  "photos": [
-    {
-      "id": "{{photo_uuid}}"
-    }
-  ]
+  "readyDate": "2025-05-22",
+  "deliveryDate": "2025-06-01"
 }
+
+### Получение списка груза
+GET {{baseUrl}}/general/?visibilityStatus=DRAFT&pageNumber=0&pageSize=10
+Authorization: Bearer {{access_token}}
+Accept: application/json
 
 ### Получение деталей груза
 GET {{baseUrl}}/{{cargo_uuid}}/
-Authorization: {{authToken}}
-
-### Поиск грузов с фильтрами
-GET {{baseUrl}}//?weightFrom=1&weightTo=13&volumeFrom=80&volumeTo=150
-Authorization: {{authToken}}
-
-### Получение последних X грузов
-GET {{baseUrl}}/count/5/
-Authorization: {{authToken}}
-
-### Получение всех грузов профиля
-GET {{baseUrl}}/profile/
-Authorization: {{authToken}}
-
-### Обновление груза
-PATCH {{baseUrl}}/{{cargo_uuid}}/
-Authorization: {{authToken}}
-Content-Type: application/json
-
-{
-  "name": "Updated Box",
-  "description": "Обновленная коробка",
-  "weight": 15,
-  "volume": 55,
-  "bodyType": "Тент",
-  "dimensions": {
-    "length": 12,
-    "width": 6,
-    "height": 22
-  },
-  "route": {
-    "from": "Chicago",
-    "to": "San Francisco"
-  },
-  "price": 120.99,
-  "typePay": "Наличные",
-  "readyDate": "2025-02-15",
-  "loadType": "Боковая",
-  "unloadType": "Передняя",
-  "deliveryDate": "2025-03-05",
-  "photos": [
-    {
-      "id": "{{photo_uuid}}"
-    }
-  ]
-}
-
-### Изменение статуса груза
-PATCH {{baseUrl}}/{{cargo_uuid}}/change-status/?status=PUBLISHED
-Authorization: {{authToken}}
-
-### Удаление груза
-DELETE {{baseUrl}}/{{cargo_uuid}}
-Authorization: {{authToken}}
+Authorization: Bearer {{access_token}}
+Accept: application/json

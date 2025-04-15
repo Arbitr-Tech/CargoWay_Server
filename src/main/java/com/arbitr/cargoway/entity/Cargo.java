@@ -15,17 +15,11 @@ import java.util.List;
 import java.util.UUID;
 
 @Data
-@Entity
 @Builder
+@Embeddable
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "cargos")
 public class Cargo {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", updatable = false, nullable = false)
-    private UUID id;
-
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -65,16 +59,11 @@ public class Cargo {
     @Column(name = "delivery_date", nullable = false)
     private LocalDate deliveryDate;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "visibility", nullable = false)
-    private VisibilityStatus visibility;
-
-    @Builder.Default
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
-
-    @Embeddable
     @Data
+    @Builder
+    @Embeddable
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Dimensions {
         @Column(name = "length", nullable = false)
         private Integer length;
@@ -86,8 +75,11 @@ public class Cargo {
         private Integer height;
     }
 
-    @Embeddable
     @Data
+    @Builder
+    @Embeddable
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Route {
         @Column(name = "route_from", nullable = false)
         private String from;
@@ -95,10 +87,6 @@ public class Cargo {
         @Column(name = "route_to", nullable = false)
         private String to;
     }
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "profile_id", referencedColumnName = "id", nullable = false)
-    private Profile profile;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

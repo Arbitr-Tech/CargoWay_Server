@@ -38,7 +38,9 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(req ->
                     req.requestMatchers("/api/v1/auth/**").permitAll()
-                        .anyRequest().authenticated())
+//                            .requestMatchers("/api/v1/cargos/").hasAuthority("ROLE_CUSTOMER")
+//                        .anyRequest().authenticated())
+                            .anyRequest().permitAll())
             .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
             .authenticationProvider(authenticationProvider(passwordEncoder()))
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

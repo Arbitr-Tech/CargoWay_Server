@@ -2,5 +2,8 @@ package com.arbitr.cargoway.entity.enums;
 
 public enum VisibilityStatus {
     PUBLISHED,
-    HIDDEN
+    DRAFT,
+    COMPLETED,
+    IN_PROGRESS,
+    CANCELED
 }
