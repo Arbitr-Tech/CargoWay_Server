@@ -2,11 +2,13 @@ package com.arbitr.cargoway.exception.handler;
 
 import com.arbitr.cargoway.dto.rs.ErrorRs;
 import com.arbitr.cargoway.exception.*;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -17,6 +19,25 @@ import java.io.FileNotFoundException;
 @RestControllerAdvice
 @SuppressWarnings("rawtypes")
 public class GlobalExceptionHandler {
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<ErrorRs> handleExpiredJwtException(ExpiredJwtException e) {
+        log.warn("JWT token expired ---: {}", e.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(ErrorRs.builder()
+                        .message("Срок действия токена истек. Пожалуйста, авторизуйтесь снова")
+                        .build());
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorRs> handleAuthenticationException(AuthenticationException e) {
+        log.warn("Authentication failed: {}", e.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(ErrorRs.builder()
+                        .message("Ошибка аутентификации: " + e.getMessage())
+                        .build());
+    }
 
     @ExceptionHandler
     public ResponseEntity<ErrorRs> handleValidationException(MethodArgumentNotValidException e) {
