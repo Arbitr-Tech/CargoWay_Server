@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:8080/api/v1/cargos
-@cargo_uuid = ab053c05-57fe-4d60-8a21-1a921cbe7132
+@cargo_uuid = 0c3ff396-a311-43ae-a020-bde48c814a3c
 
 ### Метод для регистрации компании
 POST http://localhost:8080/api/v1/auth/register/
@@ -54,8 +54,8 @@ Content-Type: application/json
   "deliveryDate": "2025-06-01"
 }
 
-### Получение списка груза
-GET {{baseUrl}}/general/?visibilityStatus=DRAFT&pageNumber=0&pageSize=10
+### Получение списка груза [INTERNAL, EXTERNAL, HISTORY]
+GET {{baseUrl}}/general/?cargoCategory=INTERNAL&pageNumber=0&pageSize=5
 Authorization: Bearer {{access_token}}
 Accept: application/json
 
