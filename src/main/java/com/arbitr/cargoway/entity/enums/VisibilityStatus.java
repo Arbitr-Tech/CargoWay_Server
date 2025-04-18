@@ -4,6 +4,7 @@ public enum VisibilityStatus {
     PUBLISHED,
     DRAFT,
     COMPLETED,
+    BIDDING,
     IN_PROGRESS,
     CANCELED
 }
