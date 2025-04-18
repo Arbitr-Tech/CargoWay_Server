@@ -1,5 +1,6 @@
 package com.arbitr.cargoway.service.impl;
 
+import com.arbitr.cargoway.dto.CargoCategoryDto;
 import com.arbitr.cargoway.dto.VisibilityStatusDto;
 import com.arbitr.cargoway.dto.rq.PaginationRq;
 import com.arbitr.cargoway.dto.rq.cargo.CargoCreateRq;
@@ -21,6 +22,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -30,14 +32,14 @@ public class CargoServiceImpl implements CargoService {
     private final CargoOrderRepository cargoOrderRepository;
     private final CargoOrderMapper cargoOrderMapper;
 
-    @Override
-    public PaginationRs<CargoOrderRs> getGeneralCargosByStatus(VisibilityStatusDto visibilityStatusDto, PaginationRq paginationRq) {
+    public PaginationRs<CargoOrderRs> getGeneralCargosByCategory(CargoCategoryDto cargoCategoryDto, PaginationRq  paginationRq) {
         User currentUser = authService.getAuthenticatedUser();
-        VisibilityStatus status = VisibilityStatus.valueOf(visibilityStatusDto.name());
 
-        Page<CargoOrder> generalCargosPage = cargoOrderRepository.findCargoOrdersByVisibilityAndProfile_Id(status,
+        Page<CargoOrder> generalCargosPage =
+                cargoOrderRepository.findCargoOrdersByVisibilityIsInAndProfile_Id(cargoCategoryDto.getVisibleStatuses(),
                 currentUser.getProfile().getId(),
-                PageRequest.of(paginationRq.getPageNumber(), paginationRq.getPageSize()));
+                PageRequest.of(paginationRq.getPageNumber(), paginationRq.getPageSize())
+                );
 
         List<CargoOrderRs> generalCargoOrderRs = generalCargosPage.getContent().stream()
                 .map(cargoOrderMapper::toRsDto)
