@@ -40,6 +40,17 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler
+    public ResponseEntity<ErrorRs> handleResourceConflictException(ResourceConflictException e) {
+        log.error(e.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(ErrorRs.builder()
+                        .message(e.getMessage())
+                        .build());
+    }
+
+    @ExceptionHandler
     public ResponseEntity<ErrorRs> handleValidationException(MethodArgumentNotValidException e) {
         log.error(e.getMessage());
 
