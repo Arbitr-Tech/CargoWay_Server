@@ -11,11 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "DTO ответа API в случае возникновения ошибки")
-public class ErrorRs<T> {
-
+public class ErrorRs {
     @Schema(description = "Сообщение об ошибки")
     private String message;
-
-    @Schema(description = "Данные объекта, связанного с ошибкой")
-    private T data;
 }

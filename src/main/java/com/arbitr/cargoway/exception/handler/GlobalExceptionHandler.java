@@ -2,6 +2,7 @@ package com.arbitr.cargoway.exception.handler;
 
 import com.arbitr.cargoway.dto.rs.ErrorRs;
 import com.arbitr.cargoway.exception.*;
+import io.jsonwebtoken.ClaimJwtException;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
@@ -17,10 +18,9 @@ import java.io.FileNotFoundException;
 
 @Slf4j
 @RestControllerAdvice
-@SuppressWarnings("rawtypes")
 public class GlobalExceptionHandler {
-    @ExceptionHandler(ExpiredJwtException.class)
-    public ResponseEntity<ErrorRs> handleExpiredJwtException(ExpiredJwtException e) {
+    @ExceptionHandler(ClaimJwtException.class)
+    public ResponseEntity<ErrorRs> handleExpiredJwtException(ClaimJwtException e) {
         log.warn("JWT token expired ---: {}", e.getMessage());
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
