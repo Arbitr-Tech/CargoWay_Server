@@ -1,6 +1,6 @@
 package com.arbitr.cargoway.dto.rs.profile;
 
-import com.arbitr.cargoway.dto.RoleDto;
+import com.arbitr.cargoway.dto.general.profile.RoleDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

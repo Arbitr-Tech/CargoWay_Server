@@ -1,6 +1,6 @@
 package com.arbitr.cargoway.listener;
 
-import com.arbitr.cargoway.dto.internal.email.EmailDto;
+import com.arbitr.cargoway.event.EmailDto;
 
 /**
  * Интерфейс для прослушивания событий о сообщениях электронной почты

@@ -1,6 +1,6 @@
 package com.arbitr.cargoway.service;
 
-import com.arbitr.cargoway.dto.internal.email.EmailDto;
+import com.arbitr.cargoway.event.EmailDto;
 
 /**
  * Сервис для отправки сообщения по электронной почте

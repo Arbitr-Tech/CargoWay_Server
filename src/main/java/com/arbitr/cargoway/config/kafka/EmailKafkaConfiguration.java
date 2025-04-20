@@ -1,7 +1,7 @@
 package com.arbitr.cargoway.config.kafka;
 
 import com.arbitr.cargoway.config.properties.KafkaCustomProperties;
-import com.arbitr.cargoway.dto.internal.email.EmailDto;
+import com.arbitr.cargoway.event.EmailDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

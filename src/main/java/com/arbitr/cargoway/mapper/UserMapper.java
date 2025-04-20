@@ -1,6 +1,6 @@
 package com.arbitr.cargoway.mapper;
 
-import com.arbitr.cargoway.dto.RoleDto;
+import com.arbitr.cargoway.dto.general.profile.RoleDto;
 import com.arbitr.cargoway.dto.rq.SignUpRequest;
 import com.arbitr.cargoway.dto.rs.profile.UserRs;
 import com.arbitr.cargoway.entity.security.User;

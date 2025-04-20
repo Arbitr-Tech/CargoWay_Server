@@ -1,4 +1,4 @@
-package com.arbitr.cargoway.dto;
+package com.arbitr.cargoway.dto.general.cargo;
 
 import com.arbitr.cargoway.entity.enums.VisibilityStatus;
 import lombok.Getter;

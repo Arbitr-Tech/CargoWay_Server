@@ -1,6 +1,6 @@
 package com.arbitr.cargoway.dto.rq.transaport;
 
-import com.arbitr.cargoway.dto.Photo;
+import com.arbitr.cargoway.dto.general.Photo;
 import com.arbitr.cargoway.dto.rq.cargo.RecordStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;

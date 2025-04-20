@@ -1,7 +1,7 @@
 package com.arbitr.cargoway.service.impl;
 
 import com.arbitr.cargoway.config.security.JwtService;
-import com.arbitr.cargoway.dto.internal.email.EmailDto;
+import com.arbitr.cargoway.event.EmailDto;
 import com.arbitr.cargoway.dto.rq.SignInRequest;
 import com.arbitr.cargoway.dto.rq.SignUpRequest;
 import com.arbitr.cargoway.dto.rs.AuthenticationResponse;

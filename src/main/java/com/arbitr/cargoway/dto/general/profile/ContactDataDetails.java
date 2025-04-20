@@ -1,4 +1,4 @@
-package com.arbitr.cargoway.dto;
+package com.arbitr.cargoway.dto.general.profile;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

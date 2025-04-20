@@ -1,6 +1,6 @@
 package com.arbitr.cargoway.service.impl;
 
-import com.arbitr.cargoway.dto.internal.email.EmailDto;
+import com.arbitr.cargoway.event.EmailDto;
 import com.arbitr.cargoway.dto.rq.auth.RecoveryEmailRq;
 import com.arbitr.cargoway.dto.rq.auth.ResetPasswordRq;
 import com.arbitr.cargoway.entity.security.PasswordToken;

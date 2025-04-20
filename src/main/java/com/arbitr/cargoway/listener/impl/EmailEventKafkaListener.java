@@ -1,6 +1,6 @@
 package com.arbitr.cargoway.listener.impl;
 
-import com.arbitr.cargoway.dto.internal.email.EmailDto;
+import com.arbitr.cargoway.event.EmailDto;
 import com.arbitr.cargoway.listener.EmailEventListener;
 import com.arbitr.cargoway.service.EmailSenderService;
 import lombok.RequiredArgsConstructor;

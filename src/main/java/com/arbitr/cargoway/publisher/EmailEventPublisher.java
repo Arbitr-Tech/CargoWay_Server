@@ -1,6 +1,6 @@
 package com.arbitr.cargoway.publisher;
 
-import com.arbitr.cargoway.dto.internal.email.EmailDto;
+import com.arbitr.cargoway.event.EmailDto;
 
 /**
  * Интерфейс издателя для публикации сообщений электронной почты

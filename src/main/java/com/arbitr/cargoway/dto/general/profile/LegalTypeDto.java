@@ -1,4 +1,4 @@
-package com.arbitr.cargoway.dto;
+package com.arbitr.cargoway.dto.general.profile;
 
 public enum LegalTypeDto {
     INDIVIDUAL,

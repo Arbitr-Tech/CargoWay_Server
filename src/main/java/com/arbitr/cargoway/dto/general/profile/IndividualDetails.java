@@ -1,9 +1,9 @@
-package com.arbitr.cargoway.dto;
+package com.arbitr.cargoway.dto.general.profile;
 
+import com.arbitr.cargoway.dto.general.Photo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 

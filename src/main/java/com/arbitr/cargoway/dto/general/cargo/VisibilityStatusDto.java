@@ -1,4 +1,4 @@
-package com.arbitr.cargoway.dto;
+package com.arbitr.cargoway.dto.general.cargo;
 
 public enum VisibilityStatusDto {
     PUBLISHED,

@@ -1,8 +1,8 @@
 package com.arbitr.cargoway.service.impl;
 
-import com.arbitr.cargoway.dto.CompanyDetails;
-import com.arbitr.cargoway.dto.ContactDataDetails;
-import com.arbitr.cargoway.dto.IndividualDetails;
+import com.arbitr.cargoway.dto.general.profile.CompanyDetails;
+import com.arbitr.cargoway.dto.general.profile.ContactDataDetails;
+import com.arbitr.cargoway.dto.general.profile.IndividualDetails;
 import com.arbitr.cargoway.dto.rq.profile.ProfileUpdateRq;
 import com.arbitr.cargoway.dto.rs.profile.ProfileRs;
 import com.arbitr.cargoway.entity.Company;

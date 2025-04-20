@@ -1,7 +1,7 @@
 package com.arbitr.cargoway.publisher.impl;
 
 import com.arbitr.cargoway.config.properties.KafkaCustomProperties;
-import com.arbitr.cargoway.dto.internal.email.EmailDto;
+import com.arbitr.cargoway.event.EmailDto;
 import com.arbitr.cargoway.publisher.EmailEventPublisher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;

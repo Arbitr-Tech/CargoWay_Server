@@ -1,7 +1,7 @@
 package com.arbitr.cargoway.dto.rq;
 
-import com.arbitr.cargoway.dto.RoleDto;
-import com.arbitr.cargoway.dto.LegalTypeDto;
+import com.arbitr.cargoway.dto.general.profile.RoleDto;
+import com.arbitr.cargoway.dto.general.profile.LegalTypeDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.arbitr.cargoway.dto.internal.email;
+package com.arbitr.cargoway.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
