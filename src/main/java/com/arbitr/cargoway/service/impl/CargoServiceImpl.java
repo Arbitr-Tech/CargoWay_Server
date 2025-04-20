@@ -17,11 +17,13 @@ import com.arbitr.cargoway.mapper.CargoOrderMapper;
 import com.arbitr.cargoway.repository.CargoOrderRepository;
 import com.arbitr.cargoway.service.AuthService;
 import com.arbitr.cargoway.service.CargoService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -181,6 +183,8 @@ public class CargoServiceImpl implements CargoService {
             cargoDetails.setRoute(cargoRoute);
         }
 
+        foundCargoOrder.setOrderUpdatedAt(LocalDateTime.now());
+
         foundCargoOrder.setCargo(cargoDetails);
 //        if (!cargoOrderUpdateRq.getPhotos().isEmpty()) {
 //            cargoOrder.setPhotos(cargoOrderUpdateRq.getPhotos());
@@ -188,6 +192,21 @@ public class CargoServiceImpl implements CargoService {
         cargoOrderRepository.save(foundCargoOrder);
 
         return cargoOrderMapper.toRsDto(foundCargoOrder);
+    }
+
+    @Transactional
+    @Override
+    public void deleteCargoOrder(UUID cargoOrderId) {
+        CargoOrder foundCargoOrder = this.getCargoOrderById(cargoOrderId);
+
+        if (!foundCargoOrder.getVisibility().equals(VisibilityStatus.DRAFT)) {
+            throw new ResourceConflictException(
+                    "Запись о грузе невозможно удалить, так как запись не в статусе черновика! Id=%s"
+                            .formatted(cargoOrderId)
+            );
+        }
+
+        cargoOrderRepository.delete(foundCargoOrder);
     }
 
     @Override

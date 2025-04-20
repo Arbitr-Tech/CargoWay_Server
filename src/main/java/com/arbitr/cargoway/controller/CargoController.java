@@ -55,5 +55,11 @@ public class CargoController {
                                          @RequestBody @Valid CargoOrderUpdateRq cargoOrderUpdateRq) {
         return cargoService.updateCargoOrder(cargoOrderId, cargoOrderUpdateRq);
     }
+
+    @DeleteMapping("{cargoOrderId}/")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCargoOrder(@PathVariable("cargoOrderId") UUID cargoOrderId) {
+        cargoService.deleteCargoOrder(cargoOrderId);
+    }
 }
 

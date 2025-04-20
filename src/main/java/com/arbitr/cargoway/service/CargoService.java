@@ -17,5 +17,6 @@ public interface CargoService {
     CargoOrderRs publishCargoOrder(UUID cargoOrderId);
     CargoOrderRs draftCargoOrder(UUID cargoOrderId);
     CargoOrderRs updateCargoOrder(UUID cargoOrderId, CargoOrderUpdateRq cargoOrderUpdateRq);
+    void deleteCargoOrder(UUID cargoOrderId);
     CargoOrder getCargoOrderById(UUID cargoOrderId);
 }

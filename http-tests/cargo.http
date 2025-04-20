@@ -59,7 +59,7 @@ Authorization: Bearer {{access_token}}
 Accept: application/json
 
 ###
-@cargo_uuid = 4c05e39a-b80e-425a-87a5-134b39734bdb
+@cargo_uuid = e423d1e1-1821-48ef-b41a-8f8ecf89b036
 
 ### Получение деталей груза
 GET {{baseUrl}}/{{cargo_uuid}}/
@@ -103,3 +103,8 @@ Content-Type: application/json
   "readyDate": "2025-05-22",
   "deliveryDate": "2025-06-01"
 }
+
+### Удаление записи груза
+DELETE {{baseUrl}}/{{cargo_uuid}}/
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
