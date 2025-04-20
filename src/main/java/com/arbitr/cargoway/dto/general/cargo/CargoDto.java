@@ -1,16 +1,19 @@
-package com.arbitr.cargoway.dto.rq.cargo;
+package com.arbitr.cargoway.dto.general.cargo;
 
-import com.arbitr.cargoway.dto.Photo;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Data
-public class CargoCreateRq {
+public class CargoDto {
     @Schema(description = "Название предмета", example = "Box")
     @NotBlank(message = "Name must not be blank")
     private String name;
@@ -35,14 +38,6 @@ public class CargoCreateRq {
     @Schema(description = "Тип кузова машины для перевозки", example = "Тент")
     private String bodyType;
 
-    @Schema(description = "Размеры предмета")
-    @NotNull(message = "Dimensions cannot be null")
-    private CargoCreateRq.Dimensions dimensions;
-
-    @Schema(description = "Маршрут предмета")
-    @NotNull(message = "Route cannot be null")
-    private CargoCreateRq.Route route;
-
     @Schema(description = "Цена предмета", example = "99.99")
     @DecimalMin(value = "0.00", message = "Price must be greater than or equal to 0")
     private BigDecimal price;
@@ -58,32 +53,38 @@ public class CargoCreateRq {
     @Future(message = "Ready date must be in the future")
     private LocalDate deliveryDate;
 
+    @Schema(description = "Размеры предмета")
+    private DimensionsDto dimensions;
+
+    @Schema(description = "Маршрут предмета")
+    private RouteDto route;
+
     @Schema(description = "id фотографий груза")
-    private List<Photo> photos;
+    private List<UUID> photos;
 
     @Data
-    public static class Dimensions {
-        @Schema(description = "Длина предмета", example = "10")
-        @Min(value = 0, message = "Length must be positive")
+    public static class DimensionsDto {
+        @Schema(description = "Длина предмета в см", example = "100")
+        @Min(value = 1, message = "Длина должна быть больше 0")
         private Integer length;
 
-        @Schema(description = "Ширина предмета", example = "5")
-        @Min(value = 0, message = "Width must be positive")
+        @Schema(description = "Ширина предмета в см", example = "50")
+        @Min(value = 1, message = "Ширина должна быть больше 0")
         private Integer width;
 
-        @Schema(description = "Высота предмета", example = "20")
-        @Min(value = 0, message = "Height must be positive")
+        @Schema(description = "Высота предмета в см", example = "75")
+        @Min(value = 1, message = "Высота должна быть больше 0")
         private Integer height;
     }
 
     @Data
-    public static class Route {
-        @Schema(description = "Место отправления", example = "New York")
-        @NotBlank(message = "From location must not be blank")
+    public static class RouteDto {
+        @Schema(description = "Место отправления", example = "Москва")
+        @NotBlank(message = "Место отправления обязательно")
         private String from;
 
-        @Schema(description = "Место назначения", example = "Los Angeles")
-        @NotBlank(message = "To location must not be blank")
+        @Schema(description = "Место назначения", example = "Санкт-Петербург")
+        @NotBlank(message = "Место назначения обязательно")
         private String to;
     }
 }
