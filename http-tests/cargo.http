@@ -1,5 +1,4 @@
 @baseUrl = http://localhost:8080/api/v1/cargos
-@cargo_uuid = 0c3ff396-a311-43ae-a020-bde48c814a3c
 
 ### Метод для регистрации компании
 POST http://localhost:8080/api/v1/auth/register/
@@ -59,7 +58,48 @@ GET {{baseUrl}}/general/?cargoCategory=INTERNAL&pageNumber=0&pageSize=5
 Authorization: Bearer {{access_token}}
 Accept: application/json
 
+###
+@cargo_uuid = 4c05e39a-b80e-425a-87a5-134b39734bdb
+
 ### Получение деталей груза
 GET {{baseUrl}}/{{cargo_uuid}}/
 Authorization: Bearer {{access_token}}
 Accept: application/json
+
+### Публикация записи
+PATCH {{baseUrl}}/{{cargo_uuid}}/publish
+Authorization: Bearer {{access_token}}
+Accept: application/json
+
+### Снятие записи с публикации
+PATCH {{baseUrl}}/{{cargo_uuid}}/draft
+Authorization: Bearer {{access_token}}
+Accept: application/json
+
+### Обновление записи о грузе
+PATCH {{baseUrl}}/{{cargo_uuid}}/
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "name": "Box",
+  "description": "Большая коробка",
+  "weight": 10,
+  "volume": 100,
+  "loadType": "Задняя",
+  "unloadType": "Задняя",
+  "bodyType": "Тент",
+  "dimensions": {
+    "length": 10,
+    "width": 5,
+    "height": 20
+  },
+  "route": {
+    "from": "New York",
+    "to": "Los Angeles"
+  },
+  "price": 100,
+  "typePay": "НДС",
+  "readyDate": "2025-05-22",
+  "deliveryDate": "2025-06-01"
+}
