@@ -1,10 +1,9 @@
 package com.arbitr.cargoway.controller;
 
-import com.arbitr.cargoway.dto.CargoCategoryDto;
-import com.arbitr.cargoway.dto.VisibilityStatusDto;
+import com.arbitr.cargoway.dto.general.cargo.CargoCategoryDto;
 import com.arbitr.cargoway.dto.rq.PaginationRq;
-import com.arbitr.cargoway.dto.rq.cargo.CargoCreateRq;
-import com.arbitr.cargoway.dto.rq.cargo.CargoUpdateRq;
+import com.arbitr.cargoway.dto.rq.cargo.CargoOrderCreateRq;
+import com.arbitr.cargoway.dto.rq.cargo.CargoOrderUpdateRq;
 import com.arbitr.cargoway.dto.rs.PaginationRs;
 import com.arbitr.cargoway.dto.rs.cargo.CargoOrderRs;
 import com.arbitr.cargoway.service.CargoService;
@@ -37,14 +36,24 @@ public class CargoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CargoOrderRs createNewCargo(@RequestBody @Valid CargoCreateRq cargoCreateRq) {
-        return cargoService.createNewCargo(cargoCreateRq);
+    public CargoOrderRs createNewCargoOrder(@RequestBody @Valid CargoOrderCreateRq cargoOrderCreateRq) {
+        return cargoService.createNewCargoOrder(cargoOrderCreateRq);
     }
 
-    @PatchMapping("{cargoId}/")
-    public CargoOrderRs updateCargo(@PathVariable("cargoId") UUID cargoId,
-                                    @RequestBody @Valid CargoUpdateRq cargoUpdateRq) {
-        return cargoService.updateCargo(cargoId, cargoUpdateRq);
+    @PatchMapping("{cargoOrderId}/publish")
+    public CargoOrderRs publishCargoOrder(@PathVariable("cargoOrderId") UUID cargoOrderId) {
+        return cargoService.publishCargoOrder(cargoOrderId);
+    }
+
+    @PatchMapping("{cargoOrderId}/draft")
+    public CargoOrderRs draftCargoOrder(@PathVariable("cargoOrderId") UUID cargoOrderId) {
+        return cargoService.draftCargoOrder(cargoOrderId);
+    }
+
+    @PatchMapping("{cargoOrderId}/")
+    public CargoOrderRs updateCargoOrder(@PathVariable("cargoOrderId") UUID cargoOrderId,
+                                         @RequestBody @Valid CargoOrderUpdateRq cargoOrderUpdateRq) {
+        return cargoService.updateCargoOrder(cargoOrderId, cargoOrderUpdateRq);
     }
 }
 

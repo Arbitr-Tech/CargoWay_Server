@@ -1,18 +1,21 @@
 package com.arbitr.cargoway.service;
 
-import com.arbitr.cargoway.dto.CargoCategoryDto;
-import com.arbitr.cargoway.dto.VisibilityStatusDto;
+import com.arbitr.cargoway.dto.general.cargo.CargoCategoryDto;
 import com.arbitr.cargoway.dto.rq.PaginationRq;
-import com.arbitr.cargoway.dto.rq.cargo.CargoCreateRq;
-import com.arbitr.cargoway.dto.rq.cargo.CargoUpdateRq;
+import com.arbitr.cargoway.dto.rq.cargo.CargoOrderCreateRq;
+import com.arbitr.cargoway.dto.rq.cargo.CargoOrderUpdateRq;
 import com.arbitr.cargoway.dto.rs.PaginationRs;
 import com.arbitr.cargoway.dto.rs.cargo.CargoOrderRs;
+import com.arbitr.cargoway.entity.CargoOrder;
 
 import java.util.UUID;
 
 public interface CargoService {
     PaginationRs<CargoOrderRs> getGeneralCargosByCategory(CargoCategoryDto cargoCategoryDto, PaginationRq  paginationRq);
     CargoOrderRs getCargoOrder(UUID cargoOrderId);
-    CargoOrderRs createNewCargo(CargoCreateRq cargoCreateRq);
-    CargoOrderRs updateCargo(UUID cargoId, CargoUpdateRq cargoUpdateRq);
+    CargoOrderRs createNewCargoOrder(CargoOrderCreateRq cargoOrderCreateRq);
+    CargoOrderRs publishCargoOrder(UUID cargoOrderId);
+    CargoOrderRs draftCargoOrder(UUID cargoOrderId);
+    CargoOrderRs updateCargoOrder(UUID cargoOrderId, CargoOrderUpdateRq cargoOrderUpdateRq);
+    CargoOrder getCargoOrderById(UUID cargoOrderId);
 }

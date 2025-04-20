@@ -1,7 +1,7 @@
 package com.arbitr.cargoway.mapper;
 
-import com.arbitr.cargoway.dto.VisibilityStatusDto;
-import com.arbitr.cargoway.dto.rq.cargo.CargoCreateRq;
+import com.arbitr.cargoway.dto.general.cargo.VisibilityStatusDto;
+import com.arbitr.cargoway.dto.general.cargo.CargoDto;
 import com.arbitr.cargoway.dto.rs.cargo.CargoOrderRs;
 import com.arbitr.cargoway.entity.Cargo;
 import com.arbitr.cargoway.entity.CargoOrder;
@@ -48,16 +48,16 @@ public interface CargoOrderMapper {
                 .orderUpdatedAt(cargoOrder.getOrderUpdatedAt())
                 .startExecution(cargoOrder.getStartExecution())
                 .endExecution(cargoOrder.getEndExecution())
-                .visibility(VisibilityStatusDto.valueOf(cargoOrder.getVisibility().name()))
+                .visibilityStatus(VisibilityStatusDto.valueOf(cargoOrder.getVisibility().name()))
                 .cargo(cargoDetails)
                 .build();
 
         return cargoOrderRs;
     }
 
-    default Cargo toEntity(CargoCreateRq cargoCreateRq) {
-        CargoCreateRq.Dimensions cargoCreateDimensions = cargoCreateRq.getDimensions();
-        CargoCreateRq.Route cargoCreateRoute = cargoCreateRq.getRoute();
+    default Cargo toEntity(CargoDto cargoDetails) {
+        CargoDto.DimensionsDto cargoCreateDimensions = cargoDetails.getDimensions();
+        CargoDto.RouteDto cargoCreateRoute = cargoDetails.getRoute();
 
         Cargo.Dimensions newCargoDimensions = Cargo.Dimensions.builder()
                 .height(cargoCreateDimensions.getHeight())
@@ -71,17 +71,17 @@ public interface CargoOrderMapper {
                 .build();
 
         Cargo newCargo = Cargo.builder()
-                .name(cargoCreateRq.getName())
-                .description(cargoCreateRq.getDescription())
-                .weight(cargoCreateRq.getWeight())
-                .volume(cargoCreateRq.getVolume())
-                .loadType(cargoCreateRq.getLoadType())
-                .unloadType(cargoCreateRq.getUnloadType())
-                .bodyType(cargoCreateRq.getBodyType())
-                .price(cargoCreateRq.getPrice())
-                .typePay(cargoCreateRq.getTypePay())
-                .readyDate(cargoCreateRq.getReadyDate())
-                .deliveryDate(cargoCreateRq.getDeliveryDate())
+                .name(cargoDetails.getName())
+                .description(cargoDetails.getDescription())
+                .weight(cargoDetails.getWeight())
+                .volume(cargoDetails.getVolume())
+                .loadType(cargoDetails.getLoadType())
+                .unloadType(cargoDetails.getUnloadType())
+                .bodyType(cargoDetails.getBodyType())
+                .price(cargoDetails.getPrice())
+                .typePay(cargoDetails.getTypePay())
+                .readyDate(cargoDetails.getReadyDate())
+                .deliveryDate(cargoDetails.getDeliveryDate())
                 .dimensions(newCargoDimensions)
                 .route(newCargoRoute)
                 .build();

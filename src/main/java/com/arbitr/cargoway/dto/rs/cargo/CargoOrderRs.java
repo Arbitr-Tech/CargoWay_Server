@@ -1,6 +1,6 @@
 package com.arbitr.cargoway.dto.rs.cargo;
 
-import com.arbitr.cargoway.dto.VisibilityStatusDto;
+import com.arbitr.cargoway.dto.general.cargo.VisibilityStatusDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -27,7 +26,7 @@ public class CargoOrderRs {
 
     @NotNull
     @Schema(description = "Статус видимости заказа", example = "PUBLIC")
-    private VisibilityStatusDto visibility;
+    private VisibilityStatusDto visibilityStatus;
 
     @NotNull
     @Schema(description = "Дата и время начала выполнения заказа", example = "2025-04-15T10:00:00")
