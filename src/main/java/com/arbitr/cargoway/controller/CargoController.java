@@ -4,12 +4,12 @@ import com.arbitr.cargoway.dto.general.cargo.CargoCategoryDto;
 import com.arbitr.cargoway.dto.rq.PaginationRq;
 import com.arbitr.cargoway.dto.rq.cargo.CargoOrderCreateRq;
 import com.arbitr.cargoway.dto.rq.cargo.CargoOrderUpdateRq;
+import com.arbitr.cargoway.dto.rq.cargo.FilterCargoRq;
 import com.arbitr.cargoway.dto.rs.PaginationRs;
 import com.arbitr.cargoway.dto.rs.cargo.CargoOrderRs;
 import com.arbitr.cargoway.service.CargoService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +24,7 @@ public class CargoController {
     private final CargoService cargoService;
 
     @GetMapping("general/")
-    public PaginationRs<CargoOrderRs> getInternalCargos(@PathParam("cargoCategory") CargoCategoryDto cargoCategory,
+    public PaginationRs<CargoOrderRs> getInternalCargos(@RequestParam CargoCategoryDto cargoCategory,
             @ModelAttribute PaginationRq paginationRq) {
         return cargoService.getGeneralCargosByCategory(cargoCategory, paginationRq);
     }
@@ -60,6 +60,12 @@ public class CargoController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCargoOrder(@PathVariable("cargoOrderId") UUID cargoOrderId) {
         cargoService.deleteCargoOrder(cargoOrderId);
+    }
+
+    @PostMapping("search/")
+    public PaginationRs<CargoOrderRs> searchCargoOrder(@RequestBody @Valid FilterCargoRq filterCargoRq,
+                                 @ModelAttribute PaginationRq paginationRq) {
+        return cargoService.searchCargoOrders(filterCargoRq, paginationRq);
     }
 }
 

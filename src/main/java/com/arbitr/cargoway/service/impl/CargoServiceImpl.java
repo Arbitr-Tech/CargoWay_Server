@@ -5,6 +5,7 @@ import com.arbitr.cargoway.dto.general.cargo.CargoDto;
 import com.arbitr.cargoway.dto.rq.PaginationRq;
 import com.arbitr.cargoway.dto.rq.cargo.CargoOrderCreateRq;
 import com.arbitr.cargoway.dto.rq.cargo.CargoOrderUpdateRq;
+import com.arbitr.cargoway.dto.rq.cargo.FilterCargoRq;
 import com.arbitr.cargoway.dto.rs.PaginationRs;
 import com.arbitr.cargoway.dto.rs.cargo.CargoOrderRs;
 import com.arbitr.cargoway.entity.Cargo;
@@ -15,12 +16,15 @@ import com.arbitr.cargoway.exception.NotFoundException;
 import com.arbitr.cargoway.exception.ResourceConflictException;
 import com.arbitr.cargoway.mapper.CargoOrderMapper;
 import com.arbitr.cargoway.repository.CargoOrderRepository;
+import com.arbitr.cargoway.repository.CargoRepository;
+import com.arbitr.cargoway.repository.specification.CargoSpecification;
 import com.arbitr.cargoway.service.AuthService;
 import com.arbitr.cargoway.service.CargoService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -32,6 +36,7 @@ import java.util.UUID;
 public class CargoServiceImpl implements CargoService {
     private final AuthService authService;
     private final CargoOrderRepository cargoOrderRepository;
+    private final CargoRepository cargoRepository;
     private final CargoOrderMapper cargoOrderMapper;
 
     public PaginationRs<CargoOrderRs> getGeneralCargosByCategory(CargoCategoryDto cargoCategoryDto, PaginationRq  paginationRq) {
@@ -75,6 +80,7 @@ public class CargoServiceImpl implements CargoService {
                 .profile(currentUser.getProfile())
                 .build();
 
+        newCargo.setCargoOrder(newCargoOrder);
         cargoOrderRepository.save(newCargoOrder);
 
         return cargoOrderMapper.toRsDto(newCargoOrder);
@@ -155,36 +161,31 @@ public class CargoServiceImpl implements CargoService {
         }
 
         if (cargoOrderUpdateRq.getDimensions() != null) {
-            CargoDto.DimensionsDto dimensions = cargoOrderUpdateRq.getDimensions();
-            Cargo.Dimensions cargoDimensions = cargoDetails.getDimensions();
+            CargoDto.DimensionsDto newDimensions = cargoOrderUpdateRq.getDimensions();
 
-            if (dimensions.getLength() != null) {
-                cargoDimensions.setLength(dimensions.getLength());
+            if (newDimensions.getLength() != null) {
+                cargoDetails.setLength(newDimensions.getLength());
             }
-            if (dimensions.getWidth() != null) {
-                cargoDimensions.setWidth(dimensions.getWidth());
+            if (newDimensions.getWidth() != null) {
+                cargoDetails.setWidth(newDimensions.getWidth());
             }
-            if (dimensions.getHeight() != null) {
-                cargoDimensions.setHeight(dimensions.getHeight());
+            if (newDimensions.getHeight() != null) {
+                cargoDetails.setHeight(newDimensions.getHeight());
             }
-            cargoDetails.setDimensions(cargoDimensions);
         }
 
         if (cargoOrderUpdateRq.getRoute() != null) {
-            CargoDto.RouteDto route = cargoOrderUpdateRq.getRoute();
-            Cargo.Route cargoRoute = cargoDetails.getRoute();
+            CargoDto.RouteDto newRoute = cargoOrderUpdateRq.getRoute();
 
-            if (route.getFrom() != null) {
-                cargoRoute.setFrom(route.getFrom());
+            if (newRoute.getFrom() != null) {
+                cargoDetails.setFrom(newRoute.getFrom());
             }
-            if (route.getTo() != null) {
-                cargoRoute.setTo(route.getTo());
+            if (newRoute.getTo() != null) {
+                cargoDetails.setTo(newRoute.getTo());
             }
-            cargoDetails.setRoute(cargoRoute);
         }
 
         foundCargoOrder.setOrderUpdatedAt(LocalDateTime.now());
-
         foundCargoOrder.setCargo(cargoDetails);
 //        if (!cargoOrderUpdateRq.getPhotos().isEmpty()) {
 //            cargoOrder.setPhotos(cargoOrderUpdateRq.getPhotos());
@@ -207,6 +208,24 @@ public class CargoServiceImpl implements CargoService {
         }
 
         cargoOrderRepository.delete(foundCargoOrder);
+    }
+
+    @Override
+    public PaginationRs<CargoOrderRs> searchCargoOrders(FilterCargoRq filterCargoRq, PaginationRq paginationRq) {
+        Specification<Cargo> specification = CargoSpecification.withFilter(filterCargoRq);
+        Page<Cargo> filteredCargosPage = cargoRepository.findAll(specification,
+                PageRequest.of(paginationRq.getPageNumber(), paginationRq.getPageSize()));
+
+        List<CargoOrderRs> filteredCargoOrdersRs = filteredCargosPage.getContent().stream()
+                .map(cargoOrderMapper::toRsDto)
+                .toList();
+
+        return PaginationRs.<CargoOrderRs>builder()
+                .content(filteredCargoOrdersRs)
+                .pageNumber(filteredCargosPage.getNumber())
+                .pageSize(filteredCargosPage.getSize())
+                .totalPages(filteredCargosPage.getTotalPages())
+                .build();
     }
 
     @Override

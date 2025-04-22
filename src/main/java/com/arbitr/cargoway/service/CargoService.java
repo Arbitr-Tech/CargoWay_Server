@@ -4,6 +4,7 @@ import com.arbitr.cargoway.dto.general.cargo.CargoCategoryDto;
 import com.arbitr.cargoway.dto.rq.PaginationRq;
 import com.arbitr.cargoway.dto.rq.cargo.CargoOrderCreateRq;
 import com.arbitr.cargoway.dto.rq.cargo.CargoOrderUpdateRq;
+import com.arbitr.cargoway.dto.rq.cargo.FilterCargoRq;
 import com.arbitr.cargoway.dto.rs.PaginationRs;
 import com.arbitr.cargoway.dto.rs.cargo.CargoOrderRs;
 import com.arbitr.cargoway.entity.CargoOrder;
@@ -18,5 +19,6 @@ public interface CargoService {
     CargoOrderRs draftCargoOrder(UUID cargoOrderId);
     CargoOrderRs updateCargoOrder(UUID cargoOrderId, CargoOrderUpdateRq cargoOrderUpdateRq);
     void deleteCargoOrder(UUID cargoOrderId);
+    PaginationRs<CargoOrderRs> searchCargoOrders(FilterCargoRq filterCargoRq, PaginationRq paginationRq);
     CargoOrder getCargoOrderById(UUID cargoOrderId);
 }
