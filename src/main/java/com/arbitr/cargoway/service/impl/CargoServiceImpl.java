@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -212,7 +213,12 @@ public class CargoServiceImpl implements CargoService {
 
     @Override
     public PaginationRs<CargoOrderRs> searchCargoOrders(FilterCargoRq filterCargoRq, PaginationRq paginationRq) {
-        Specification<Cargo> specification = CargoSpecification.withFilter(filterCargoRq);
+        Set<VisibilityStatus> allowedStatuses = Set.of(
+                VisibilityStatus.PUBLISHED,
+                VisibilityStatus.BIDDING
+        );
+
+        Specification<Cargo> specification = CargoSpecification.withFilter(filterCargoRq, allowedStatuses);
         Page<Cargo> filteredCargosPage = cargoRepository.findAll(specification,
                 PageRequest.of(paginationRq.getPageNumber(), paginationRq.getPageSize()));
 

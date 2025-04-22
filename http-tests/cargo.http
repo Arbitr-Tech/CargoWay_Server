@@ -31,23 +31,23 @@ Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-  "name": "Box",
-  "description": "Большая коробка",
-  "weight": 10,
-  "volume": 100,
+  "name": "машина",
+  "description": " машина для гонок",
+  "weight": 1200,
+  "volume": 90,
   "loadType": "Задняя",
   "unloadType": "Задняя",
   "bodyType": "Тент",
   "dimensions": {
-    "length": 10,
-    "width": 5,
+    "length": 120,
+    "width": 50,
     "height": 20
   },
   "route": {
     "from": "New York",
     "to": "Los Angeles"
   },
-  "price": 99.99,
+  "price": 5000000,
   "typePay": "НДС",
   "readyDate": "2025-05-22",
   "deliveryDate": "2025-06-01"
@@ -58,8 +58,8 @@ GET {{baseUrl}}/general/?cargoCategory=INTERNAL&pageNumber=1&pageSize=5
 Authorization: Bearer {{access_token}}
 Accept: application/json
 
-###
-@cargo_uuid = e423d1e1-1821-48ef-b41a-8f8ecf89b036
+### f34f357b-ba53-454e-8f11-74e8afcf97cf
+@cargo_uuid = 294cae4e-6636-4807-88f3-87ca84353753
 
 ### Получение деталей груза
 GET {{baseUrl}}/{{cargo_uuid}}/
@@ -85,7 +85,7 @@ Content-Type: application/json
   "name": "Box",
   "description": "Большая коробка",
   "weight": 10,
-  "volume": 100,
+  "volume": 1000,
   "loadType": "Задняя",
   "unloadType": "Задняя",
   "bodyType": "Тент",
@@ -98,7 +98,7 @@ Content-Type: application/json
     "from": "New York",
     "to": "Los Angeles"
   },
-  "price": 100,
+  "price": 10000,
   "typePay": "НДС",
   "readyDate": "2025-05-22",
   "deliveryDate": "2025-06-01"
@@ -115,23 +115,5 @@ Content-Type: application/json
 Accept: application/json
 
 {
-    "weightFrom": 10,
-    "weightTo": 2000,
-    "volumeFrom": 10,
-    "volumeTo": 150,
-    "loadType": "Задняя",
-    "unloadType": "Боковая",
-    "priceFrom": 5000.00,
-    "priceTo": 15000.00,
-    "bodyType": "Тентованный",
-    "readyDate": "2025-02-15",
-    "route": {
-    "from": "Москва",
-    "to": "Санкт-Петербург"
-    },
-    "dimensions": {
-    "length": 300,
-    "width": 200,
-    "height": 250
-    }
+    "priceTo": 5000000.00
 }

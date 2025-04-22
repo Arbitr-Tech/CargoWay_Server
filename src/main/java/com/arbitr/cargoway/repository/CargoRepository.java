@@ -16,6 +16,6 @@ import java.util.UUID;
 public interface CargoRepository extends JpaRepository<Cargo, UUID>, JpaSpecificationExecutor<Cargo> {
 
     @NotNull
-    @EntityGraph(attributePaths = {"cargoOrder", "images"})
+    @EntityGraph(attributePaths = {"images"})
     Page<Cargo> findAll(Specification<Cargo> spec, @NotNull Pageable pageable);
 }

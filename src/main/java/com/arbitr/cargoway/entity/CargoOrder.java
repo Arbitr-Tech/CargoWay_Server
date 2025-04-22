@@ -37,8 +37,9 @@ public class CargoOrder {
     @Column(name = "order_created_at", nullable = false)
     private LocalDateTime orderCreatedAt = LocalDateTime.now();
 
-    @Column(name = "order_updated_at")
-    private LocalDateTime orderUpdatedAt;
+    @Builder.Default
+    @Column(name = "order_updated_at", nullable = false)
+    private LocalDateTime orderUpdatedAt = LocalDateTime.now();
 
     @OneToOne(mappedBy = "cargoOrder", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private Cargo cargo;

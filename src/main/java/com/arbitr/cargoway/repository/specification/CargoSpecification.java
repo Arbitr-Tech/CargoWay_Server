@@ -2,19 +2,27 @@ package com.arbitr.cargoway.repository.specification;
 
 import com.arbitr.cargoway.dto.rq.cargo.FilterCargoRq;
 import com.arbitr.cargoway.entity.Cargo;
+import com.arbitr.cargoway.entity.CargoOrder;
+import com.arbitr.cargoway.entity.enums.VisibilityStatus;
 import org.springframework.data.jpa.domain.Specification;
 import jakarta.persistence.criteria.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class CargoSpecification {
-    public static Specification<Cargo> withFilter(FilterCargoRq filter) {
+    public static Specification<Cargo> withFilter(FilterCargoRq filter, Set<VisibilityStatus> allowedStatuses) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
-            // Фильтр по весу
+            Join<Cargo, CargoOrder> cargoOrderJoin = root.join("cargoOrder", JoinType.INNER);
+
+            if (allowedStatuses != null && !allowedStatuses.isEmpty()) {
+                predicates.add(cargoOrderJoin.get("visibility").in(allowedStatuses));
+            }
+
             if (filter.getWeightFrom() != null || filter.getWeightTo() != null) {
                 predicates.add(criteriaBuilder.between(
                         root.get("weight"),
@@ -80,6 +88,10 @@ public class CargoSpecification {
                 if (filter.getDimensions().getHeight() != null) {
                     predicates.add(criteriaBuilder.equal(root.get("height"), filter.getDimensions().getHeight()));
                 }
+            }
+
+            if (query != null && query.getOrderList().isEmpty()) {
+                query.orderBy(criteriaBuilder.desc(cargoOrderJoin.get("orderUpdatedAt")));
             }
 
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
