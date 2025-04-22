@@ -1,6 +1,5 @@
 package com.arbitr.cargoway.entity;
 
-import com.arbitr.cargoway.entity.enums.VisibilityStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,17 +8,28 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Data
+@Entity
 @Builder
-@Embeddable
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "cargos", indexes = {
+        @Index(name = "idx_cargo_weight", columnList = "weight"),
+        @Index(name = "idx_cargo_volume", columnList = "volume"),
+        @Index(name = "idx_cargo_price", columnList = "price"),
+        @Index(name = "idx_cargo_route", columnList = "from, to"),
+        @Index(name = "idx_cargo_dates", columnList = "ready_date, deliveryDate")
+})
 public class Cargo {
+    @Id
+    @Builder.Default
+    @Column(name = "id", updatable = false, nullable = false)
+    private UUID id = UUID.randomUUID();
+
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -41,12 +51,6 @@ public class Cargo {
     @Column(name = "body_type", nullable = false)
     private String bodyType;
 
-    @Embedded
-    private Dimensions dimensions;
-
-    @Embedded
-    private Route route;
-
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
@@ -59,34 +63,24 @@ public class Cargo {
     @Column(name = "delivery_date", nullable = false)
     private LocalDate deliveryDate;
 
-    @Data
-    @Builder
-    @Embeddable
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class Dimensions {
-        @Column(name = "length", nullable = false)
-        private Integer length;
+    @Column(name = "route_from", nullable = false)
+    private String from;
 
-        @Column(name = "width", nullable = false)
-        private Integer width;
+    @Column(name = "route_to", nullable = false)
+    private String to;
 
-        @Column(name = "height", nullable = false)
-        private Integer height;
-    }
+    @Column(name = "length", nullable = false)
+    private Integer length;
 
-    @Data
-    @Builder
-    @Embeddable
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class Route {
-        @Column(name = "route_from", nullable = false)
-        private String from;
+    @Column(name = "width", nullable = false)
+    private Integer width;
 
-        @Column(name = "route_to", nullable = false)
-        private String to;
-    }
+    @Column(name = "height", nullable = false)
+    private Integer height;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "cargo_order_id", referencedColumnName = "id", nullable = false)
+    private CargoOrder cargoOrder;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

@@ -40,7 +40,7 @@ public class CargoOrder {
     @Column(name = "order_updated_at")
     private LocalDateTime orderUpdatedAt;
 
-    @Embedded
+    @OneToOne(mappedBy = "cargoOrder", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private Cargo cargo;
 
     @ManyToOne(fetch = FetchType.LAZY)

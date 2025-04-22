@@ -11,18 +11,24 @@ import org.mapstruct.Mapper;
 public interface CargoOrderMapper {
     default CargoOrderRs toRsDto(CargoOrder cargoOrder) {
         Cargo cargo = cargoOrder.getCargo();
-        Cargo.Dimensions cargoDimensions = cargo.getDimensions();
-        Cargo.Route cargoRoute = cargo.getRoute();
+        return generalRsDto(cargo, cargoOrder);
+    }
 
+    default CargoOrderRs toRsDto(Cargo cargo) {
+        CargoOrder cargoOrder = cargo.getCargoOrder();
+        return generalRsDto(cargo, cargoOrder);
+    }
+
+    default CargoOrderRs generalRsDto(Cargo cargo, CargoOrder cargoOrder) {
         CargoOrderRs.Dimensions cargoOrderDimensions = CargoOrderRs.Dimensions.builder()
-                .width(cargoDimensions.getWidth())
-                .height(cargoDimensions.getHeight())
-                .length(cargoDimensions.getLength())
+                .width(cargo.getWidth())
+                .height(cargo.getHeight())
+                .length(cargo.getLength())
                 .build();
 
         CargoOrderRs.Route cargoOrderRoute = CargoOrderRs.Route.builder()
-                .from(cargoRoute.getFrom())
-                .to(cargoRoute.getTo())
+                .from(cargo.getFrom())
+                .to(cargo.getTo())
                 .build();
 
         CargoOrderRs.CargoDetails cargoDetails = CargoOrderRs.CargoDetails.builder()
@@ -37,12 +43,11 @@ public interface CargoOrderMapper {
                 .typePay(cargo.getTypePay())
                 .readyDate(cargo.getReadyDate())
                 .deliveryDate(cargo.getDeliveryDate())
-                .price(cargo.getPrice())
                 .dimensions(cargoOrderDimensions)
                 .route(cargoOrderRoute)
                 .build();
 
-        CargoOrderRs cargoOrderRs = CargoOrderRs.builder()
+        return CargoOrderRs.builder()
                 .id(cargoOrder.getId())
                 .orderCreatedAt(cargoOrder.getOrderCreatedAt())
                 .orderUpdatedAt(cargoOrder.getOrderUpdatedAt())
@@ -51,26 +56,13 @@ public interface CargoOrderMapper {
                 .visibilityStatus(VisibilityStatusDto.valueOf(cargoOrder.getVisibility().name()))
                 .cargo(cargoDetails)
                 .build();
-
-        return cargoOrderRs;
     }
 
     default Cargo toEntity(CargoDto cargoDetails) {
-        CargoDto.DimensionsDto cargoCreateDimensions = cargoDetails.getDimensions();
-        CargoDto.RouteDto cargoCreateRoute = cargoDetails.getRoute();
+        CargoDto.DimensionsDto cargoDimensionsDetails = cargoDetails.getDimensions();
+        CargoDto.RouteDto cargoRouteDetails = cargoDetails.getRoute();
 
-        Cargo.Dimensions newCargoDimensions = Cargo.Dimensions.builder()
-                .height(cargoCreateDimensions.getHeight())
-                .width(cargoCreateDimensions.getWidth())
-                .length(cargoCreateDimensions.getLength())
-                .build();
-
-        Cargo.Route newCargoRoute = Cargo.Route.builder()
-                .from(cargoCreateRoute.getFrom())
-                .to(cargoCreateRoute.getTo())
-                .build();
-
-        Cargo newCargo = Cargo.builder()
+        return Cargo.builder()
                 .name(cargoDetails.getName())
                 .description(cargoDetails.getDescription())
                 .weight(cargoDetails.getWeight())
@@ -82,10 +74,11 @@ public interface CargoOrderMapper {
                 .typePay(cargoDetails.getTypePay())
                 .readyDate(cargoDetails.getReadyDate())
                 .deliveryDate(cargoDetails.getDeliveryDate())
-                .dimensions(newCargoDimensions)
-                .route(newCargoRoute)
+                .from(cargoRouteDetails.getFrom())
+                .to(cargoRouteDetails.getTo())
+                .height(cargoDimensionsDetails.getHeight())
+                .width(cargoDimensionsDetails.getWidth())
+                .length(cargoDimensionsDetails.getLength())
                 .build();
-
-        return newCargo;
     }
 }
