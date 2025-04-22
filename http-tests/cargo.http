@@ -54,7 +54,7 @@ Content-Type: application/json
 }
 
 ### Получение списка груза [INTERNAL, EXTERNAL, HISTORY]
-GET {{baseUrl}}/general/?cargoCategory=INTERNAL&pageNumber=0&pageSize=5
+GET {{baseUrl}}/general/?cargoCategory=INTERNAL&pageNumber=1&pageSize=5
 Authorization: Bearer {{access_token}}
 Accept: application/json
 
@@ -108,3 +108,30 @@ Content-Type: application/json
 DELETE {{baseUrl}}/{{cargo_uuid}}/
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
+
+### Запрос на получение списка записей грузов
+POST {{baseUrl}}/search/?pageNumber=1&pageSize=5
+Content-Type: application/json
+Accept: application/json
+
+{
+    "weightFrom": 10,
+    "weightTo": 2000,
+    "volumeFrom": 10,
+    "volumeTo": 150,
+    "loadType": "Задняя",
+    "unloadType": "Боковая",
+    "priceFrom": 5000.00,
+    "priceTo": 15000.00,
+    "bodyType": "Тентованный",
+    "readyDate": "2025-02-15",
+    "route": {
+    "from": "Москва",
+    "to": "Санкт-Петербург"
+    },
+    "dimensions": {
+    "length": 300,
+    "width": 200,
+    "height": 250
+    }
+}
