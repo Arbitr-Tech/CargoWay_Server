@@ -53,12 +53,12 @@ public class CargoServiceImpl implements CargoService {
                 .map(cargoOrderMapper::toRsDto)
                 .toList();
 
-        return PaginationRs.<CargoOrderRs>builder()
-                .content(generalCargoOrderRs)
-                .pageNumber(generalCargosPage.getNumber() + 1)
-                .pageSize(generalCargosPage.getSize())
-                .totalPages(generalCargosPage.getTotalPages())
-                .build();
+        return PaginationRs.of(
+                generalCargoOrderRs,
+                generalCargosPage.getNumber(),
+                generalCargosPage.getSize(),
+                generalCargosPage.getTotalPages()
+        );
     }
 
     @Override
@@ -226,12 +226,12 @@ public class CargoServiceImpl implements CargoService {
                 .map(cargoOrderMapper::toRsDto)
                 .toList();
 
-        return PaginationRs.<CargoOrderRs>builder()
-                .content(filteredCargoOrdersRs)
-                .pageNumber(filteredCargosPage.getNumber() + 1)
-                .pageSize(filteredCargosPage.getSize())
-                .totalPages(filteredCargosPage.getTotalPages())
-                .build();
+        return PaginationRs.of(
+                filteredCargoOrdersRs,
+                filteredCargosPage.getNumber(),
+                filteredCargosPage.getSize(),
+                filteredCargosPage.getTotalPages()
+        );
     }
 
     @Override

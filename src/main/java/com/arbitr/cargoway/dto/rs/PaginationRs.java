@@ -1,19 +1,20 @@
 package com.arbitr.cargoway.dto.rs;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class PaginationRs<T> {
     List<T> content;
     int pageNumber;
     int pageSize;
     int totalPages;
+
+    public static <T> PaginationRs<T> of(List<T> content, int pageNumber, int pageSize, int totalPages) {
+        return new PaginationRs<>(content, pageNumber, pageSize, totalPages);
+    }
 }
