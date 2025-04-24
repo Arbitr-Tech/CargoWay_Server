@@ -55,7 +55,7 @@ public class CargoServiceImpl implements CargoService {
 
         return PaginationRs.<CargoOrderRs>builder()
                 .content(generalCargoOrderRs)
-                .pageNumber(generalCargosPage.getNumber())
+                .pageNumber(generalCargosPage.getNumber() + 1)
                 .pageSize(generalCargosPage.getSize())
                 .totalPages(generalCargosPage.getTotalPages())
                 .build();
@@ -228,7 +228,7 @@ public class CargoServiceImpl implements CargoService {
 
         return PaginationRs.<CargoOrderRs>builder()
                 .content(filteredCargoOrdersRs)
-                .pageNumber(filteredCargosPage.getNumber())
+                .pageNumber(filteredCargosPage.getNumber() + 1)
                 .pageSize(filteredCargosPage.getSize())
                 .totalPages(filteredCargosPage.getTotalPages())
                 .build();
