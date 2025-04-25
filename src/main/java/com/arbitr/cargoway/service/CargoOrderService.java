@@ -12,7 +12,7 @@ import com.arbitr.cargoway.entity.CargoOrder;
 import java.util.List;
 import java.util.UUID;
 
-public interface CargoService {
+public interface CargoOrderService {
     PaginationRs<CargoOrderRs> getGeneralCargosByCategory(CargoCategoryDto cargoCategoryDto, PaginationRq  paginationRq);
     List<CargoOrderRs> getLastCargoOrder();
     CargoOrderRs getCargoOrder(UUID cargoOrderId);

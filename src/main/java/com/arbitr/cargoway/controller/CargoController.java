@@ -7,7 +7,7 @@ import com.arbitr.cargoway.dto.rq.cargo.CargoOrderUpdateRq;
 import com.arbitr.cargoway.dto.rq.cargo.FilterCargoRq;
 import com.arbitr.cargoway.dto.rs.PaginationRs;
 import com.arbitr.cargoway.dto.rs.cargo.CargoOrderRs;
-import com.arbitr.cargoway.service.CargoService;
+import com.arbitr.cargoway.service.CargoOrderService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,56 +22,56 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Tag(name = "Profile", description = "Управление профилем пользователя")
 public class CargoController {
-    private final CargoService cargoService;
+    private final CargoOrderService cargoOrderService;
 
     @GetMapping("general/")
     public PaginationRs<CargoOrderRs> getInternalCargos(@RequestParam CargoCategoryDto cargoCategory,
             @ModelAttribute PaginationRq paginationRq) {
-        return cargoService.getGeneralCargosByCategory(cargoCategory, paginationRq);
+        return cargoOrderService.getGeneralCargosByCategory(cargoCategory, paginationRq);
     }
 
     @GetMapping("{cargoOrderId}/")
     public CargoOrderRs getCargoOrder(@PathVariable("cargoOrderId") UUID cargoOrderId) {
-        return cargoService.getCargoOrder(cargoOrderId);
+        return cargoOrderService.getCargoOrder(cargoOrderId);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CargoOrderRs createNewCargoOrder(@RequestBody @Valid CargoOrderCreateRq cargoOrderCreateRq) {
-        return cargoService.createNewCargoOrder(cargoOrderCreateRq);
+        return cargoOrderService.createNewCargoOrder(cargoOrderCreateRq);
     }
 
     @PatchMapping("{cargoOrderId}/publish")
     public CargoOrderRs publishCargoOrder(@PathVariable("cargoOrderId") UUID cargoOrderId) {
-        return cargoService.publishCargoOrder(cargoOrderId);
+        return cargoOrderService.publishCargoOrder(cargoOrderId);
     }
 
     @PatchMapping("{cargoOrderId}/draft")
     public CargoOrderRs draftCargoOrder(@PathVariable("cargoOrderId") UUID cargoOrderId) {
-        return cargoService.draftCargoOrder(cargoOrderId);
+        return cargoOrderService.draftCargoOrder(cargoOrderId);
     }
 
     @PatchMapping("{cargoOrderId}/")
     public CargoOrderRs updateCargoOrder(@PathVariable("cargoOrderId") UUID cargoOrderId,
                                          @RequestBody @Valid CargoOrderUpdateRq cargoOrderUpdateRq) {
-        return cargoService.updateCargoOrder(cargoOrderId, cargoOrderUpdateRq);
+        return cargoOrderService.updateCargoOrder(cargoOrderId, cargoOrderUpdateRq);
     }
 
     @DeleteMapping("{cargoOrderId}/")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCargoOrder(@PathVariable("cargoOrderId") UUID cargoOrderId) {
-        cargoService.deleteCargoOrder(cargoOrderId);
+        cargoOrderService.deleteCargoOrder(cargoOrderId);
     }
 
     @PostMapping("search/")
     public PaginationRs<CargoOrderRs> searchCargoOrder(@RequestBody @Valid FilterCargoRq filterCargoRq,
                                  @ModelAttribute PaginationRq paginationRq) {
-        return cargoService.searchCargoOrders(filterCargoRq, paginationRq);
+        return cargoOrderService.searchCargoOrders(filterCargoRq, paginationRq);
     }
 
     @GetMapping("last5/")
     public List<CargoOrderRs> get5LastCargoOrders() {
-        return cargoService.getLastCargoOrder();
+        return cargoOrderService.getLastCargoOrder();
     }
 }
 

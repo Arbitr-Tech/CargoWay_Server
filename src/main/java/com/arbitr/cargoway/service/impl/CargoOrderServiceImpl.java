@@ -19,7 +19,7 @@ import com.arbitr.cargoway.repository.CargoOrderRepository;
 import com.arbitr.cargoway.repository.CargoRepository;
 import com.arbitr.cargoway.repository.specification.CargoSpecification;
 import com.arbitr.cargoway.service.AuthService;
-import com.arbitr.cargoway.service.CargoService;
+import com.arbitr.cargoway.service.CargoOrderService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,7 +34,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class CargoServiceImpl implements CargoService {
+public class CargoOrderServiceImpl implements CargoOrderService {
     private final AuthService authService;
     private final CargoOrderRepository cargoOrderRepository;
     private final CargoRepository cargoRepository;
