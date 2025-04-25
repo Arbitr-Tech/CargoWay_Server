@@ -44,7 +44,7 @@ public class CargoServiceImpl implements CargoService {
         User currentUser = authService.getAuthenticatedUser();
 
         Page<CargoOrder> generalCargosPage =
-                cargoOrderRepository.findCargoOrdersByVisibilityIsInAndProfile_Id(cargoCategoryDto.getVisibleStatuses(),
+                cargoOrderRepository.findCargoOrdersByVisibilityIsInAndOwner_Id(cargoCategoryDto.getVisibleStatuses(),
                 currentUser.getProfile().getId(),
                 PageRequest.of(paginationRq.getPageNumber(), paginationRq.getPageSize())
                 );
@@ -59,6 +59,14 @@ public class CargoServiceImpl implements CargoService {
                 generalCargosPage.getSize(),
                 generalCargosPage.getTotalPages()
         );
+    }
+
+    @Override
+    public List<CargoOrderRs> getLastCargoOrder() {
+        return cargoOrderRepository.findLast5CargoOrdersByVisibilityIsIn(Set.of(VisibilityStatus.PUBLISHED,
+                VisibilityStatus.BIDDING)).stream()
+                .map(cargoOrderMapper::toRsDto)
+                .toList();
     }
 
     @Override
@@ -78,7 +86,7 @@ public class CargoServiceImpl implements CargoService {
         CargoOrder newCargoOrder = CargoOrder.builder()
                 .cargo(newCargo)
                 .visibility(VisibilityStatus.DRAFT)
-                .profile(currentUser.getProfile())
+                .owner(currentUser.getProfile())
                 .build();
 
         newCargo.setCargoOrder(newCargoOrder);

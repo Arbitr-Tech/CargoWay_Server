@@ -5,8 +5,8 @@ POST http://localhost:8080/api/v1/auth/register/
 Content-Type: application/json
 
 {
-  "username": "lolik",
-  "email": "annten@mail.com",
+  "username": "lolik1",
+  "email": "annten1@mail.com",
   "password": "SecurePass456!",
   "legalType": "INDIVIDUAL",
   "role": "CUSTOMER"
@@ -17,7 +17,7 @@ POST http://localhost:8080/api/v1/auth/login/
 Content-Type: application/json
 
 {
-  "email": "annten@mail.com",
+  "email": "annten1@mail.com",
   "password": "SecurePass456!"
 }
 
@@ -59,7 +59,7 @@ Authorization: Bearer {{access_token}}
 Accept: application/json
 
 ### f34f357b-ba53-454e-8f11-74e8afcf97cf
-@cargo_uuid = 294cae4e-6636-4807-88f3-87ca84353753
+@cargo_uuid = 622dce67-67b5-47c1-b028-ae2d81517988
 
 ### Получение деталей груза
 GET {{baseUrl}}/{{cargo_uuid}}/
@@ -117,3 +117,7 @@ Accept: application/json
 {
     "priceTo": 5000000.00
 }
+
+### Получение списка последних 5 грузов
+GET {{baseUrl}}/last5/
+Accept: application/json

@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -66,6 +67,11 @@ public class CargoController {
     public PaginationRs<CargoOrderRs> searchCargoOrder(@RequestBody @Valid FilterCargoRq filterCargoRq,
                                  @ModelAttribute PaginationRq paginationRq) {
         return cargoService.searchCargoOrders(filterCargoRq, paginationRq);
+    }
+
+    @GetMapping("last5/")
+    public List<CargoOrderRs> get5LastCargoOrders() {
+        return cargoService.getLastCargoOrder();
     }
 }
 

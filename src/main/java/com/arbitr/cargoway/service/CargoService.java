@@ -9,10 +9,12 @@ import com.arbitr.cargoway.dto.rs.PaginationRs;
 import com.arbitr.cargoway.dto.rs.cargo.CargoOrderRs;
 import com.arbitr.cargoway.entity.CargoOrder;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface CargoService {
     PaginationRs<CargoOrderRs> getGeneralCargosByCategory(CargoCategoryDto cargoCategoryDto, PaginationRq  paginationRq);
+    List<CargoOrderRs> getLastCargoOrder();
     CargoOrderRs getCargoOrder(UUID cargoOrderId);
     CargoOrderRs createNewCargoOrder(CargoOrderCreateRq cargoOrderCreateRq);
     CargoOrderRs publishCargoOrder(UUID cargoOrderId);

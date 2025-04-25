@@ -33,6 +33,10 @@ public class CargoOrder {
     @Column(name = "end_execution")
     private LocalDateTime endExecution;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "executor_id", referencedColumnName = "id")
+    private Profile executor;
+
     @Builder.Default
     @Column(name = "order_created_at", nullable = false)
     private LocalDateTime orderCreatedAt = LocalDateTime.now();
@@ -46,5 +50,5 @@ public class CargoOrder {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id", referencedColumnName = "id", nullable = false)
-    private Profile profile;
+    private Profile owner;
 }
