@@ -21,7 +21,7 @@ import java.util.UUID;
 @RequestMapping("/api/v1/cargos/")
 @RequiredArgsConstructor
 @Tag(name = "Profile", description = "Управление профилем пользователя")
-public class CargoController {
+public class CargoOrderController {
     private final CargoOrderService cargoOrderService;
 
     @GetMapping("general/")
