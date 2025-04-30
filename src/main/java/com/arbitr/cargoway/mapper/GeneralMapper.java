@@ -3,7 +3,7 @@ package com.arbitr.cargoway.mapper;
 import com.arbitr.cargoway.dto.rq.cargo.RecordStatus;
 import com.arbitr.cargoway.dto.rs.ImageRef;
 import com.arbitr.cargoway.entity.Image;
-import com.arbitr.cargoway.entity.enums.VisibilityStatus;
+import com.arbitr.cargoway.entity.enums.CargoOrderStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
 
@@ -13,12 +13,12 @@ import java.util.List;
 @Mapper
 public interface GeneralMapper {
     @Named("mapStatusToVisibility")
-    default VisibilityStatus mapStatusToVisibility(RecordStatus recordStatus) {
-        return VisibilityStatus.valueOf(recordStatus.name());
+    default CargoOrderStatus mapStatusToVisibility(RecordStatus recordStatus) {
+        return CargoOrderStatus.valueOf(recordStatus.name());
     }
 
     @Named("mapVisibilityToStatus")
-    default RecordStatus mapStatusToVisibility(VisibilityStatus transportStatus) {
+    default RecordStatus mapStatusToVisibility(CargoOrderStatus transportStatus) {
         return RecordStatus.valueOf(transportStatus.name());
     }
 

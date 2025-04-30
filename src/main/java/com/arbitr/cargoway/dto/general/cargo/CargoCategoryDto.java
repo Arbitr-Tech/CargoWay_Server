@@ -1,19 +1,19 @@
 package com.arbitr.cargoway.dto.general.cargo;
 
-import com.arbitr.cargoway.entity.enums.VisibilityStatus;
+import com.arbitr.cargoway.entity.enums.CargoOrderStatus;
 import lombok.Getter;
 
 import java.util.Set;
 
 @Getter
 public enum CargoCategoryDto {
-    HISTORY(Set.of(VisibilityStatus.CANCELED, VisibilityStatus.COMPLETED)),
-    INTERNAL(Set.of(VisibilityStatus.DRAFT, VisibilityStatus.PUBLISHED)),
-    EXTERNAL(Set.of(VisibilityStatus.IN_PROGRESS, VisibilityStatus.BIDDING));
+    HISTORY(Set.of(CargoOrderStatus.CANCELED, CargoOrderStatus.COMPLETED)),
+    INTERNAL(Set.of(CargoOrderStatus.DRAFT, CargoOrderStatus.PUBLISHED)),
+    EXTERNAL(Set.of(CargoOrderStatus.IN_PROGRESS, CargoOrderStatus.BIDDING));
 
-    private final Set<VisibilityStatus> visibleStatuses;
+    private final Set<CargoOrderStatus> visibleStatuses;
 
-    CargoCategoryDto(Set<VisibilityStatus> visibleStatuses) {
+    CargoCategoryDto(Set<CargoOrderStatus> visibleStatuses) {
         this.visibleStatuses = visibleStatuses;
     }
 

@@ -3,7 +3,7 @@ package com.arbitr.cargoway.repository.specification;
 import com.arbitr.cargoway.dto.rq.cargo.FilterCargoRq;
 import com.arbitr.cargoway.entity.Cargo;
 import com.arbitr.cargoway.entity.CargoOrder;
-import com.arbitr.cargoway.entity.enums.VisibilityStatus;
+import com.arbitr.cargoway.entity.enums.CargoOrderStatus;
 import org.springframework.data.jpa.domain.Specification;
 import jakarta.persistence.criteria.*;
 
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 public class CargoSpecification {
-    public static Specification<Cargo> withFilter(FilterCargoRq filter, Set<VisibilityStatus> allowedStatuses) {
+    public static Specification<Cargo> withFilter(FilterCargoRq filter, Set<CargoOrderStatus> allowedStatuses) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 

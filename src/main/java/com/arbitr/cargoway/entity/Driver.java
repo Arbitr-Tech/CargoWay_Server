@@ -40,10 +40,7 @@ public class Driver {
     @Column(name = "expiration_date", nullable = false)
     private LocalDate expirationDate;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "profile_id", referencedColumnName = "id", nullable = false)
     private Profile profile;
-
-    @OneToOne(fetch = FetchType.EAGER)
-    private Transport transport;
 }

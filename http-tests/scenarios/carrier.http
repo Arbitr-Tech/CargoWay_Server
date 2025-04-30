@@ -1,0 +1,104 @@
+@transportUrl=http://localhost:8080/api/v1/transports
+@cargoUrl=http://localhost:8080/api/v1/cargos
+@driverUrl=http://localhost:8080/api/v1/drivers
+@trailersUrl=http://localhost:8080/api/v1/trailers
+
+### Метод для регистрации компании
+POST http://localhost:8080/api/v1/auth/register/
+Content-Type: application/json
+
+{
+  "username": "sagid123",
+  "email": "sagid@mail.com",
+  "password": "SecurePass456!",
+  "legalType": "INDIVIDUAL",
+  "role": "CARRIER"
+}
+
+### Метод для авторизации
+POST http://localhost:8080/api/v1/auth/login/
+Content-Type: application/json
+
+{
+  "email": "sagid@mail.com",
+  "password": "SecurePass456!"
+}
+
+> {%
+    client.global.set("access_token", response.body.access_token);
+%}
+
+### Метод для создания записи о [водителе]
+POST {{driverUrl}}//
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "licenseCategory": "A",
+  "licenseNumber": "0319 445115",
+  "issueDate": "2023-04-30",
+  "expirationDate": "2033-04-30"
+}
+
+###
+@driverId=66c53c94-f6c2-4a5c-9a11-1eaf91a93b7d
+
+### Метод для создания записи о [прицепе]
+POST {{trailersUrl}}//
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "trailerNumber": "A123BC",
+  "liftingCapacity": 10000,
+  "bodyType": "Тент",
+  "loadType": "Верхняя",
+  "unloadType": "Задняя",
+  "length": 10,
+  "width": 3,
+  "height": 3,
+  "volume": 30
+}
+
+###
+@trailerId=e45d62b8-b23f-4bee-a3f2-d618b0c59876
+
+### Метод для создания записи о транспорте
+POST {{transportUrl}}//
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "driverId": "{{driverId}}",
+  "brand": "Volvo",
+  "model": "FH16",
+  "manufactureYear": 2020,
+  "transportNumber": "A123BC",
+  "embeddedTrailerDetails": {
+    "trailerNumber": "X456YZ",
+    "liftingCapacity": 10000,
+    "bodyType": "Тент",
+    "loadType": "Верхняя",
+    "unloadType": "Задняя",
+    "length": 10,
+    "width": 3,
+    "height": 3,
+    "volume": 30
+  },
+  "trailersIds": [
+    "{{trailerId}}"
+  ]
+}
+
+### Запрос на получение списка записей грузов
+POST {{cargoUrl}}/search/?pageNumber=1&pageSize=5
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "priceTo": 5000000.00
+}
+
+### Создать отклик от перевозчика на груз
+POST {{transportUrl}}/cargos/

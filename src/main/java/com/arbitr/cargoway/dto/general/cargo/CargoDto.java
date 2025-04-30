@@ -5,7 +5,10 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -13,6 +16,9 @@ import java.util.List;
 import java.util.UUID;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CargoDto {
     @Schema(description = "Название предмета", example = "Box")
     @NotBlank(message = "Name must not be blank")
@@ -63,6 +69,9 @@ public class CargoDto {
     private List<UUID> photos;
 
     @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class DimensionsDto {
         @Schema(description = "Длина предмета в см", example = "100")
         @Min(value = 1, message = "Длина должна быть больше 0")
@@ -78,6 +87,9 @@ public class CargoDto {
     }
 
     @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class RouteDto {
         @Schema(description = "Место отправления", example = "Москва")
         @NotBlank(message = "Место отправления обязательно")

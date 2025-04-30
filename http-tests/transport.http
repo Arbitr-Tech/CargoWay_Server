@@ -1,92 +1,94 @@
 @baseUrl = http://localhost:8080/api/v1/transports
-@authToken = Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyUmFub20xMjMiLCJpYXQiOjE3NDAxNjY0MTcsImV4cCI6MTc0MDI1MjgxN30.VXg2lAQ1FqPMJrnlXyzZOf_uYGbGe-EX5bIg5y7E58g
-@transport_uuid = 95a529de-b39a-4cfd-8b7d-f7674bcaf0f9
-@photo_uuid = 65673995-f289-4d68-981e-23426b195d37
 
-### Метод для создания транспорта
-POST {{baseUrl}}//
-Authorization: {{authToken}}
+### Метод для регистрации компании
+POST http://localhost:8080/api/v1/auth/register/
 Content-Type: application/json
 
 {
-  "type": "Грузовик",
-  "brand" : "Volvo",
+  "username": "sagid123",
+  "email": "sagid@mail.com",
+  "password": "SecurePass456!",
+  "legalType": "INDIVIDUAL",
+  "role": "CARRIER"
+}
+
+### Метод для авторизации
+POST http://localhost:8080/api/v1/auth/login/
+Content-Type: application/json
+
+{
+  "email": "sagid@mail.com",
+  "password": "SecurePass456!"
+}
+
+> {%
+    client.global.set("access_token", response.body.access_token);
+%}
+
+###
+@driverId=
+@trailerId=
+
+### Метод для создания транспорта
+POST {{baseUrl}}//
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "driverId": "{{driverId}}",
+  "brand": "Volvo",
   "model": "FH16",
-  "year": "2022",
-  "transportNumber": "43kl43",
-  "liftingCapacity": 10000,
-  "volume": 50,
-  "loadType": "Верхняя",
-  "unloadType": "Задняя",
-  "bodyType": "Реф",
-  "route": {
-    "from": "Москва",
-    "to": "Санкт-Петербург"
-  },
-  "trailerDetails": {
-    "dimensions": {
+  "manufactureYear": 2020,
+  "transportNumber": "A123BC",
+  "embeddedTrailerDetails": {
+    "trailerNumber": "X456YZ",
+    "liftingCapacity": 10000,
+    "bodyType": "Тент",
+    "loadType": "Верхняя",
+    "unloadType": "Задняя",
     "length": 10,
-    "width": 2.5,
-    "height": 3
-    },
-    "volume": 10,
-    "trailerNumber": "43kl43"
+    "width": 3,
+    "height": 3,
+    "volume": 30
   },
-  "price": 5000.00,
-  "typePay": "Предоплата",
-  "readyDate": "2025-02-28",
-  "driver": "",
-  "status": "HIDDEN",
-  "photos": [
-    {
-      "id": "{{photo_uuid}}"
-    }
+  "trailersIds": [
+    "{{trailerId}}"
   ]
 }
 
+### Получение деталей транспортов с пагинацией
+GET {{baseUrl}}/?pageNumber=1&pageSize=5
+Authorization: Bearer {{access_token}}
+
+###
+@transportId=
+
 ### Получение деталей транспорта
-GET {{baseUrl}}/{{transport_uuid}}/
-Authorization: {{authToken}}
+GET {{baseUrl}}/{{transportId}}/
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
 
-### Поиск транспорта с фильтрами <<< Не работает <<<
-#GET {{baseUrl}}?type=Грузовик&capacity=10000&volume=50&loadType=Верхняя&unloadType=Задняя&price=5000.00&readyDate=2025-02-08&from=Москва&to=Санкт-Петербург
-#Authorization: {{authToken}}
+### Обновление деталей транспорта
+PATCH {{baseUrl}}/{{transportId}}/
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
 
-### Получение последних X транспортов
-GET {{baseUrl}}/count/5/
-Authorization: {{authToken}}
-
-### Обновление транспорта <<< Не работает <<<
-#PATCH {{baseUrl}}/{{transport_uuid}}/
-#Authorization: {{authToken}}
-#Content-Type: application/json
-#
-#{
-#  "type": "Фура",
-#  "model": "Scania R500",
-#  "capacity": 12000,
-#  "volume": 55,
-#  "loadType": "Боковая",
-#  "unloadType": "Передняя",
-#  "route": {
-#    "from": "Казань",
-#    "to": "Екатеринбург"
-#  },
-#  "price": 5500.00,
-#  "typePay": "Постоплата",
-#  "readyDate": "2025-02-10",
-#  "deliveryDate": "2025-02-18",
-#  "photos": [
-#    {
-#      "id": "{{photo_uuid}}"
-#    }
-#  ]
-#}
-
-### Изменение статуса транспорта
-PATCH {{baseUrl}}/{{transport_uuid}}/change-status/?status=HIDDEN
-Authorization: {{authToken}}
+{
+  "driverId": "{{driverId}}",
+  "brand": "Volvo",
+  "model": "FH16",
+  "manufactureYear": 2024,
+  "transportNumber": "A123BC",
+  "embeddedTrailerDetails": {
+    "trailerNumber": "X456LO",
+    "width": 6,
+    "height": 10
+  },
+  "trailersIds": [
+    "{{trailerId}}"
+  ]
+}
 
 ### Удаление транспорта
-DELETE {{baseUrl}}/{{transport_uuid}}/
-Authorization: {{authToken}}
+DELETE {{baseUrl}}/{{transportId}}/
+Authorization: Bearer {{access_token}}

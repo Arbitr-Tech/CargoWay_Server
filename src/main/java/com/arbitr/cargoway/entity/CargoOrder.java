@@ -1,7 +1,7 @@
 package com.arbitr.cargoway.entity;
 
 
-import com.arbitr.cargoway.entity.enums.VisibilityStatus;
+import com.arbitr.cargoway.entity.enums.CargoOrderStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -25,7 +26,7 @@ public class CargoOrder {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "visibility", nullable = false)
-    private VisibilityStatus visibility;
+    private CargoOrderStatus visibility;
 
     @Column(name = "start_execution")
     private LocalDateTime startExecution;
@@ -51,4 +52,7 @@ public class CargoOrder {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id", referencedColumnName = "id", nullable = false)
     private Profile owner;
+
+    @OneToMany(mappedBy = "cargoOrder", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CargoOrderResponse> responses;
 }

@@ -10,7 +10,8 @@ import com.arbitr.cargoway.dto.rs.PaginationRs;
 import com.arbitr.cargoway.dto.rs.cargo.CargoOrderRs;
 import com.arbitr.cargoway.entity.Cargo;
 import com.arbitr.cargoway.entity.CargoOrder;
-import com.arbitr.cargoway.entity.enums.VisibilityStatus;
+import com.arbitr.cargoway.entity.Profile;
+import com.arbitr.cargoway.entity.enums.CargoOrderStatus;
 import com.arbitr.cargoway.entity.security.User;
 import com.arbitr.cargoway.exception.NotFoundException;
 import com.arbitr.cargoway.exception.ResourceConflictException;
@@ -20,6 +21,7 @@ import com.arbitr.cargoway.repository.CargoRepository;
 import com.arbitr.cargoway.repository.specification.CargoSpecification;
 import com.arbitr.cargoway.service.AuthService;
 import com.arbitr.cargoway.service.CargoOrderService;
+import com.arbitr.cargoway.service.ProfileService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -35,6 +37,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class CargoOrderServiceImpl implements CargoOrderService {
+    private final ProfileService profileService;
     private final AuthService authService;
     private final CargoOrderRepository cargoOrderRepository;
     private final CargoRepository cargoRepository;
@@ -63,8 +66,8 @@ public class CargoOrderServiceImpl implements CargoOrderService {
 
     @Override
     public List<CargoOrderRs> getLastCargoOrder() {
-        return cargoOrderRepository.findLast5CargoOrdersByVisibilityIsIn(Set.of(VisibilityStatus.PUBLISHED,
-                VisibilityStatus.BIDDING)).stream()
+        return cargoOrderRepository.findLast5CargoOrdersByVisibilityIsIn(Set.of(CargoOrderStatus.PUBLISHED,
+                CargoOrderStatus.BIDDING)).stream()
                 .map(cargoOrderMapper::toRsDto)
                 .toList();
     }
@@ -79,14 +82,14 @@ public class CargoOrderServiceImpl implements CargoOrderService {
 
     @Override
     public CargoOrderRs createNewCargoOrder(CargoOrderCreateRq cargoOrderCreateRq) {
-        User currentUser = authService.getAuthenticatedUser();
+        Profile currentProfile = profileService.getAuthenticatedProfile();
 
         Cargo newCargo = cargoOrderMapper.toEntity(cargoOrderCreateRq);
 
         CargoOrder newCargoOrder = CargoOrder.builder()
                 .cargo(newCargo)
-                .visibility(VisibilityStatus.DRAFT)
-                .owner(currentUser.getProfile())
+                .visibility(CargoOrderStatus.DRAFT)
+                .owner(currentProfile)
                 .build();
 
         newCargo.setCargoOrder(newCargoOrder);
@@ -97,17 +100,17 @@ public class CargoOrderServiceImpl implements CargoOrderService {
 
     @Override
     public CargoOrderRs publishCargoOrder(UUID cargoOrderId) {
-        return changeInternalVisibilityStatus(cargoOrderId, VisibilityStatus.DRAFT, VisibilityStatus.PUBLISHED);
+        return changeInternalVisibilityStatus(cargoOrderId, CargoOrderStatus.DRAFT, CargoOrderStatus.PUBLISHED);
     }
 
     @Override
     public CargoOrderRs draftCargoOrder(UUID cargoOrderId) {
-        return changeInternalVisibilityStatus(cargoOrderId, VisibilityStatus.PUBLISHED, VisibilityStatus.DRAFT);
+        return changeInternalVisibilityStatus(cargoOrderId, CargoOrderStatus.PUBLISHED, CargoOrderStatus.DRAFT);
     }
 
-    private CargoOrderRs changeInternalVisibilityStatus(UUID cargoOrderId, VisibilityStatus currentStatus,
-                                                        VisibilityStatus newStatus) {
-        CargoOrder foundCargoOrder = this.getCargoOrderById(cargoOrderId);
+    private CargoOrderRs changeInternalVisibilityStatus(UUID cargoOrderId, CargoOrderStatus currentStatus,
+                                                        CargoOrderStatus newStatus) {
+        CargoOrder foundCargoOrder = this.getCargoOrderByIdAndCurrentProfile(cargoOrderId);
 
         if (!foundCargoOrder.getVisibility().equals(currentStatus)) {
             throw new ResourceConflictException(
@@ -124,9 +127,9 @@ public class CargoOrderServiceImpl implements CargoOrderService {
 
     @Override
     public CargoOrderRs updateCargoOrder(UUID cargoOrderId, CargoOrderUpdateRq cargoOrderUpdateRq) {
-        CargoOrder foundCargoOrder = this.getCargoOrderById(cargoOrderId);
+        CargoOrder foundCargoOrder = this.getCargoOrderByIdAndCurrentProfile(cargoOrderId);
 
-        if (!foundCargoOrder.getVisibility().equals(VisibilityStatus.DRAFT)) {
+        if (!foundCargoOrder.getVisibility().equals(CargoOrderStatus.DRAFT)) {
             throw new ResourceConflictException(
                     "Запись о грузе невозможно обновить, так как запись не в статусе черновика! Id=%s"
                             .formatted(cargoOrderId)
@@ -207,9 +210,9 @@ public class CargoOrderServiceImpl implements CargoOrderService {
     @Transactional
     @Override
     public void deleteCargoOrder(UUID cargoOrderId) {
-        CargoOrder foundCargoOrder = this.getCargoOrderById(cargoOrderId);
+        CargoOrder foundCargoOrder = this.getCargoOrderByIdAndCurrentProfile(cargoOrderId);
 
-        if (!foundCargoOrder.getVisibility().equals(VisibilityStatus.DRAFT)) {
+        if (!foundCargoOrder.getVisibility().equals(CargoOrderStatus.DRAFT)) {
             throw new ResourceConflictException(
                     "Запись о грузе невозможно удалить, так как запись не в статусе черновика! Id=%s"
                             .formatted(cargoOrderId)
@@ -221,9 +224,9 @@ public class CargoOrderServiceImpl implements CargoOrderService {
 
     @Override
     public PaginationRs<CargoOrderRs> searchCargoOrders(FilterCargoRq filterCargoRq, PaginationRq paginationRq) {
-        Set<VisibilityStatus> allowedStatuses = Set.of(
-                VisibilityStatus.PUBLISHED,
-                VisibilityStatus.BIDDING
+        Set<CargoOrderStatus> allowedStatuses = Set.of(
+                CargoOrderStatus.PUBLISHED,
+                CargoOrderStatus.BIDDING
         );
 
         Specification<Cargo> specification = CargoSpecification.withFilter(filterCargoRq, allowedStatuses);
@@ -245,6 +248,16 @@ public class CargoOrderServiceImpl implements CargoOrderService {
     @Override
     public CargoOrder getCargoOrderById(UUID cargoOrderId) {
         return cargoOrderRepository.findById(cargoOrderId)
+                .orElseThrow(
+                        () -> new NotFoundException("Запись о грузе с id=%s не найдена!".formatted(cargoOrderId))
+                );
+    }
+
+    @Override
+    public CargoOrder getCargoOrderByIdAndCurrentProfile(UUID cargoOrderId) {
+        Profile currentProfile = profileService.getAuthenticatedProfile();
+
+        return cargoOrderRepository.findCargoOrderByIdAndOwner_Id(cargoOrderId, currentProfile.getId())
                 .orElseThrow(
                         () -> new NotFoundException("Запись о грузе с id=%s не найдена!".formatted(cargoOrderId))
                 );

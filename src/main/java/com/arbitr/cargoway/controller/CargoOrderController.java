@@ -7,6 +7,7 @@ import com.arbitr.cargoway.dto.rq.cargo.CargoOrderUpdateRq;
 import com.arbitr.cargoway.dto.rq.cargo.FilterCargoRq;
 import com.arbitr.cargoway.dto.rs.PaginationRs;
 import com.arbitr.cargoway.dto.rs.cargo.CargoOrderRs;
+import com.arbitr.cargoway.service.CargoOrderResponseService;
 import com.arbitr.cargoway.service.CargoOrderService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -20,9 +21,10 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/cargos/")
 @RequiredArgsConstructor
-@Tag(name = "Profile", description = "Управление профилем пользователя")
+@Tag(name = "CargoOrder", description = "Управление записями о грузах")
 public class CargoOrderController {
     private final CargoOrderService cargoOrderService;
+    private final CargoOrderResponseService cargoOrderResponseService;
 
     @GetMapping("general/")
     public PaginationRs<CargoOrderRs> getInternalCargos(@RequestParam CargoCategoryDto cargoCategory,
@@ -72,6 +74,12 @@ public class CargoOrderController {
     @GetMapping("last5/")
     public List<CargoOrderRs> get5LastCargoOrders() {
         return cargoOrderService.getLastCargoOrder();
+    }
+
+    @PostMapping("{cargoOrderId}/transport/{transportId}/response/")
+    public void makeCargoOrderResponse(@PathVariable("cargoOrderId") UUID cargoOrderId,
+                                       @PathVariable("transportId") UUID transportId) {
+        cargoOrderResponseService.makeResponse(cargoOrderId, transportId);
     }
 }
 

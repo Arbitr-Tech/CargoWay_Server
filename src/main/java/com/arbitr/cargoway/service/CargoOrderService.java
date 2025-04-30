@@ -23,4 +23,5 @@ public interface CargoOrderService {
     void deleteCargoOrder(UUID cargoOrderId);
     PaginationRs<CargoOrderRs> searchCargoOrders(FilterCargoRq filterCargoRq, PaginationRq paginationRq);
     CargoOrder getCargoOrderById(UUID cargoOrderId);
+    CargoOrder getCargoOrderByIdAndCurrentProfile(UUID cargoOrderId);
 }

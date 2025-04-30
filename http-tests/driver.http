@@ -1,0 +1,65 @@
+@driverUrl=http://localhost:8080/api/v1/drivers
+
+### Метод для регистрации компании
+POST http://localhost:8080/api/v1/auth/register/
+Content-Type: application/json
+
+{
+  "username": "sagid123",
+  "email": "sagid@mail.com",
+  "password": "SecurePass456!",
+  "legalType": "INDIVIDUAL",
+  "role": "CARRIER"
+}
+
+### Метод для авторизации
+POST http://localhost:8080/api/v1/auth/login/
+Content-Type: application/json
+
+{
+  "email": "sagid@mail.com",
+  "password": "SecurePass456!"
+}
+
+> {%
+    client.global.set("access_token", response.body.access_token);
+%}
+
+### Метод для создания записи о [водителе]
+POST {{driverUrl}}//
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "licenseCategory": "B",
+  "licenseNumber": "0113 445115",
+  "issueDate": "2023-04-30",
+  "expirationDate": "2033-04-30"
+}
+
+### Метод для получения всех записей о водителях профиля с пагинацией
+GET {{driverUrl}}//?pageNumber=1&pageSize=5
+Authorization: Bearer {{access_token}}
+
+###
+@driverId=32566cdc-82e6-4eba-a4bd-73dec566050f
+
+### Метод для получения данных записи водителя по id
+GET {{driverUrl}}/{{driverId}}/
+Authorization: Bearer {{access_token}}
+
+### Метод для обновления данных записи водителя по id
+PATCH {{driverUrl}}/{{driverId}}/
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "licenseCategory": "C",
+  "licenseNumber": "0503 445115",
+  "issueDate": "2023-04-30",
+  "expirationDate": "2033-04-30"
+}
+
+### Метод для удаление записи о водителя по id
+DELETE {{driverUrl}}/{{driverId}}/
+Authorization: Bearer {{access_token}}

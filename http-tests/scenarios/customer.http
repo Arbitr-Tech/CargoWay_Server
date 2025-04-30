@@ -1,4 +1,14 @@
-@baseUrl = http://localhost:8080/api/v1/cargos
+### Метод для регистрации компании [ЗАКАЗЧИК + ФИЗ ЛИЦО]
+POST http://localhost:8080/api/v1/auth/register/
+Content-Type: application/json
+
+{
+  "username": "lolik1",
+  "email": "annten1@mail.com",
+  "password": "SecurePass456!",
+  "legalType": "INDIVIDUAL",
+  "role": "CUSTOMER"
+}
 
 ### Метод для авторизации
 POST http://localhost:8080/api/v1/auth/login/
@@ -96,16 +106,3 @@ Content-Type: application/json
 DELETE {{baseUrl}}/{{cargo_uuid}}/
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
-
-### Запрос на получение списка записей грузов
-POST {{baseUrl}}/search/?pageNumber=1&pageSize=5
-Content-Type: application/json
-Accept: application/json
-
-{
-    "priceTo": 5000000.00
-}
-
-### Получение списка последних 5 грузов
-GET {{baseUrl}}/last5/
-Accept: application/json

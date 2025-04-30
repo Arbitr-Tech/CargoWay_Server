@@ -1,7 +1,7 @@
 package com.arbitr.cargoway.repository;
 
 import com.arbitr.cargoway.entity.CargoOrder;
-import com.arbitr.cargoway.entity.enums.VisibilityStatus;
+import com.arbitr.cargoway.entity.enums.CargoOrderStatus;
 import jakarta.websocket.server.PathParam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,13 +11,17 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
 @Repository
 public interface CargoOrderRepository extends JpaRepository<CargoOrder, UUID> {
     @EntityGraph(attributePaths = {"cargo", "cargo.images"})
-    Page<CargoOrder> findCargoOrdersByVisibilityIsInAndOwner_Id(Set<VisibilityStatus> visibilities,
+    Optional<CargoOrder> findCargoOrderByIdAndOwner_Id(UUID id, UUID ownerId);
+
+    @EntityGraph(attributePaths = {"cargo", "cargo.images"})
+    Page<CargoOrder> findCargoOrdersByVisibilityIsInAndOwner_Id(Set<CargoOrderStatus> visibilities,
                                                               UUID profileId, Pageable pageable);
 
     @Query("""
@@ -29,5 +33,5 @@ public interface CargoOrderRepository extends JpaRepository<CargoOrder, UUID> {
     ORDER BY c_o.orderUpdatedAt DESC
     LIMIT 5
     """)
-    List<CargoOrder> findLast5CargoOrdersByVisibilityIsIn(@PathParam("visibilities") Set<VisibilityStatus> visibilities);
+    List<CargoOrder> findLast5CargoOrdersByVisibilityIsIn(@PathParam("visibilities") Set<CargoOrderStatus> visibilities);
 }

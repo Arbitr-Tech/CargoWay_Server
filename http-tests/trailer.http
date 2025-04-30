@@ -1,0 +1,69 @@
+@trailersUrl=http://localhost:8080/api/v1/trailers
+
+### Метод для регистрации компании
+POST http://localhost:8080/api/v1/auth/register/
+Content-Type: application/json
+
+{
+  "username": "sagid123",
+  "email": "sagid@mail.com",
+  "password": "SecurePass456!",
+  "legalType": "INDIVIDUAL",
+  "role": "CARRIER"
+}
+
+### Метод для авторизации
+POST http://localhost:8080/api/v1/auth/login/
+Content-Type: application/json
+
+{
+  "email": "sagid@mail.com",
+  "password": "SecurePass456!"
+}
+
+> {%
+    client.global.set("access_token", response.body.access_token);
+%}
+
+### Метод для создания записи о [прицепе]
+POST {{trailersUrl}}//
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "trailerNumber": "A123BC",
+  "liftingCapacity": 10000,
+  "bodyType": "Тент",
+  "loadType": "Верхняя",
+  "unloadType": "Задняя",
+  "length": 10,
+  "width": 3,
+  "height": 3,
+  "volume": 30
+}
+
+### Метод для получения всех записей о водителях профиля с пагинацией
+GET {{trailersUrl}}//?pageNumber=1&pageSize=5
+Authorization: Bearer {{access_token}}
+
+###
+@trailerId=00face22-b297-460e-9e14-b685884732ba
+
+### Метод для получения данных о конкретной записи о прицепе по id
+GET {{trailersUrl}}/{{trailerId}}/
+Authorization: Bearer {{access_token}}
+
+### Метод для обновления записи о прицепе по id
+PATCH {{trailersUrl}}/{{trailerId}}/
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "trailerNumber": "A123BC",
+  "liftingCapacity": 4626,
+  "bodyType": "Тент"
+}
+
+### Метод удаления записи о прицепе
+DELETE {{trailersUrl}}/{{trailerId}}/
+Authorization: Bearer {{access_token}}

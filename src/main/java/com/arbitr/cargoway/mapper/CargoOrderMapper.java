@@ -1,6 +1,6 @@
 package com.arbitr.cargoway.mapper;
 
-import com.arbitr.cargoway.dto.general.cargo.VisibilityStatusDto;
+import com.arbitr.cargoway.dto.general.cargo.CargoOrderStatusDto;
 import com.arbitr.cargoway.dto.general.cargo.CargoDto;
 import com.arbitr.cargoway.dto.rs.cargo.CargoOrderRs;
 import com.arbitr.cargoway.entity.Cargo;
@@ -20,18 +20,18 @@ public interface CargoOrderMapper {
     }
 
     default CargoOrderRs generalRsDto(Cargo cargo, CargoOrder cargoOrder) {
-        CargoOrderRs.Dimensions cargoOrderDimensions = CargoOrderRs.Dimensions.builder()
+        CargoDto.DimensionsDto cargoOrderDimensions = CargoDto.DimensionsDto.builder()
                 .width(cargo.getWidth())
                 .height(cargo.getHeight())
                 .length(cargo.getLength())
                 .build();
 
-        CargoOrderRs.Route cargoOrderRoute = CargoOrderRs.Route.builder()
+        CargoDto.RouteDto cargoRouteDetails = CargoDto.RouteDto.builder()
                 .from(cargo.getFrom())
                 .to(cargo.getTo())
                 .build();
 
-        CargoOrderRs.CargoDetails cargoDetails = CargoOrderRs.CargoDetails.builder()
+        CargoDto cargoDetails = CargoDto.builder()
                 .name(cargo.getName())
                 .description(cargo.getDescription())
                 .weight(cargo.getWeight())
@@ -44,7 +44,7 @@ public interface CargoOrderMapper {
                 .readyDate(cargo.getReadyDate())
                 .deliveryDate(cargo.getDeliveryDate())
                 .dimensions(cargoOrderDimensions)
-                .route(cargoOrderRoute)
+                .route(cargoRouteDetails)
                 .build();
 
         return CargoOrderRs.builder()
@@ -53,7 +53,7 @@ public interface CargoOrderMapper {
                 .orderUpdatedAt(cargoOrder.getOrderUpdatedAt())
                 .startExecution(cargoOrder.getStartExecution())
                 .endExecution(cargoOrder.getEndExecution())
-                .visibilityStatus(VisibilityStatusDto.valueOf(cargoOrder.getVisibility().name()))
+                .visibilityStatus(CargoOrderStatusDto.valueOf(cargoOrder.getVisibility().name()))
                 .cargo(cargoDetails)
                 .build();
     }

@@ -15,6 +15,7 @@ public class PaginationRs<T> {
     int totalPages;
 
     public static <T> PaginationRs<T> of(List<T> content, int pageNumber, int pageSize, int totalPages) {
-        return new PaginationRs<>(content, pageNumber, pageSize, totalPages);
+        int realPageNumber = pageNumber + 1;
+        return new PaginationRs<>(content, realPageNumber, pageSize, totalPages);
     }
 }

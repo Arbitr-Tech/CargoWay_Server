@@ -54,6 +54,12 @@ public class ProfileServiceImpl implements ProfileService {
         return profileMapper.buildProfileRsFrom(profile);
     }
 
+    @Override
+    public Profile getAuthenticatedProfile() {
+        User user = authService.getAuthenticatedUser();
+        return getProfileOrThrow(user);
+    }
+
     private Profile getProfileOrThrow(User user) {
         return Optional.ofNullable(user.getProfile())
                 .orElseThrow(() -> new NotFoundException("Профиль пользователя не был найден!"));
