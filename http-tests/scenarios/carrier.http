@@ -34,6 +34,7 @@ Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
+  "fullName": "Алексей Яковлев",
   "licenseCategory": "A",
   "licenseNumber": "0319 445115",
   "issueDate": "2023-04-30",

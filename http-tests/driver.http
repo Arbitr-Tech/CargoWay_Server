@@ -31,6 +31,7 @@ Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
+  "fullName": "Михаил Петрович",
   "licenseCategory": "B",
   "licenseNumber": "0113 445115",
   "issueDate": "2023-04-30",
@@ -42,7 +43,7 @@ GET {{driverUrl}}//?pageNumber=1&pageSize=5
 Authorization: Bearer {{access_token}}
 
 ###
-@driverId=32566cdc-82e6-4eba-a4bd-73dec566050f
+@driverId=8f7ac654-67c5-406f-ac62-2035c8f45f5b
 
 ### Метод для получения данных записи водителя по id
 GET {{driverUrl}}/{{driverId}}/
@@ -54,6 +55,7 @@ Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
+  "fullName": "Михаил ",
   "licenseCategory": "C",
   "licenseNumber": "0503 445115",
   "issueDate": "2023-04-30",
