@@ -79,6 +79,9 @@ public class DriverServiceImpl implements DriverService {
     public DriverRs updateDriver(UUID driverId, DriverUpdateRq driverUpdateRq) {
         Driver existingDriver = this.getDriverByIdAndCurrentProfile(driverId);
 
+        if (driverUpdateRq.getFullName() != null) {
+            existingDriver.setFullName(driverUpdateRq.getFullName());
+        }
         if (driverUpdateRq.getLicenseCategory() != null) {
             existingDriver.setLicenseCategory(driverUpdateRq.getLicenseCategory());
         }

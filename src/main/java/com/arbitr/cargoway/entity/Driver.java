@@ -24,8 +24,11 @@ public class Driver {
     @Column(name = "id")
     private UUID id;
 
+    @Column(name = "fullname", nullable = false)
+    private String fullName;
+
     @Pattern(regexp = "[A-E]", message = "Категория прав должна быть одной из букв: A, B, C, D, E")
-    @Column(name = "license_category", nullable = false, length = 1)
+    @Column(name = "license_category", nullable = false)
     private String licenseCategory;
 
     @Pattern(regexp = "\\d{4} \\d{6}", message = "Номер прав должен быть в формате 'XXXX XXXXXX'")
