@@ -21,27 +21,30 @@ import java.util.UUID;
 @AllArgsConstructor
 public class CargoDto {
     @Schema(description = "Название предмета", example = "Box")
-    @NotBlank(message = "Name must not be blank")
+    @NotBlank(message = "Название груза не может быть пустым")
     private String name;
 
     @Schema(description = "Описание предмета", example = "A large box")
     private String description;
 
     @Schema(description = "Вес предмета", example = "10")
-    @Min(value = 0, message = "Weight must be a positive number")
+    @Min(value = 0, message = "Вес не может быть отрицательным")
     private Integer weight;
 
     @Schema(description = "Объем предмета", example = "50")
-    @Min(value = 0, message = "Volume must be a positive number")
+    @Min(value = 0, message = "Объем не может быть отрицательным")
     private Integer volume;
 
     @Schema(description = "Тип загрузки", example = "Задняя")
+    @NotBlank(message = "Тип загрузки не может быть пустым")
     private String loadType;
 
     @Schema(description = "Тип выгрузки", example = "Задняя")
+    @NotBlank(message = "Тип выгрузки не может быть пустым")
     private String unloadType;
 
     @Schema(description = "Тип кузова машины для перевозки", example = "Тент")
+    @NotBlank(message = "Тип кузова машины для перевозки не может быть пустым")
     private String bodyType;
 
     @Schema(description = "Цена предмета", example = "99.99")
@@ -49,14 +52,15 @@ public class CargoDto {
     private BigDecimal price;
 
     @Schema(description = "Тип оплаты")
+    @NotBlank(message = "Тип оплаты не может быть пустым")
     private String typePay;
 
     @Schema(description = "Дата готовности предмета", example = "2025-02-08")
-    @Future(message = "Ready date must be in the future")
+    @Future(message = "Дата готовности груза не может быть прошедшей")
     private LocalDate readyDate;
 
     @Schema(description = "Необходимая дата доставки")
-    @Future(message = "Ready date must be in the future")
+    @Future(message = "Дата доставки груза не может быть прошедшей")
     private LocalDate deliveryDate;
 
     @Schema(description = "Размеры предмета")
