@@ -77,7 +77,6 @@ Content-Type: application/json
   "manufactureYear": 2020,
   "transportNumber": "A123BC",
   "embeddedTrailerDetails": {
-    "trailerNumber": "X456YZ",
     "liftingCapacity": 10000,
     "bodyType": "Тент",
     "loadType": "Верхняя",
