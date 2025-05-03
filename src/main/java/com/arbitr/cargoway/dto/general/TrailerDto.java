@@ -10,6 +10,9 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @Schema(description = "DTO с информацией о прицепе")
 public class TrailerDto {
+    @Schema(description = "Название прицепаН")
+    private String name;
+
     @Schema(description = "Номер прицепа", example = "A123BC")
     private String trailerNumber;
 

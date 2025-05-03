@@ -20,6 +20,9 @@ public class Trailer {
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
+    @Column(name = "name", nullable = false)
+    private String name;
+
     @Column(name = "trailer_number", nullable = false, unique = true)
     private String trailerNumber;
 

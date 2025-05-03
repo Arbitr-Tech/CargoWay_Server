@@ -81,38 +81,41 @@ public class TrailerServiceImpl implements TrailerService {
 
     @Override
     public TrailerRs updateTrailer(UUID trailerId, TrailerUpdateRq trailerUpdateRq) {
-        Trailer foundTrailer = this.getTrailerByIdAndCurrentProfile(trailerId);
+        Trailer existingTrailer = this.getTrailerByIdAndCurrentProfile(trailerId);
 
+        if (trailerUpdateRq.getName() != null) {
+            existingTrailer.setName(trailerUpdateRq.getName());
+        }
         if (trailerUpdateRq.getTrailerNumber() != null) {
-            foundTrailer.setTrailerNumber(trailerUpdateRq.getTrailerNumber());
+            existingTrailer.setTrailerNumber(trailerUpdateRq.getTrailerNumber());
         }
         if (trailerUpdateRq.getLiftingCapacity() != null) {
-            foundTrailer.setLiftingCapacity(trailerUpdateRq.getLiftingCapacity());
+            existingTrailer.setLiftingCapacity(trailerUpdateRq.getLiftingCapacity());
         }
         if (trailerUpdateRq.getBodyType() != null) {
-            foundTrailer.setBodyType(trailerUpdateRq.getBodyType());
+            existingTrailer.setBodyType(trailerUpdateRq.getBodyType());
         }
         if (trailerUpdateRq.getLoadType() != null) {
-            foundTrailer.setLoadType(trailerUpdateRq.getLoadType());
+            existingTrailer.setLoadType(trailerUpdateRq.getLoadType());
         }
         if (trailerUpdateRq.getUnloadType() != null) {
-            foundTrailer.setUnloadType(trailerUpdateRq.getUnloadType());
+            existingTrailer.setUnloadType(trailerUpdateRq.getUnloadType());
         }
         if (trailerUpdateRq.getWidth() != null) {
-            foundTrailer.setWidth(trailerUpdateRq.getWidth());
+            existingTrailer.setWidth(trailerUpdateRq.getWidth());
         }
         if (trailerUpdateRq.getLength() != null) {
-            foundTrailer.setLength(trailerUpdateRq.getLength());
+            existingTrailer.setLength(trailerUpdateRq.getLength());
         }
         if (trailerUpdateRq.getHeight() != null) {
-            foundTrailer.setHeight(trailerUpdateRq.getHeight());
+            existingTrailer.setHeight(trailerUpdateRq.getHeight());
         }
         if (trailerUpdateRq.getVolume() != null) {
-            foundTrailer.setVolume(trailerUpdateRq.getVolume());
+            existingTrailer.setVolume(trailerUpdateRq.getVolume());
         }
 
-        trailerRepository.save(foundTrailer);
-        return trailerMapper.toRsDto(foundTrailer);
+        trailerRepository.save(existingTrailer);
+        return trailerMapper.toRsDto(existingTrailer);
     }
 
     @Override
