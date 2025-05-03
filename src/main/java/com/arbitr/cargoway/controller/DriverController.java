@@ -39,7 +39,7 @@ public class DriverController {
 
     @PatchMapping("{driverId}/")
     public DriverRs updateDriver(@PathVariable("driverId") UUID driverId,
-                                 @RequestBody @Valid DriverUpdateRq driverUpdateRq) {
+                                 @RequestBody DriverUpdateRq driverUpdateRq) {
         return driverService.updateDriver(driverId, driverUpdateRq);
     }
 

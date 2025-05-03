@@ -39,7 +39,7 @@ public class TrailerController {
 
     @PatchMapping("{trailerId}/")
     public TrailerRs updateTrailer(@PathVariable("trailerId") UUID trailerId,
-                                   @RequestBody @Valid TrailerUpdateRq trailerUpdateRq) {
+                                   @RequestBody TrailerUpdateRq trailerUpdateRq) {
         return trailerService.updateTrailer(trailerId, trailerUpdateRq);
     }
 

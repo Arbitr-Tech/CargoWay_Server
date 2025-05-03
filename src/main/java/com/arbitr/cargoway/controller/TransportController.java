@@ -40,7 +40,7 @@ public class TransportController {
 
     @PatchMapping("{transportId}/")
     public TransportRs updateTransport(@PathVariable("transportId") UUID transportId,
-                                       @RequestBody @Valid TransportUpdateRq transportUpdateRq) {
+                                       @RequestBody TransportUpdateRq transportUpdateRq) {
         return transportService.updateTransport(transportId, transportUpdateRq);
     }
 

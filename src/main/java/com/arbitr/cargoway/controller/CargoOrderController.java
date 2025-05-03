@@ -55,7 +55,7 @@ public class CargoOrderController {
 
     @PatchMapping("{cargoOrderId}/")
     public CargoOrderRs updateCargoOrder(@PathVariable("cargoOrderId") UUID cargoOrderId,
-                                         @RequestBody @Valid CargoOrderUpdateRq cargoOrderUpdateRq) {
+                                         @RequestBody CargoOrderUpdateRq cargoOrderUpdateRq) {
         return cargoOrderService.updateCargoOrder(cargoOrderId, cargoOrderUpdateRq);
     }
 
@@ -66,7 +66,7 @@ public class CargoOrderController {
     }
 
     @PostMapping("search/")
-    public PaginationRs<CargoOrderRs> searchCargoOrder(@RequestBody @Valid FilterCargoRq filterCargoRq,
+    public PaginationRs<CargoOrderRs> searchCargoOrder(@RequestBody FilterCargoRq filterCargoRq,
                                  @ModelAttribute PaginationRq paginationRq) {
         return cargoOrderService.searchCargoOrders(filterCargoRq, paginationRq);
     }
