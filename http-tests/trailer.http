@@ -31,6 +31,7 @@ Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
+  "name": "Мерседес Бенц",
   "trailerNumber": "A123BC",
   "liftingCapacity": 10000,
   "bodyType": "Тент",
@@ -47,7 +48,7 @@ GET {{trailersUrl}}//?pageNumber=1&pageSize=5
 Authorization: Bearer {{access_token}}
 
 ###
-@trailerId=00face22-b297-460e-9e14-b685884732ba
+@trailerId=119a38ac-49ac-4239-a491-230c0e3d64a3
 
 ### Метод для получения данных о конкретной записи о прицепе по id
 GET {{trailersUrl}}/{{trailerId}}/
@@ -59,6 +60,7 @@ Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
+  "name": "lexus",
   "trailerNumber": "A123BC",
   "liftingCapacity": 4626,
   "bodyType": "Тент"

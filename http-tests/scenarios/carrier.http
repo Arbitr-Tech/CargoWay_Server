@@ -50,6 +50,7 @@ Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
+  "name": "Мерседес Бенц",
   "trailerNumber": "A123BC",
   "liftingCapacity": 10000,
   "bodyType": "Тент",
