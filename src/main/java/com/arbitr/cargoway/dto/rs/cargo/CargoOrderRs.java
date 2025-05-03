@@ -20,36 +20,27 @@ import java.util.UUID;
 @AllArgsConstructor
 @Schema(description = "Детальная информация о заказе груза")
 public class CargoOrderRs {
-
-    @NotNull
     @Schema(description = "Идентификатор заказа", example = "550e8400-e29b-41d4-a716-446655440000")
     private UUID id;
 
-    @NotNull
     @Schema(description = "Статус видимости заказа", example = "PUBLIC")
     private CargoOrderStatusDto visibilityStatus;
 
-    @NotNull
     @Schema(description = "Дата и время начала выполнения заказа", example = "2025-04-15T10:00:00")
     private LocalDateTime startExecution;
 
-    @NotNull
     @Schema(description = "Дата и время окончания выполнения заказа", example = "2025-04-16T18:00:00")
     private LocalDateTime endExecution;
 
-    @NotNull
     @Schema(description = "Дата создания заказа", example = "2025-04-14T12:00:00")
     private LocalDateTime orderCreatedAt;
 
-    @NotNull
     @Schema(description = "Дата последнего обновления заказа", example = "2025-04-14T12:30:00")
     private LocalDateTime orderUpdatedAt;
 
-    @NotNull
     @Schema(description = "Краткая информация о профиле исполнителя")
     private ProfileShortDto executor;
 
-    @NotNull
     @Schema(description = "Детали груза")
     private CargoDto cargo;
 
