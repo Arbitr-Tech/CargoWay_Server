@@ -147,13 +147,14 @@ public class TransportServiceImpl implements TransportService {
             existingTransport.setEmbeddedTrailerDetails(trailerDetails);
         }
 
-        if (transportUpdateRq.getTrailersDetails() != null) {
-            List<Trailer> transportTrailers = trailerService.getTrailersByIds(transportUpdateRq.getTrailersDetails());
+        if (transportUpdateRq.getTrailersIds() != null) {
+            List<Trailer> transportTrailers = trailerService.getTrailersByIds(transportUpdateRq.getTrailersIds());
 
-            if (!transportTrailers.isEmpty() && !(transportTrailers.size() == transportUpdateRq.getTrailersDetails().size())) {
+            if (!transportTrailers.isEmpty() && !(transportTrailers.size() == transportUpdateRq.getTrailersIds().size())) {
                 throw new NotFoundException("Один или несколько элементов из переданного списка не были обнаружены в БД");
             }
             existingTransport.setTrailers(transportTrailers);
+            transportTrailers.forEach(trailer -> trailer.setTransport(existingTransport));
         }
 
         transportRepository.save(existingTransport);

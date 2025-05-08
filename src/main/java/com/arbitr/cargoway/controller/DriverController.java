@@ -5,6 +5,7 @@ import com.arbitr.cargoway.dto.rq.driver.DriverCreateRq;
 import com.arbitr.cargoway.dto.rq.driver.DriverUpdateRq;
 import com.arbitr.cargoway.dto.rs.driver.DriverRs;
 import com.arbitr.cargoway.dto.rs.PaginationRs;
+import com.arbitr.cargoway.dto.rs.driver.DriverShortInfoRs;
 import com.arbitr.cargoway.service.DriverService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -28,8 +30,13 @@ public class DriverController {
     }
 
     @GetMapping
-    public PaginationRs<DriverRs> getDriversCurrentProfile(@ModelAttribute PaginationRq paginationRq) {
-        return driverService.getDrivers(paginationRq);
+    public PaginationRs<DriverRs> getDrivers(@ModelAttribute PaginationRq paginationRq) {
+        return driverService.getCurrentProfileDrivers(paginationRq);
+    }
+
+    @GetMapping("list/")
+    public List<DriverShortInfoRs> getListDrivers() {
+        return driverService.getListCurrentProfileDrivers();
     }
 
     @GetMapping("{driverId}/")

@@ -31,8 +31,8 @@ Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-  "name": "Мерседес Бенц",
-  "trailerNumber": "A123BC",
+  "name": "Аминбэк Шариме АЗ23",
+  "trailerNumber": "A123BХ",
   "liftingCapacity": 10000,
   "bodyType": "Тент",
   "loadType": "Верхняя",
@@ -45,6 +45,10 @@ Content-Type: application/json
 
 ### Метод для получения всех записей о водителях профиля с пагинацией
 GET {{trailersUrl}}//?pageNumber=1&pageSize=5
+Authorization: Bearer {{access_token}}
+
+### Метод для получения всех записей о водителях профиля [СПИСОК БЕЗ ПАГИНАЦИИ]
+GET {{trailersUrl}}/list/
 Authorization: Bearer {{access_token}}
 
 ###

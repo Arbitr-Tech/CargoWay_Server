@@ -5,6 +5,7 @@ import com.arbitr.cargoway.dto.rq.trailer.TrailerCreateRq;
 import com.arbitr.cargoway.dto.rq.trailer.TrailerUpdateRq;
 import com.arbitr.cargoway.dto.rs.PaginationRs;
 import com.arbitr.cargoway.dto.rs.trailer.TrailerRs;
+import com.arbitr.cargoway.dto.rs.trailer.TrailerShortInfoRs;
 import com.arbitr.cargoway.entity.Profile;
 import com.arbitr.cargoway.entity.Trailer;
 import com.arbitr.cargoway.exception.NotFoundException;
@@ -60,7 +61,7 @@ public class TrailerServiceImpl implements TrailerService {
     }
 
     @Override
-    public PaginationRs<TrailerRs> getTrailers(PaginationRq paginationRq) {
+    public PaginationRs<TrailerRs> getCurrentProfileTrailers(PaginationRq paginationRq) {
         Profile currentProfile = profileService.getAuthenticatedProfile();
 
         Page<Trailer> trailerPage = trailerRepository.findTrailersByProfile_Id(currentProfile.getId(),
@@ -77,6 +78,17 @@ public class TrailerServiceImpl implements TrailerService {
                 trailerPage.getSize(),
                 trailerPage.getTotalPages()
         );
+    }
+
+    @Override
+    public List<TrailerShortInfoRs> getListCurrentProfileTrailers() {
+        Profile currentProfile = profileService.getAuthenticatedProfile();
+
+        List<Trailer> trailers = trailerRepository.findTrailersByProfile_Id(currentProfile.getId());
+
+        return trailers.stream()
+                .map(trailerMapper::toShortRsDto)
+                .toList();
     }
 
     @Override

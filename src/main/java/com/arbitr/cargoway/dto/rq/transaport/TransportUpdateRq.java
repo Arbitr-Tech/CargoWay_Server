@@ -36,7 +36,7 @@ public class TransportUpdateRq {
     private UUID driverId;
 
     @Schema(description = "Информация о прицепах транспорта")
-    private List<UUID> trailersDetails;
+    private List<UUID> trailersIds;
 
     @Schema(description = "ID фотографий транспорта")
     private List<UUID> photos;

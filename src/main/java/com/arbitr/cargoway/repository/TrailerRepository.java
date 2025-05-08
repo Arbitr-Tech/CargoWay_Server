@@ -15,5 +15,6 @@ import java.util.UUID;
 public interface TrailerRepository extends JpaRepository<Trailer, UUID> {
     Optional<Trailer> findTrailerByIdAndProfile_Id(UUID trailerId, UUID profileId);
     Page<Trailer> findTrailersByProfile_Id(UUID profileId, Pageable pageable);
+    List<Trailer> findTrailersByProfile_Id(UUID profileId);
     List<Trailer> findTrailersByIdIn(Collection<UUID> ids);
 }

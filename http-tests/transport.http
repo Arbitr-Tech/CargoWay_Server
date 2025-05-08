@@ -26,8 +26,8 @@ Content-Type: application/json
 %}
 
 ###
-@driverId=
-@trailerId=
+@driverId=cb2ddc1f-5141-4286-bc85-88b5649f2db1
+@trailerId=5a9aecb5-abe0-4a78-b587-1f638ac1dcad
 
 ### Метод для создания транспорта
 POST {{baseUrl}}//
@@ -56,11 +56,11 @@ Content-Type: application/json
 }
 
 ### Получение деталей транспортов с пагинацией
-GET {{baseUrl}}/?pageNumber=1&pageSize=5
+GET {{baseUrl}}//?pageNumber=1&pageSize=5
 Authorization: Bearer {{access_token}}
 
 ###
-@transportId=
+@transportId=e9f7c565-da13-416e-9706-4c6c551dfa6c
 
 ### Получение деталей транспорта
 GET {{baseUrl}}/{{transportId}}/
@@ -73,18 +73,23 @@ Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-  "driverId": "{{driverId}}",
-  "brand": "Volvo",
-  "model": "FH16",
-  "manufactureYear": 2024,
-  "transportNumber": "A123BC",
-  "embeddedTrailerDetails": {
-    "width": 6,
-    "height": 10
-  },
-  "trailersIds": [
-    "{{trailerId}}"
-  ]
+    "brand": "Volvo",
+    "model": "FH16",
+    "manufactureYear": 2024,
+    "transportNumber": "A123BC",
+    "embeddedTrailerDetails": {
+        "liftingCapacity": 10000,
+        "bodyType": "Тент",
+        "loadType": "Верхняя",
+        "unloadType": "Задняя",
+        "length": 10,
+        "width": 3,
+        "height": 3,
+        "volume": 30
+    },
+    "trailersIds": [
+        "{{trailerId}}"
+    ]
 }
 
 ### Удаление транспорта

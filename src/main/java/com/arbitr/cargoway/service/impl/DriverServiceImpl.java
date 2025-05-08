@@ -5,6 +5,7 @@ import com.arbitr.cargoway.dto.rq.driver.DriverCreateRq;
 import com.arbitr.cargoway.dto.rq.driver.DriverUpdateRq;
 import com.arbitr.cargoway.dto.rs.driver.DriverRs;
 import com.arbitr.cargoway.dto.rs.PaginationRs;
+import com.arbitr.cargoway.dto.rs.driver.DriverShortInfoRs;
 import com.arbitr.cargoway.entity.Driver;
 import com.arbitr.cargoway.entity.Profile;
 import com.arbitr.cargoway.exception.NotFoundException;
@@ -41,7 +42,7 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public PaginationRs<DriverRs> getDrivers(PaginationRq paginationRq) {
+    public PaginationRs<DriverRs> getCurrentProfileDrivers(PaginationRq paginationRq) {
         Profile currentProfile = profileService.getAuthenticatedProfile();
 
         Page<Driver> profileDrivers = driverRepository.findDriversByProfile_id(
@@ -58,6 +59,17 @@ public class DriverServiceImpl implements DriverService {
                 profileDrivers.getSize(),
                 profileDrivers.getTotalPages()
         );
+    }
+
+    @Override
+    public List<DriverShortInfoRs> getListCurrentProfileDrivers() {
+        Profile currentProfile = profileService.getAuthenticatedProfile();
+
+        List<Driver> drivers = driverRepository.findDriversByProfile_id(currentProfile.getId());
+
+        return drivers.stream()
+                .map(driverMapper::toShortRsDto)
+                .toList();
     }
 
     @Override

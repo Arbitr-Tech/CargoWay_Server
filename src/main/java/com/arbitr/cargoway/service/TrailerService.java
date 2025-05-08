@@ -5,6 +5,7 @@ import com.arbitr.cargoway.dto.rq.trailer.TrailerCreateRq;
 import com.arbitr.cargoway.dto.rq.trailer.TrailerUpdateRq;
 import com.arbitr.cargoway.dto.rs.PaginationRs;
 import com.arbitr.cargoway.dto.rs.trailer.TrailerRs;
+import com.arbitr.cargoway.dto.rs.trailer.TrailerShortInfoRs;
 import com.arbitr.cargoway.entity.Trailer;
 
 import java.util.List;
@@ -15,7 +16,8 @@ public interface TrailerService {
     Trailer getTrailerByIdAndCurrentProfile(UUID trailerId);
     TrailerRs getTrailer(UUID trailerId);
     List<Trailer> getTrailersByIds(List<UUID> trailersIds);
-    PaginationRs<TrailerRs> getTrailers(PaginationRq paginationRq);
+    PaginationRs<TrailerRs> getCurrentProfileTrailers(PaginationRq paginationRq);
+    List<TrailerShortInfoRs> getListCurrentProfileTrailers();
     TrailerRs updateTrailer(UUID trailerId, TrailerUpdateRq trailerUpdateRq);
     void deleteTrailer(UUID trailerId);
 }

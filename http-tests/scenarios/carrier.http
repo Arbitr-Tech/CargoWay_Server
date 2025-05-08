@@ -42,7 +42,7 @@ Content-Type: application/json
 }
 
 ###
-@driverId=66c53c94-f6c2-4a5c-9a11-1eaf91a93b7d
+@driverId=2df8b767-7f7b-45e9-9621-c0deb9c4f853
 
 ### Метод для создания записи о [прицепе]
 POST {{trailersUrl}}//
@@ -63,7 +63,7 @@ Content-Type: application/json
 }
 
 ###
-@trailerId=e45d62b8-b23f-4bee-a3f2-d618b0c59876
+@trailerId=345a5f9f-8041-4b42-a9fc-0f396739f665
 
 ### Метод для создания записи о транспорте
 POST {{transportUrl}}//
@@ -76,16 +76,7 @@ Content-Type: application/json
   "model": "FH16",
   "manufactureYear": 2020,
   "transportNumber": "A123BC",
-  "embeddedTrailerDetails": {
-    "liftingCapacity": 10000,
-    "bodyType": "Тент",
-    "loadType": "Верхняя",
-    "unloadType": "Задняя",
-    "length": 10,
-    "width": 3,
-    "height": 3,
-    "volume": 30
-  },
+
   "trailersIds": [
     "{{trailerId}}"
   ]

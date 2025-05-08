@@ -42,6 +42,10 @@ Content-Type: application/json
 GET {{driverUrl}}//?pageNumber=1&pageSize=5
 Authorization: Bearer {{access_token}}
 
+### Метод для получения всех записей о водителях профиля [СПИСОК БЕЗ ПАГИНАЦИИ]
+GET {{driverUrl}}/list/
+Authorization: Bearer {{access_token}}
+
 ###
 @driverId=8f7ac654-67c5-406f-ac62-2035c8f45f5b
 

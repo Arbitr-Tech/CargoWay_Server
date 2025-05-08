@@ -50,28 +50,28 @@ public class Transport {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class TrailerDetails {
-        @Column(name = "lifting_capacity", nullable = false)
+        @Column(name = "lifting_capacity")
         private Integer liftingCapacity;
 
-        @Column(name = "load_type", nullable = false)
+        @Column(name = "load_type")
         private String loadType;
 
-        @Column(name = "unload_type", nullable = false)
+        @Column(name = "unload_type")
         private String unloadType;
 
-        @Column(name = "bodyType", nullable = false)
+        @Column(name = "bodyType")
         private String bodyType;
 
-        @Column(name = "length", nullable = false)
+        @Column(name = "length")
         private Integer length;
 
-        @Column(name = "width", nullable = false)
+        @Column(name = "width")
         private Integer width;
 
-        @Column(name = "height", nullable = false)
+        @Column(name = "height")
         private Integer height;
 
-        @Column(name = "trailer_volume", nullable = false)
+        @Column(name = "trailer_volume")
         private Integer volume;
     }
 

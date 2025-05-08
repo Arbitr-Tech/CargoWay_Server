@@ -5,6 +5,7 @@ import com.arbitr.cargoway.dto.rq.trailer.TrailerCreateRq;
 import com.arbitr.cargoway.dto.rq.trailer.TrailerUpdateRq;
 import com.arbitr.cargoway.dto.rs.PaginationRs;
 import com.arbitr.cargoway.dto.rs.trailer.TrailerRs;
+import com.arbitr.cargoway.dto.rs.trailer.TrailerShortInfoRs;
 import com.arbitr.cargoway.service.TrailerService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -34,7 +36,12 @@ public class TrailerController {
 
     @GetMapping
     public PaginationRs<TrailerRs> getTrailers(@ModelAttribute PaginationRq paginationRq) {
-        return trailerService.getTrailers(paginationRq);
+        return trailerService.getCurrentProfileTrailers(paginationRq);
+    }
+
+    @GetMapping("list/")
+    public List<TrailerShortInfoRs> getListTrailers() {
+        return trailerService.getListCurrentProfileTrailers();
     }
 
     @PatchMapping("{trailerId}/")

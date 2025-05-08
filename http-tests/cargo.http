@@ -47,7 +47,7 @@ Authorization: Bearer {{access_token}}
 Accept: application/json
 
 ### f34f357b-ba53-454e-8f11-74e8afcf97cf
-@cargo_uuid = 401d7207-31f6-4d59-8685-54cb778b88ff
+@cargo_uuid = 076b025d-f7e7-4c80-ae61-21df94a1173e
 
 ### Получение деталей груза
 GET {{baseUrl}}/{{cargo_uuid}}/
