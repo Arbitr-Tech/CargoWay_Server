@@ -60,7 +60,7 @@ GET {{baseUrl}}//?pageNumber=1&pageSize=5
 Authorization: Bearer {{access_token}}
 
 ###
-@transportId=e9f7c565-da13-416e-9706-4c6c551dfa6c
+@transportId=838a2564-f08b-4de5-b63e-b2bf3e4a9124
 
 ### Получение деталей транспорта
 GET {{baseUrl}}/{{transportId}}/

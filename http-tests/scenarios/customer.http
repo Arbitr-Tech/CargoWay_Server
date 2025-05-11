@@ -29,7 +29,7 @@ Content-Type: application/json
 %}
 
 ### Метод для создания груза
-POST {{baseUrl}}//
+POST {{cargoUrl}}//
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
@@ -56,31 +56,31 @@ Content-Type: application/json
   "deliveryDate": "2025-06-01"
 }
 
-### Получение списка груза [INTERNAL, EXTERNAL, HISTORY]
-GET {{baseUrl}}/general/?cargoCategory=INTERNAL&pageNumber=1&pageSize=5
+### Получение списка груза [INTERNAL]
+GET {{cargoUrl}}/general/?cargoCategory=INTERNAL&pageNumber=1&pageSize=5
 Authorization: Bearer {{access_token}}
 Accept: application/json
 
-### f34f357b-ba53-454e-8f11-74e8afcf97cf
-@cargo_uuid = 401d7207-31f6-4d59-8685-54cb778b88ff
+### [ЭТОТ ID НАДО ПЕРЕДАТЬ В СЦЕНАРИЙ В ФАЙЛЕ carrier]
+@cargo_uuid=807df26e-9d4a-487e-b522-268b2236df72
 
 ### Получение деталей груза
-GET {{baseUrl}}/{{cargo_uuid}}/
+GET {{cargoUrl}}/{{cargo_uuid}}/
 Authorization: Bearer {{access_token}}
 Accept: application/json
 
-### Публикация записи
-PATCH {{baseUrl}}/{{cargo_uuid}}/publish
+### Публикация записи [после ПЕРЕЙТИ В ФАЙЛ carrier И ОТКЛИКНУТЬСЯ НА ЗАКАЗ ПО ID]
+PATCH {{cargoUrl}}/{{cargo_uuid}}/publish/
 Authorization: Bearer {{access_token}}
 Accept: application/json
 
 ### Снятие записи с публикации
-PATCH {{baseUrl}}/{{cargo_uuid}}/draft
+PATCH {{cargoUrl}}/{{cargo_uuid}}/draft/
 Authorization: Bearer {{access_token}}
 Accept: application/json
 
-### Обновление записи о грузе
-PATCH {{baseUrl}}/{{cargo_uuid}}/
+### Обновление записи о грузе [ПРОВЕРКА О НЕВОЗМОЖНОСТИ ОБНОВЛЕНИЯ]
+PATCH {{cargoUrl}}/{{cargo_uuid}}/
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
@@ -107,7 +107,7 @@ Content-Type: application/json
   "deliveryDate": "2025-06-01"
 }
 
-### Удаление записи груза
-DELETE {{baseUrl}}/{{cargo_uuid}}/
+### Получение списка груза [EXTERNAL]
+GET {{cargoUrl}}/general/?cargoCategory=EXTERNAL&pageNumber=1&pageSize=5
 Authorization: Bearer {{access_token}}
-Content-Type: application/json
+Accept: application/json

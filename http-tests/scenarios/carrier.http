@@ -42,7 +42,7 @@ Content-Type: application/json
 }
 
 ###
-@driverId=2df8b767-7f7b-45e9-9621-c0deb9c4f853
+@driverId=32dad756-cdde-4105-9f4f-c62f164fd81f
 
 ### Метод для создания записи о [прицепе]
 POST {{trailersUrl}}//
@@ -63,7 +63,7 @@ Content-Type: application/json
 }
 
 ###
-@trailerId=345a5f9f-8041-4b42-a9fc-0f396739f665
+@trailerId=d3411083-654f-47e9-b58f-445da1d50dff
 
 ### Метод для создания записи о транспорте
 POST {{transportUrl}}//
@@ -82,6 +82,14 @@ Content-Type: application/json
   ]
 }
 
+### Метод для получения записи о транспортах
+GET {{transportUrl}}//?pageNumber=1&pageSize=5
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+@transport_id=1b5d3d28-7a02-4a0b-9965-7f5788f5e50f
+
 ### Запрос на получение списка записей грузов
 POST {{cargoUrl}}/search/?pageNumber=1&pageSize=5
 Authorization: Bearer {{access_token}}
@@ -92,5 +100,18 @@ Accept: application/json
   "priceTo": 5000000.00
 }
 
+###
+@cargo_order_id=807df26e-9d4a-487e-b522-268b2236df72
+
 ### Создать отклик от перевозчика на груз
-POST {{transportUrl}}/cargos/
+POST {{cargoUrl}}/{{cargo_order_id}}/transport/{{transport_id}}/response/
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+### Идентификатор отклика [МОЖНО ПОСМОТРЕТЬ ДЕТАЛИ ГРУЗА]
+@response_id=
+
+### Отменить отклик от перевозчкаи на груз
+POST {{cargoUrl}}/{{cargo_order_id}}/response/{{response_id}}/cancel/
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
