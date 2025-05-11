@@ -1,14 +1,12 @@
 package com.arbitr.cargoway.mapper;
 
-import com.arbitr.cargoway.dto.general.profile.CompanyDetails;
-import com.arbitr.cargoway.dto.general.profile.ContactDataDetails;
-import com.arbitr.cargoway.dto.general.profile.IndividualDetails;
+import com.arbitr.cargoway.dto.general.profile.ProfileShortDto;
 import com.arbitr.cargoway.dto.rs.profile.ProfileRs;
 import com.arbitr.cargoway.dto.rs.profile.ReviewRs;
 import com.arbitr.cargoway.entity.*;
+import com.arbitr.cargoway.entity.enums.LegalType;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 
 import java.util.Collections;
@@ -21,21 +19,28 @@ public interface ProfileMapper {
     @Mapping(source = "user", target = "userData")
     ProfileRs buildProfileRsFrom(Profile profile);
 
-    Individual buildIndividualFrom(IndividualDetails individualDetails);
+    @Named("toProfileShortDto")
+    default ProfileShortDto toProfileShortDto(Profile profile) {
+        if (profile == null) {
+            return null;
+        }
 
-    IndividualDetails buildIndividualFrom(Individual individual);
+        LegalType profileLegalType = profile.getLegalType();
 
-    Company buildCompanyFrom(CompanyDetails companyDetails);
+        String profileName;
+        if (profileLegalType == LegalType.COMPANY) {
+            profileName = profile.getCompany().getName();
+        } else {
+            profileName = profile.getIndividual().getFullName();
+        }
 
-    CompanyDetails buildCompanyDetailsFrom(Company company);
-
-    ContactData buildContactDataFrom(ContactDataDetails contactDataDetails);
-
-    void updateContactData(@MappingTarget ContactData target, ContactData source);
-
-    void updateIndividual(@MappingTarget Individual target, Individual source);
-
-    void updateCompany(@MappingTarget Company target, Company source);
+        return ProfileShortDto.builder()
+                .id(profile.getId())
+                .profileName(profileName)
+                .systemRating(profile.getSystemRating())
+                .userRating(profile.getUserRating())
+                .build();
+    }
 
     @Named("mapReviewToReviewRs")
     default List<ReviewRs> mapReviews(List<Review> reviews) {

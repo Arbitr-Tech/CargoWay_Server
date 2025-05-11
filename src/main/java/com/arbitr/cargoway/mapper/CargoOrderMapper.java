@@ -2,36 +2,48 @@ package com.arbitr.cargoway.mapper;
 
 import com.arbitr.cargoway.dto.general.cargo.CargoOrderStatusDto;
 import com.arbitr.cargoway.dto.general.cargo.CargoDto;
+import com.arbitr.cargoway.dto.rs.cargo.CargoOrderResponseDto;
 import com.arbitr.cargoway.dto.rs.cargo.CargoOrderRs;
 import com.arbitr.cargoway.entity.Cargo;
 import com.arbitr.cargoway.entity.CargoOrder;
+import com.arbitr.cargoway.entity.CargoOrderResponse;
+import com.arbitr.cargoway.entity.enums.CargoOrderStatus;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
-@Mapper
+@Mapper(componentModel = "spring", uses = {ProfileMapper.class, TransportMapper.class})
 public interface CargoOrderMapper {
-    default CargoOrderRs toRsDto(CargoOrder cargoOrder) {
-        Cargo cargo = cargoOrder.getCargo();
-        return generalRsDto(cargo, cargoOrder);
-    }
+    @Mapping(source = "responses", target = "responses", qualifiedByName = "toCargoOrderResponseDto")
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "orderCreatedAt", target = "orderCreatedAt")
+    @Mapping(source = "orderUpdatedAt", target = "orderUpdatedAt")
+    @Mapping(source = "startExecution", target = "startExecution")
+    @Mapping(source = "endExecution", target = "endExecution")
+    @Mapping(source = "visibility", target = "visibilityStatus", qualifiedByName = "mapVisibilityStatus")
+    @Mapping(source = "cargo", target = "cargo", qualifiedByName = "toCargoDto")
+    @Mapping(source = "executor", target = "executor", qualifiedByName = "toProfileShortDto")
+//    @Mapping(source = "owner", target = "owner", qualifiedByName = "toProfileShortDto")
+    CargoOrderRs toRsDto(CargoOrder cargoOrder);
 
-    default CargoOrderRs toRsDto(Cargo cargo) {
-        CargoOrder cargoOrder = cargo.getCargoOrder();
-        return generalRsDto(cargo, cargoOrder);
-    }
+    @Mapping(source = "cargoOrder.responses", target = "responses", qualifiedByName = "toCargoOrderResponseDto")
+    @Mapping(source = "cargoOrder.id", target = "id")
+    @Mapping(source = "cargoOrder.orderCreatedAt", target = "orderCreatedAt")
+    @Mapping(source = "cargoOrder.orderUpdatedAt", target = "orderUpdatedAt")
+    @Mapping(source = "cargoOrder.startExecution", target = "startExecution")
+    @Mapping(source = "cargoOrder.endExecution", target = "endExecution")
+    @Mapping(source = "cargoOrder.visibility", target = "visibilityStatus", qualifiedByName = "mapVisibilityStatus")
+    @Mapping(source = "cargo", target = "cargo", qualifiedByName = "toCargoDto")
+    @Mapping(source = "cargoOrder.executor", target = "executor", qualifiedByName = "toProfileShortDto")
+//    @Mapping(source = "cargoOrder.owner", target = "owner", qualifiedByName = "toProfileShortDto")
+    CargoOrderRs toRsDto(Cargo cargo);
 
-    default CargoOrderRs generalRsDto(Cargo cargo, CargoOrder cargoOrder) {
-        CargoDto.DimensionsDto cargoOrderDimensions = CargoDto.DimensionsDto.builder()
-                .width(cargo.getWidth())
-                .height(cargo.getHeight())
-                .length(cargo.getLength())
-                .build();
-
-        CargoDto.RouteDto cargoRouteDetails = CargoDto.RouteDto.builder()
-                .from(cargo.getFrom())
-                .to(cargo.getTo())
-                .build();
-
-        CargoDto cargoDetails = CargoDto.builder()
+    @Named("toCargoDto")
+    default CargoDto toCargoDto(Cargo cargo) {
+        if (cargo == null) {
+            return null;
+        }
+        return CargoDto.builder()
                 .name(cargo.getName())
                 .description(cargo.getDescription())
                 .weight(cargo.getWeight())
@@ -43,20 +55,43 @@ public interface CargoOrderMapper {
                 .typePay(cargo.getTypePay())
                 .readyDate(cargo.getReadyDate())
                 .deliveryDate(cargo.getDeliveryDate())
-                .dimensions(cargoOrderDimensions)
-                .route(cargoRouteDetails)
-                .build();
-
-        return CargoOrderRs.builder()
-                .id(cargoOrder.getId())
-                .orderCreatedAt(cargoOrder.getOrderCreatedAt())
-                .orderUpdatedAt(cargoOrder.getOrderUpdatedAt())
-                .startExecution(cargoOrder.getStartExecution())
-                .endExecution(cargoOrder.getEndExecution())
-                .visibilityStatus(CargoOrderStatusDto.valueOf(cargoOrder.getVisibility().name()))
-                .cargo(cargoDetails)
+                .dimensions(toDimensionsDto(cargo))
+                .route(toRouteDto(cargo))
                 .build();
     }
+
+    @Named("toDimensionsDto")
+    default CargoDto.DimensionsDto toDimensionsDto(Cargo cargo) {
+        if (cargo == null) {
+            return null;
+        }
+        return CargoDto.DimensionsDto.builder()
+                .width(cargo.getWidth())
+                .height(cargo.getHeight())
+                .length(cargo.getLength())
+                .build();
+    }
+
+    @Named("toRouteDto")
+    default CargoDto.RouteDto toRouteDto(Cargo cargo) {
+        if (cargo == null) {
+            return null;
+        }
+        return CargoDto.RouteDto.builder()
+                .from(cargo.getFrom())
+                .to(cargo.getTo())
+                .build();
+    }
+
+    @Named("mapVisibilityStatus")
+    default CargoOrderStatusDto mapVisibilityStatus(CargoOrderStatus visibility) {
+        return visibility != null ? CargoOrderStatusDto.valueOf(visibility.name()) : null;
+    }
+
+    @Named("toCargoOrderResponseDto")
+    @Mapping(source = "responder", target = "responderDetails", qualifiedByName = "toProfileShortDto")
+    @Mapping(source = "transport", target = "transportDetails")
+    CargoOrderResponseDto toCargoOrderResponseDto(CargoOrderResponse cargoOrderResponse);
 
     default Cargo toEntity(CargoDto cargoDetails) {
         CargoDto.DimensionsDto cargoDimensionsDetails = cargoDetails.getDimensions();

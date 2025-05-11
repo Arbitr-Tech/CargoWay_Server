@@ -4,6 +4,7 @@ package com.arbitr.cargoway.mapper;
 import com.arbitr.cargoway.dto.general.EmbeddedTrailerDto;
 import com.arbitr.cargoway.dto.rq.transaport.TransportCreateRq;
 import com.arbitr.cargoway.dto.rs.transport.TransportRs;
+import com.arbitr.cargoway.dto.rs.transport.TransportShortDto;
 import com.arbitr.cargoway.entity.Transport;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -39,6 +40,8 @@ public interface TransportMapper extends GeneralMapper {
 
     @Mapping(source = "embeddedTrailerDetails", target = "embeddedTrailer", qualifiedByName = "toTrailerDetails")
     TransportRs toRsDto(Transport transport);
+
+    TransportShortDto toTransportShortDto(Transport transport);
 
     @Named("toTrailerDetails")
     EmbeddedTrailerDto toTrailerDetails(Transport.TrailerDetails trailerDetails);
