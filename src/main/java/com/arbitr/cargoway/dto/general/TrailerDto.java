@@ -17,7 +17,7 @@ public class TrailerDto {
     private String name;
 
     @NotBlank(message = "Номер прицепа не может быть пустым")
-    @Pattern(regexp = "^[А-ЯA-Z][0-9]{3}[А-ЯA-Z]{2}$", message = "Номер прицепа должен соответствовать формату: буква, 3 цифры, 2 буквы (например, А123ВС)")
+    @Pattern(regexp = "^[АВЕКМНОРСТУХ]{2}\\d{4}$", message = "Номер прицепа должен соответствовать формату: буква, 3 цифры, 2 буквы (например, А123ВС)")
     @Schema(description = "Номер прицепа", example = "А123ВС")
     private String trailerNumber;
 
