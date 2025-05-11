@@ -43,12 +43,12 @@ public class CargoOrderController {
         return cargoOrderService.createNewCargoOrder(cargoOrderCreateRq);
     }
 
-    @PatchMapping("{cargoOrderId}/publish")
+    @PatchMapping("{cargoOrderId}/publish/")
     public CargoOrderRs publishCargoOrder(@PathVariable("cargoOrderId") UUID cargoOrderId) {
         return cargoOrderService.publishCargoOrder(cargoOrderId);
     }
 
-    @PatchMapping("{cargoOrderId}/draft")
+    @PatchMapping("{cargoOrderId}/draft/")
     public CargoOrderRs draftCargoOrder(@PathVariable("cargoOrderId") UUID cargoOrderId) {
         return cargoOrderService.draftCargoOrder(cargoOrderId);
     }
@@ -80,6 +80,12 @@ public class CargoOrderController {
     public void makeCargoOrderResponse(@PathVariable("cargoOrderId") UUID cargoOrderId,
                                        @PathVariable("transportId") UUID transportId) {
         cargoOrderResponseService.makeResponse(cargoOrderId, transportId);
+    }
+
+    @PostMapping("/{cargoOrderId}/response/{responseId}/cancel/")
+    public void cancelCargoOrderResponse(@PathVariable("cargoOrderId") UUID cargoOrderId,
+                                         @PathVariable("responseId") UUID responseId) {
+        cargoOrderResponseService.cancelResponse(cargoOrderId, responseId);
     }
 }
 
