@@ -14,7 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Schema(description = "Краткие данные о профиле")
 public class ProfileShortDto {
-    private UUID profileId;
+    private UUID id;
     private String profileName;
     private Double systemRating;
     private Double userRating;
