@@ -27,11 +27,9 @@ public class Driver {
     @Column(name = "fullname", nullable = false)
     private String fullName;
 
-    @Pattern(regexp = "[A-E]", message = "Категория прав должна быть одной из букв: A, B, C, D, E")
     @Column(name = "license_category", nullable = false)
     private String licenseCategory;
 
-    @Pattern(regexp = "\\d{4} \\d{6}", message = "Номер прав должен быть в формате 'XXXX XXXXXX'")
     @Column(name = "license_number", nullable = false, unique = true, length = 11)
     private String licenseNumber;
 
