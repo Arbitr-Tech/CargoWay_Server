@@ -5,6 +5,7 @@ import com.arbitr.cargoway.entity.CargoOrderResponse;
 import com.arbitr.cargoway.entity.Profile;
 import com.arbitr.cargoway.entity.Transport;
 import com.arbitr.cargoway.entity.enums.CargoOrderStatus;
+import com.arbitr.cargoway.exception.NotFoundException;
 import com.arbitr.cargoway.repository.CargoOrderResponseRepository;
 import com.arbitr.cargoway.service.CargoOrderResponseService;
 import com.arbitr.cargoway.service.CargoOrderService;
@@ -39,6 +40,19 @@ public class CargoOrderResponseServiceImpl implements CargoOrderResponseService 
 
         foundCargoOrder.getResponses().add(newCargoOrderResponse);
         cargoOrderResponseRepository.save(newCargoOrderResponse);
+    }
+
+    @Override
+    public void cancelResponse(UUID cargoOrderId, UUID responseId) {
+        CargoOrderResponse existingCargoOrderResponse =
+                cargoOrderResponseRepository.findCargoOrderResponseByIdAndCargoOrder_Id(responseId, cargoOrderId)
+                        .orElseThrow(
+                                () -> new NotFoundException(
+                                        "Не был найден отклик или заказ! id заказа = %s id отклика = %s"
+                                        .formatted(cargoOrderId, responseId))
+                        );
+
+        cargoOrderResponseRepository.delete(existingCargoOrderResponse);
     }
 
     public void setBiddingStatusIfElse(CargoOrder cargoOrder) {
