@@ -43,11 +43,11 @@ public class CargoOrderServiceImpl implements CargoOrderService {
     private final CargoRepository cargoRepository;
     private final CargoOrderMapper cargoOrderMapper;
 
-    public PaginationRs<CargoOrderRs> getGeneralCargosByCategory(CargoCategoryDto cargoCategoryDto, PaginationRq  paginationRq) {
+    public PaginationRs<CargoOrderRs> getGeneralCargosByCategory(VisibilityCategory visibilityCategory, PaginationRq  paginationRq) {
         User currentUser = authService.getAuthenticatedUser();
 
         Page<CargoOrder> generalCargosPage =
-                cargoOrderRepository.findCargoOrdersByVisibilityIsInAndOwner_Id(cargoCategoryDto.getVisibleStatuses(),
+                cargoOrderRepository.findCargoOrdersByVisibilityIsInAndOwner_Id(visibilityCategory.getVisibleStatuses(),
                 currentUser.getProfile().getId(),
                 PageRequest.of(paginationRq.getPageNumber(), paginationRq.getPageSize())
                 );

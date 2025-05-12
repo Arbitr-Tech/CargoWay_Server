@@ -1,6 +1,6 @@
 package com.arbitr.cargoway.service;
 
-import com.arbitr.cargoway.dto.general.cargo.CargoCategoryDto;
+import com.arbitr.cargoway.dto.general.cargo.VisibilityCategory;
 import com.arbitr.cargoway.dto.rq.PaginationRq;
 import com.arbitr.cargoway.dto.rq.cargo.CargoOrderCreateRq;
 import com.arbitr.cargoway.dto.rq.cargo.CargoOrderUpdateRq;
@@ -13,7 +13,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface CargoOrderService {
-    PaginationRs<CargoOrderRs> getGeneralCargosByCategory(CargoCategoryDto cargoCategoryDto, PaginationRq  paginationRq);
+    PaginationRs<CargoOrderRs> getGeneralCargosByCategory(VisibilityCategory visibilityCategory, PaginationRq  paginationRq);
+    PaginationRs<CargoOrderRs> getCarrierGeneralByCategory(VisibilityCategory visibilityCategory, PaginationRq paginationRq);
     List<CargoOrderRs> getLastCargoOrder();
     CargoOrderRs getCargoOrder(UUID cargoOrderId);
     CargoOrderRs createNewCargoOrder(CargoOrderCreateRq cargoOrderCreateRq);

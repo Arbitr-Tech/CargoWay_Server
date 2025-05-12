@@ -1,13 +1,11 @@
 package com.arbitr.cargoway.controller;
 
-import com.arbitr.cargoway.dto.general.cargo.CargoCategoryDto;
+import com.arbitr.cargoway.dto.general.cargo.VisibilityCategory;
 import com.arbitr.cargoway.dto.rq.PaginationRq;
 import com.arbitr.cargoway.dto.rq.cargo.CargoOrderCreateRq;
 import com.arbitr.cargoway.dto.rq.cargo.CargoOrderUpdateRq;
-import com.arbitr.cargoway.dto.rq.cargo.FilterCargoRq;
 import com.arbitr.cargoway.dto.rs.PaginationRs;
 import com.arbitr.cargoway.dto.rs.cargo.CargoOrderRs;
-import com.arbitr.cargoway.service.CargoOrderResponseService;
 import com.arbitr.cargoway.service.CargoOrderService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -24,10 +22,9 @@ import java.util.UUID;
 @Tag(name = "CargoOrder", description = "Управление записями о грузах")
 public class CargoOrderController {
     private final CargoOrderService cargoOrderService;
-    private final CargoOrderResponseService cargoOrderResponseService;
 
     @GetMapping("general/")
-    public PaginationRs<CargoOrderRs> getInternalCargos(@RequestParam CargoCategoryDto cargoCategory,
+    public PaginationRs<CargoOrderRs> getInternalCargos(@RequestParam VisibilityCategory cargoCategory,
             @ModelAttribute PaginationRq paginationRq) {
         return cargoOrderService.getGeneralCargosByCategory(cargoCategory, paginationRq);
     }
@@ -43,16 +40,6 @@ public class CargoOrderController {
         return cargoOrderService.createNewCargoOrder(cargoOrderCreateRq);
     }
 
-    @PatchMapping("{cargoOrderId}/publish/")
-    public CargoOrderRs publishCargoOrder(@PathVariable("cargoOrderId") UUID cargoOrderId) {
-        return cargoOrderService.publishCargoOrder(cargoOrderId);
-    }
-
-    @PatchMapping("{cargoOrderId}/draft/")
-    public CargoOrderRs draftCargoOrder(@PathVariable("cargoOrderId") UUID cargoOrderId) {
-        return cargoOrderService.draftCargoOrder(cargoOrderId);
-    }
-
     @PatchMapping("{cargoOrderId}/")
     public CargoOrderRs updateCargoOrder(@PathVariable("cargoOrderId") UUID cargoOrderId,
                                          @RequestBody CargoOrderUpdateRq cargoOrderUpdateRq) {
@@ -65,27 +52,9 @@ public class CargoOrderController {
         cargoOrderService.deleteCargoOrder(cargoOrderId);
     }
 
-    @PostMapping("search/")
-    public PaginationRs<CargoOrderRs> searchCargoOrder(@RequestBody FilterCargoRq filterCargoRq,
-                                 @ModelAttribute PaginationRq paginationRq) {
-        return cargoOrderService.searchCargoOrders(filterCargoRq, paginationRq);
-    }
-
     @GetMapping("last5/")
     public List<CargoOrderRs> get5LastCargoOrders() {
         return cargoOrderService.getLastCargoOrder();
-    }
-
-    @PostMapping("{cargoOrderId}/transport/{transportId}/response/")
-    public void makeCargoOrderResponse(@PathVariable("cargoOrderId") UUID cargoOrderId,
-                                       @PathVariable("transportId") UUID transportId) {
-        cargoOrderResponseService.makeResponse(cargoOrderId, transportId);
-    }
-
-    @PostMapping("/{cargoOrderId}/response/{responseId}/cancel/")
-    public void cancelCargoOrderResponse(@PathVariable("cargoOrderId") UUID cargoOrderId,
-                                         @PathVariable("responseId") UUID responseId) {
-        cargoOrderResponseService.cancelResponse(cargoOrderId, responseId);
     }
 }
 
