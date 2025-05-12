@@ -1,6 +1,7 @@
 package com.arbitr.cargoway.service.impl;
 
-import com.arbitr.cargoway.dto.general.cargo.CargoCategoryDto;
+import com.arbitr.cargoway.dto.general.cargo.CarrierVisibilityCategory;
+import com.arbitr.cargoway.dto.general.cargo.VisibilityCategory;
 import com.arbitr.cargoway.dto.general.cargo.CargoDto;
 import com.arbitr.cargoway.dto.rq.PaginationRq;
 import com.arbitr.cargoway.dto.rq.cargo.CargoOrderCreateRq;
@@ -12,7 +13,7 @@ import com.arbitr.cargoway.entity.Cargo;
 import com.arbitr.cargoway.entity.CargoOrder;
 import com.arbitr.cargoway.entity.Profile;
 import com.arbitr.cargoway.entity.enums.CargoOrderStatus;
-import com.arbitr.cargoway.entity.security.User;
+import com.arbitr.cargoway.exception.BadRequestException;
 import com.arbitr.cargoway.exception.NotFoundException;
 import com.arbitr.cargoway.exception.ResourceConflictException;
 import com.arbitr.cargoway.mapper.CargoOrderMapper;
@@ -44,13 +45,51 @@ public class CargoOrderServiceImpl implements CargoOrderService {
     private final CargoOrderMapper cargoOrderMapper;
 
     public PaginationRs<CargoOrderRs> getGeneralCargosByCategory(VisibilityCategory visibilityCategory, PaginationRq  paginationRq) {
-        User currentUser = authService.getAuthenticatedUser();
+        Profile currentProfile = profileService.getAuthenticatedProfile();
 
         Page<CargoOrder> generalCargosPage =
                 cargoOrderRepository.findCargoOrdersByVisibilityIsInAndOwner_Id(visibilityCategory.getVisibleStatuses(),
-                currentUser.getProfile().getId(),
+                currentProfile.getId(),
                 PageRequest.of(paginationRq.getPageNumber(), paginationRq.getPageSize())
                 );
+
+        List<CargoOrderRs> generalCargoOrderRs = generalCargosPage.getContent().stream()
+                .map(cargoOrderMapper::toRsDto)
+                .toList();
+
+        return PaginationRs.of(
+                generalCargoOrderRs,
+                generalCargosPage.getNumber(),
+                generalCargosPage.getSize(),
+                generalCargosPage.getTotalPages()
+        );
+    }
+
+    @Override
+    public PaginationRs<CargoOrderRs> getCarrierGeneralByCategory(CarrierVisibilityCategory carrierVisibilityCategory,
+                                                                  PaginationRq paginationRq) {
+        Profile currentProfile = profileService.getAuthenticatedProfile();
+
+        Page<CargoOrder> generalCargosPage = null;
+
+        if (carrierVisibilityCategory.equals(CarrierVisibilityCategory.ACTIVE) ||
+                carrierVisibilityCategory.equals(CarrierVisibilityCategory.HISTORY)) {
+            generalCargosPage = cargoOrderRepository.findCargoOrdersByVisibilityIsInAndExecutor_Id(
+                    carrierVisibilityCategory.getVisibleStatuses(),
+                    currentProfile.getId(),
+                    PageRequest.of(paginationRq.getPageNumber(), paginationRq.getPageSize()));
+        }
+
+        if (carrierVisibilityCategory.equals(CarrierVisibilityCategory.WAITING)) {
+            generalCargosPage = cargoOrderRepository.findCargoOrdersByVisibilityIsInAndResponder_Id(
+                    carrierVisibilityCategory.getVisibleStatuses(),
+                    currentProfile.getId(),
+                    PageRequest.of(paginationRq.getPageNumber(), paginationRq.getPageSize()));
+        }
+
+        if (generalCargosPage == null) {
+            throw new BadRequestException("Указан несуществующий тип категории!");
+        }
 
         List<CargoOrderRs> generalCargoOrderRs = generalCargosPage.getContent().stream()
                 .map(cargoOrderMapper::toRsDto)
