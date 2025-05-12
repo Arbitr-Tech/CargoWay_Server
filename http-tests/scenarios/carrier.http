@@ -42,7 +42,7 @@ Content-Type: application/json
 }
 
 ###
-@driverId=32dad756-cdde-4105-9f4f-c62f164fd81f
+@driverId=29ea4d4c-1258-4948-8852-484903c70f8e
 
 ### Метод для создания записи о [прицепе]
 POST {{trailersUrl}}//
@@ -51,7 +51,7 @@ Content-Type: application/json
 
 {
   "name": "Мерседес Бенц",
-  "trailerNumber": "A123BC",
+  "trailerNumber": "АВ1234",
   "liftingCapacity": 10000,
   "bodyType": "Тент",
   "loadType": "Верхняя",
@@ -63,7 +63,7 @@ Content-Type: application/json
 }
 
 ###
-@trailerId=d3411083-654f-47e9-b58f-445da1d50dff
+@trailerId=b4e78f10-dcb9-4e73-9128-6cf83b3ec068
 
 ### Метод для создания записи о транспорте
 POST {{transportUrl}}//
@@ -88,7 +88,7 @@ Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 ###
-@transport_id=1b5d3d28-7a02-4a0b-9965-7f5788f5e50f
+@transport_id=cbf1cdeb-e34d-4e50-9e35-d56e2686f409
 
 ### Запрос на получение списка записей грузов
 POST {{cargoUrl}}/search/?pageNumber=1&pageSize=5
@@ -101,7 +101,7 @@ Accept: application/json
 }
 
 ###
-@cargo_order_id=807df26e-9d4a-487e-b522-268b2236df72
+@cargo_order_id=8a202fe9-96b3-4ac5-b715-2de0bba4b310
 
 ### Создать отклик от перевозчика на груз
 POST {{cargoUrl}}/{{cargo_order_id}}/transport/{{transport_id}}/response/
@@ -109,9 +109,14 @@ Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 ### Идентификатор отклика [МОЖНО ПОСМОТРЕТЬ ДЕТАЛИ ГРУЗА]
-@response_id=
+@response_id=a14afe80-2ef3-4d06-a6fc-aa62ec055deb
 
 ### Отменить отклик от перевозчкаи на груз
 POST {{cargoUrl}}/{{cargo_order_id}}/response/{{response_id}}/cancel/
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+### Просмотреть список записей перевозчика [ACTIVE, WAITING, HISTORY]
+GET {{cargoUrl}}/carrier/general/?cargoCategory=WAITING&pageNumber=1&pageSize=5
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
