@@ -46,6 +46,11 @@ public class CargoOrderController {
         return cargoOrderService.updateCargoOrder(cargoOrderId, cargoOrderUpdateRq);
     }
 
+    @PostMapping("{cargoOrderId}/cancel/")
+    public CargoOrderRs cancelCargoOrder(@PathVariable("cargoOrderId") UUID cargoOrderId) {
+        return cargoOrderService.cancelExecutionCargoOrder(cargoOrderId);
+    }
+
     @DeleteMapping("{cargoOrderId}/")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCargoOrder(@PathVariable("cargoOrderId") UUID cargoOrderId) {

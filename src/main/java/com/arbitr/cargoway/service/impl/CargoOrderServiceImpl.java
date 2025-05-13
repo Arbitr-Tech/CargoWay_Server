@@ -20,7 +20,6 @@ import com.arbitr.cargoway.mapper.CargoOrderMapper;
 import com.arbitr.cargoway.repository.CargoOrderRepository;
 import com.arbitr.cargoway.repository.CargoRepository;
 import com.arbitr.cargoway.repository.specification.CargoSpecification;
-import com.arbitr.cargoway.service.AuthService;
 import com.arbitr.cargoway.service.CargoOrderService;
 import com.arbitr.cargoway.service.ProfileService;
 import jakarta.transaction.Transactional;
@@ -39,18 +38,18 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CargoOrderServiceImpl implements CargoOrderService {
     private final ProfileService profileService;
-    private final AuthService authService;
     private final CargoOrderRepository cargoOrderRepository;
     private final CargoRepository cargoRepository;
     private final CargoOrderMapper cargoOrderMapper;
 
-    public PaginationRs<CargoOrderRs> getGeneralCargosByCategory(VisibilityCategory visibilityCategory, PaginationRq  paginationRq) {
+    public PaginationRs<CargoOrderRs> getGeneralCargosByCategory(VisibilityCategory visibilityCategory,
+                                                                 PaginationRq  paginationRq) {
         Profile currentProfile = profileService.getAuthenticatedProfile();
 
         Page<CargoOrder> generalCargosPage =
                 cargoOrderRepository.findCargoOrdersByVisibilityIsInAndOwner_Id(visibilityCategory.getVisibleStatuses(),
-                currentProfile.getId(),
-                PageRequest.of(paginationRq.getPageNumber(), paginationRq.getPageSize())
+                        currentProfile.getId(),
+                        PageRequest.of(paginationRq.getPageNumber(), paginationRq.getPageSize())
                 );
 
         List<CargoOrderRs> generalCargoOrderRs = generalCargosPage.getContent().stream()
@@ -246,6 +245,61 @@ public class CargoOrderServiceImpl implements CargoOrderService {
         return cargoOrderMapper.toRsDto(foundCargoOrder);
     }
 
+    @Override
+    public CargoOrderRs endExecutionCargoOrder(UUID cargoOrderId) {
+        CargoOrder existingCargoOrder = this.getCargoOrderById(cargoOrderId);
+
+        existingCargoOrder.setEndExecution(LocalDateTime.now());
+        cargoOrderRepository.save(existingCargoOrder);
+
+        return cargoOrderMapper.toRsDto(existingCargoOrder);
+    }
+
+    @Override
+    public CargoOrderRs confirmEndExecutionCargoOrder(UUID cargoOrderId) {
+        CargoOrder existingCargoOrder = this.getCargoOrderByIdAndCurrentProfile(cargoOrderId);
+
+        if (existingCargoOrder.getEndExecution() == null) {
+            throw new ResourceConflictException(
+                    "Перевозчик не завершил исполнение, поэтому успешно закрыть заказ невозможно! Id заказа=%s"
+                            .formatted(cargoOrderId)
+            );
+        }
+
+        this.setStatusToCargoOrder(existingCargoOrder, CargoOrderStatus.COMPLETED);
+        existingCargoOrder.setEndExecution(LocalDateTime.now());
+
+        cargoOrderRepository.save(existingCargoOrder);
+
+        return cargoOrderMapper.toRsDto(existingCargoOrder);
+    }
+
+    @Transactional
+    @Override
+    public CargoOrderRs cancelExecutionCargoOrder(UUID cargoOrderId) {
+        CargoOrder exisitingCargoOrder = this.getCargoOrderByIdAndCurrentProfile(cargoOrderId);
+
+        if (!exisitingCargoOrder.getVisibility().equals(CargoOrderStatus.IN_PROGRESS)) {
+            throw new ResourceConflictException("Невозможно отменить заказ, так как он не состоянии исполнения! Id=%s"
+                    .formatted(cargoOrderId));
+        }
+
+        CargoOrder foundCargoOrder = cargoOrderRepository.findCargoOrderByIdAndOwner_IdOrExecutor_Id(
+                cargoOrderId,
+                exisitingCargoOrder.getOwner().getId(),
+                exisitingCargoOrder.getExecutor().getId()
+        ).orElseThrow(
+                () -> new NotFoundException("Заказ с id=%s не был найден в исполнении!".formatted(cargoOrderId))
+        );
+
+        this.setStatusToCargoOrder(foundCargoOrder, CargoOrderStatus.CANCELED);
+        exisitingCargoOrder.setEndExecution(LocalDateTime.now());
+
+        cargoOrderRepository.save(exisitingCargoOrder);
+
+        return cargoOrderMapper.toRsDto(exisitingCargoOrder);
+    }
+
     @Transactional
     @Override
     public void deleteCargoOrder(UUID cargoOrderId) {
@@ -300,5 +354,12 @@ public class CargoOrderServiceImpl implements CargoOrderService {
                 .orElseThrow(
                         () -> new NotFoundException("Запись о грузе с id=%s не найдена!".formatted(cargoOrderId))
                 );
+    }
+
+    @Override
+    public void setStatusToCargoOrder(CargoOrder cargoOrder, CargoOrderStatus cargoOrderStatus) {
+        if (!(cargoOrder.getVisibility().equals(cargoOrderStatus))) {
+            cargoOrder.setVisibility(cargoOrderStatus);
+        }
     }
 }

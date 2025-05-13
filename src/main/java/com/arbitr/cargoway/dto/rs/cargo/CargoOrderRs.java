@@ -41,6 +41,9 @@ public class CargoOrderRs {
     @Schema(description = "Краткая информация о профиле исполнителя")
     private ProfileShortDto executor;
 
+    @Schema(description = "Краткая информация о профиле владельца груза")
+    private ProfileShortDto owner;
+
     @Schema(description = "Детали груза")
     private CargoDto cargo;
 

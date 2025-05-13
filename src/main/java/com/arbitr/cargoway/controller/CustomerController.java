@@ -5,10 +5,7 @@ import com.arbitr.cargoway.service.CargoOrderResponseService;
 import com.arbitr.cargoway.service.CargoOrderService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -30,8 +27,14 @@ public class CustomerController {
         return cargoOrderService.draftCargoOrder(cargoOrderId);
     }
 
-    public CargoOrderRs acceptResponse(@PathVariable("cargoOrderId") UUID cargoOrderId,
-                                       @PathVariable("responseId") UUID responseId) {
-        return null;
+    @PostMapping("/{cargoOrderId}/response/{responseId}/accept/")
+    public CargoOrderRs startExecutionCargoOrder(@PathVariable("cargoOrderId") UUID cargoOrderId,
+                                         @PathVariable("responseId") UUID responseId) {
+        return cargoOrderResponseService.startExecutionCargoOrder(cargoOrderId, responseId);
+    }
+
+    @PostMapping("/{cargoOrderId}/endExecution/confirm/")
+    public CargoOrderRs confirmEndExecutionCargoOrder(@PathVariable("cargoOrderId") UUID cargoOrderId) {
+        return cargoOrderService.confirmEndExecutionCargoOrder(cargoOrderId);
     }
 }

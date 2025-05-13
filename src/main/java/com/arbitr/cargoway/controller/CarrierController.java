@@ -45,4 +45,9 @@ public class CarrierController {
                                          @PathVariable("responseId") UUID responseId) {
         cargoOrderResponseService.cancelResponse(cargoOrderId, responseId);
     }
+
+    @PostMapping("/{cargoOrderId}/endExecution/")
+    public CargoOrderRs endExecutionCargoOrder(@PathVariable("cargoOrderId") UUID cargoOrderId) {
+        return cargoOrderService.endExecutionCargoOrder(cargoOrderId);
+    }
 }

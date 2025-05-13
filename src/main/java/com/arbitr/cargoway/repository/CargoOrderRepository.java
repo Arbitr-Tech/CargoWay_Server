@@ -21,6 +21,9 @@ public interface CargoOrderRepository extends JpaRepository<CargoOrder, UUID> {
     Optional<CargoOrder> findCargoOrderByIdAndOwner_Id(UUID id, UUID ownerId);
 
     @EntityGraph(attributePaths = {"cargo", "cargo.images"})
+    Optional<CargoOrder> findCargoOrderByIdAndOwner_IdOrExecutor_Id(UUID id, UUID ownerId, UUID executorId);
+
+    @EntityGraph(attributePaths = {"cargo", "cargo.images"})
     Page<CargoOrder> findCargoOrdersByVisibilityIsInAndOwner_Id(Set<CargoOrderStatus> visibilities,
                                                               UUID profileId, Pageable pageable);
 
