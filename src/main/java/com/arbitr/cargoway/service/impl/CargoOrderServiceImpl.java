@@ -277,22 +277,25 @@ public class CargoOrderServiceImpl implements CargoOrderService {
     @Transactional
     @Override
     public CargoOrderRs cancelExecutionCargoOrder(UUID cargoOrderId) {
-        CargoOrder exisitingCargoOrder = this.getCargoOrderByIdAndCurrentProfile(cargoOrderId);
+        Profile currentProfile = profileService.getAuthenticatedProfile();
+
+        CargoOrder exisitingCargoOrder = this.getCargoOrderById(cargoOrderId);
 
         if (!exisitingCargoOrder.getVisibility().equals(CargoOrderStatus.IN_PROGRESS)) {
             throw new ResourceConflictException("Невозможно отменить заказ, так как он не состоянии исполнения! Id=%s"
                     .formatted(cargoOrderId));
         }
 
-        CargoOrder foundCargoOrder = cargoOrderRepository.findCargoOrderByIdAndOwner_IdOrExecutor_Id(
-                cargoOrderId,
-                exisitingCargoOrder.getOwner().getId(),
-                exisitingCargoOrder.getExecutor().getId()
-        ).orElseThrow(
-                () -> new NotFoundException("Заказ с id=%s не был найден в исполнении!".formatted(cargoOrderId))
-        );
+        if (!exisitingCargoOrder.getExecutor().getId().equals(currentProfile.getId()) &&
+                !exisitingCargoOrder.getOwner().getId().equals(currentProfile.getId())
+        ) {
+            throw new ResourceConflictException(
+                    "Текущий профиль не может отменить заказ, так как не связан с ним! id заказа=%s".
+                            formatted(cargoOrderId)
+            );
+        }
 
-        this.setStatusToCargoOrder(foundCargoOrder, CargoOrderStatus.CANCELED);
+        this.setStatusToCargoOrder(exisitingCargoOrder, CargoOrderStatus.CANCELED);
         exisitingCargoOrder.setEndExecution(LocalDateTime.now());
 
         cargoOrderRepository.save(exisitingCargoOrder);
