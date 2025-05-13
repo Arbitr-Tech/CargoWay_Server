@@ -42,7 +42,7 @@ Content-Type: application/json
 }
 
 ###
-@driverId=ed6f8049-ca98-4e19-8bc0-af8d146bf43a
+@driverId=4b3fac24-5630-4650-b7f1-945186ba7949
 
 ### Метод для создания записи о [прицепе]
 POST {{trailersUrl}}//
@@ -63,7 +63,7 @@ Content-Type: application/json
 }
 
 ###
-@trailerId=8672c9e5-9a18-4d06-9239-21a1514f2aba
+@trailerId=36628643-be57-4433-ac26-e95165db06fe
 
 ### Метод для создания записи о транспорте
 POST {{transportUrl}}//
@@ -88,7 +88,7 @@ Authorization: Bearer {{access_token}}
 Accept: application/json
 
 ###
-@transport_id=c1a2d717-f459-42d0-b70a-7ada6a52d6fc
+@transport_id=723c33e0-5934-4488-8fb0-c2e22d3df603
 
 ### Запрос на получение списка записей грузов
 POST {{cargoUrl}}/search/?pageNumber=1&pageSize=5
@@ -101,7 +101,7 @@ Accept: application/json
 }
 
 ###
-@cargo_order_id=e76f65d2-2b9b-4e5b-b8ec-edc57025da74
+@cargo_order_id=5585ceb3-048e-4d82-919f-5fa427fc1d25
 
 ### Создать отклик от перевозчика на груз
 POST {{cargoUrl}}/{{cargo_order_id}}/transport/{{transport_id}}/response/
@@ -112,7 +112,7 @@ Accept: application/json
 @response_id=521b08b0-6b48-4ab8-9a6a-f971c8829df3
 
 ### Отменить отклик от перевозчкаи на груз
-POST {{cargoUrl}}/{{cargo_order_id}}/response/{{response_id}}/cancel/
+POST {{cargoUrl}}/{{cargo_order_id}}/response/cancel/
 Authorization: Bearer {{access_token}}
 Accept: application/json
 
