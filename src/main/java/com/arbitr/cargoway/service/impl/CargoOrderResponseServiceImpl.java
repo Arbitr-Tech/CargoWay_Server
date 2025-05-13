@@ -60,8 +60,15 @@ public class CargoOrderResponseServiceImpl implements CargoOrderResponseService 
     }
 
     @Override
-    public void cancelResponse(UUID cargoOrderId, UUID responseId) {
-        CargoOrderResponse existingCargoOrderResponse = this.getCargoOrderResponse(cargoOrderId, responseId);
+    public void cancelResponse(UUID cargoOrderId) {
+        Profile currentProfile = profileService.getAuthenticatedProfile();
+
+        CargoOrderResponse existingCargoOrderResponse = cargoOrderResponseRepository
+                .findCargoOrderResponseByCargoOrder_IdAndResponder_Id(cargoOrderId, currentProfile.getId())
+                .orElseThrow(
+                        () -> new NotFoundException("У заказа с id=%s не был найден отклик от текущего профиля с id=%s"
+                                .formatted(cargoOrderId, currentProfile.getId()))
+                );
 
         cargoOrderResponseRepository.delete(existingCargoOrderResponse);
     }
