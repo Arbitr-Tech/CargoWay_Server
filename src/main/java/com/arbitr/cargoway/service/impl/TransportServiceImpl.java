@@ -78,7 +78,9 @@ public class TransportServiceImpl implements TransportService {
 
     @Override
     public TransportRs getTransport(UUID transportId) {
-        Transport foundTransport = this.getTransportByIdAndCurrentProfile(transportId);
+        Transport foundTransport = transportRepository.findById(transportId).orElseThrow(
+                () -> new NotFoundException("Транспорт с id=%s не был найден!".formatted(transportId))
+        );
         return transportMapper.toRsDto(foundTransport);
     }
 
