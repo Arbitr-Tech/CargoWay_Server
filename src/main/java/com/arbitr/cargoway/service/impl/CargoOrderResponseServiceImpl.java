@@ -78,10 +78,12 @@ public class CargoOrderResponseServiceImpl implements CargoOrderResponseService 
         CargoOrderResponse existingCargoOrderResponse = this.getCargoOrderResponse(cargoOrderId, responseId);
 
         Profile newExecutor = existingCargoOrderResponse.getResponder();
+        Transport newTransport = existingCargoOrderResponse.getTransport();
         CargoOrder currentCargoOrder = existingCargoOrderResponse.getCargoOrder();
 
         cargoOrderService.setStatusToCargoOrder(currentCargoOrder, CargoOrderStatus.IN_PROGRESS);
         currentCargoOrder.setExecutor(newExecutor);
+        currentCargoOrder.setExecutorTransport(newTransport);
         currentCargoOrder.setStartExecution(LocalDateTime.now());
 
         cargoOrderRepository.save(currentCargoOrder);

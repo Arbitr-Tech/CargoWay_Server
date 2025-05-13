@@ -38,6 +38,10 @@ public class CargoOrder {
     @JoinColumn(name = "executor_id", referencedColumnName = "id")
     private Profile executor;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "executor_transport_id", referencedColumnName = "id")
+    private Transport executorTransport;
+
     @Builder.Default
     @Column(name = "order_created_at", nullable = false)
     private LocalDateTime orderCreatedAt = LocalDateTime.now();

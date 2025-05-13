@@ -23,6 +23,7 @@ public interface CargoOrderMapper {
     @Mapping(source = "visibility", target = "visibilityStatus", qualifiedByName = "mapVisibilityStatus")
     @Mapping(source = "cargo", target = "cargo", qualifiedByName = "toCargoDto")
     @Mapping(source = "executor", target = "executor", qualifiedByName = "toProfileShortDto")
+    @Mapping(source = "executorTransport", target = "executorTransport")
     @Mapping(source = "owner", target = "owner", qualifiedByName = "toProfileShortDto")
     CargoOrderRs toRsDto(CargoOrder cargoOrder);
 
@@ -35,6 +36,7 @@ public interface CargoOrderMapper {
     @Mapping(source = "cargoOrder.visibility", target = "visibilityStatus", qualifiedByName = "mapVisibilityStatus")
     @Mapping(source = "cargo", target = "cargo", qualifiedByName = "toCargoDto")
     @Mapping(source = "cargoOrder.executor", target = "executor", qualifiedByName = "toProfileShortDto")
+    @Mapping(source = "cargoOrder.executorTransport", target = "executorTransport")
     @Mapping(source = "cargoOrder.owner", target = "owner", qualifiedByName = "toProfileShortDto")
     CargoOrderRs toRsDto(Cargo cargo);
 
