@@ -57,30 +57,30 @@ Content-Type: application/json
 }
 
 ### Получение списка груза [INTERNAL]
-GET {{cargoUrl}}/general/?cargoCategory=INTERNAL&pageNumber=1&pageSize=5
+GET {{cargoUrl}}/general/?cargoCategory=EXTERNAL&pageNumber=1&pageSize=5
 Authorization: Bearer {{access_token}}
 Accept: application/json
 
 ### [ЭТОТ ID НАДО ПЕРЕДАТЬ В СЦЕНАРИЙ В ФАЙЛЕ carrier]
-@cargo_uuid=807df26e-9d4a-487e-b522-268b2236df72
+@cargo_order_id=e76f65d2-2b9b-4e5b-b8ec-edc57025da74
 
 ### Получение деталей груза
-GET {{cargoUrl}}/{{cargo_uuid}}/
+GET {{cargoUrl}}/{{cargo_order_id}}/
 Authorization: Bearer {{access_token}}
 Accept: application/json
 
 ### Публикация записи [после ПЕРЕЙТИ В ФАЙЛ carrier И ОТКЛИКНУТЬСЯ НА ЗАКАЗ ПО ID]
-PATCH {{cargoUrl}}/{{cargo_uuid}}/publish/
+PATCH {{cargoUrl}}/{{cargo_order_id}}/publish/
 Authorization: Bearer {{access_token}}
 Accept: application/json
 
 ### Снятие записи с публикации
-PATCH {{cargoUrl}}/{{cargo_uuid}}/draft/
+PATCH {{cargoUrl}}/{{cargo_order_id}}/draft/
 Authorization: Bearer {{access_token}}
 Accept: application/json
 
 ### Обновление записи о грузе [ПРОВЕРКА О НЕВОЗМОЖНОСТИ ОБНОВЛЕНИЯ]
-PATCH {{cargoUrl}}/{{cargo_uuid}}/
+PATCH {{cargoUrl}}/{{cargo_order_id}}/
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
@@ -109,5 +109,23 @@ Content-Type: application/json
 
 ### Получение списка груза [EXTERNAL]
 GET {{cargoUrl}}/general/?cargoCategory=EXTERNAL&pageNumber=1&pageSize=5
+Authorization: Bearer {{access_token}}
+Accept: application/json
+
+### Идентификатор запроса, который выбрали
+@response_id=d0ef6b06-1d11-4de1-8ea3-2f67c174e514
+
+### Выбор перевозчика и начало исполнения заказа
+POST {{cargoUrl}}/{{cargo_order_id}}/response/{{response_id}}/accept/
+Authorization: Bearer {{access_token}}
+Accept: application/json
+
+### Отмена исполнения заказа
+POST {{cargoUrl}}/{{cargo_order_id}}/cancel/
+Authorization: Bearer {{access_token}}
+Accept: application/json
+
+### Подтвердить запрос на завершение исполнения заказа
+POST {{cargoUrl}}/{{cargo_order_id}}/endExecution/confirm/
 Authorization: Bearer {{access_token}}
 Accept: application/json

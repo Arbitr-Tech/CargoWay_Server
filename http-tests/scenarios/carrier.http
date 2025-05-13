@@ -42,7 +42,7 @@ Content-Type: application/json
 }
 
 ###
-@driverId=29ea4d4c-1258-4948-8852-484903c70f8e
+@driverId=ed6f8049-ca98-4e19-8bc0-af8d146bf43a
 
 ### Метод для создания записи о [прицепе]
 POST {{trailersUrl}}//
@@ -63,7 +63,7 @@ Content-Type: application/json
 }
 
 ###
-@trailerId=b4e78f10-dcb9-4e73-9128-6cf83b3ec068
+@trailerId=8672c9e5-9a18-4d06-9239-21a1514f2aba
 
 ### Метод для создания записи о транспорте
 POST {{transportUrl}}//
@@ -85,10 +85,10 @@ Content-Type: application/json
 ### Метод для получения записи о транспортах
 GET {{transportUrl}}//?pageNumber=1&pageSize=5
 Authorization: Bearer {{access_token}}
-Content-Type: application/json
+Accept: application/json
 
 ###
-@transport_id=cbf1cdeb-e34d-4e50-9e35-d56e2686f409
+@transport_id=c1a2d717-f459-42d0-b70a-7ada6a52d6fc
 
 ### Запрос на получение списка записей грузов
 POST {{cargoUrl}}/search/?pageNumber=1&pageSize=5
@@ -101,22 +101,33 @@ Accept: application/json
 }
 
 ###
-@cargo_order_id=8a202fe9-96b3-4ac5-b715-2de0bba4b310
+@cargo_order_id=e76f65d2-2b9b-4e5b-b8ec-edc57025da74
 
 ### Создать отклик от перевозчика на груз
 POST {{cargoUrl}}/{{cargo_order_id}}/transport/{{transport_id}}/response/
 Authorization: Bearer {{access_token}}
-Content-Type: application/json
+Accept: application/json
 
 ### Идентификатор отклика [МОЖНО ПОСМОТРЕТЬ ДЕТАЛИ ГРУЗА]
-@response_id=a14afe80-2ef3-4d06-a6fc-aa62ec055deb
+@response_id=521b08b0-6b48-4ab8-9a6a-f971c8829df3
 
 ### Отменить отклик от перевозчкаи на груз
 POST {{cargoUrl}}/{{cargo_order_id}}/response/{{response_id}}/cancel/
 Authorization: Bearer {{access_token}}
-Content-Type: application/json
+Accept: application/json
 
 ### Просмотреть список записей перевозчика [ACTIVE, WAITING, HISTORY]
-GET {{cargoUrl}}/carrier/general/?cargoCategory=WAITING&pageNumber=1&pageSize=5
+GET {{cargoUrl}}/carrier/general/?cargoCategory=ACTIVE&pageNumber=1&pageSize=5
 Authorization: Bearer {{access_token}}
-Content-Type: application/json
+Accept: application/json
+
+### После принятия со стороны заказчика отклика перевозчика
+### Отмена исполнения заказа [ПЕРЕВОЗЧИК]
+POST {{cargoUrl}}/{{cargo_order_id}}/cancel/
+Authorization: Bearer {{access_token}}
+Accept: application/json
+
+### Отправить запрос на завершение исполнения заказа
+POST {{cargoUrl}}/{{cargo_order_id}}/endExecution/
+Authorization: Bearer {{access_token}}
+Accept: application/json
