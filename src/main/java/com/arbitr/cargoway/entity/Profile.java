@@ -33,7 +33,7 @@ public class Profile {
 
     @Builder.Default
     @Column(name = "system_rating", nullable = false)
-    private Double systemRating = 0.0;
+    private Double systemRating = 100.0;
 
     @Builder.Default
     @Column(name = "activated", nullable = false)
