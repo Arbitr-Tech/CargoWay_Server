@@ -15,17 +15,18 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "title",  nullable = false)
-    private String title;
-
     @Column(name = "comment", nullable = false)
     private String comment;
 
     @Column(name = "rating",  nullable = false)
-    private Double rating = 0.0;
+    private int rating = 0;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "commentator_id", referencedColumnName = "id", nullable = false)
+    private Profile commentator;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id", referencedColumnName = "id", nullable = false)

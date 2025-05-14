@@ -1,0 +1,54 @@
+@reviewUrl=http://localhost:8080/api/v1/reviews
+
+### Метод для авторизации
+POST http://localhost:8080/api/v1/auth/login/
+Content-Type: application/json
+
+{
+  "email": "annten1@mail.com",
+  "password": "SecurePass456!"
+}
+
+> {%
+    client.global.set("access_token", response.body.access_token);
+%}
+
+### Идентификатор профиля, которому выставляется отзыв (комментируемый профиль)
+@profileId=
+
+### Метод для создания отзыва
+POST {{reviewUrl}}/profile/{{profileId}}/
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "comment": "Неплохо справился с работой. Можно будет повторить контракт",
+  "rating": 4
+}
+
+### Идентификатор отзыва
+@reviewId=
+
+### Метода для обновления данных отзыва
+PATCH {{reviewUrl}}/{{reviewId}}/
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "comment": "Отличная работа!",
+  "rating": 5
+}
+
+### Метод для получения данных по отзыву
+GET {{reviewUrl}}/{{reviewId}}/
+Authorization: Bearer {{access_token}}
+Accept: application/json
+
+### Метод для получения списка отзывов профиля и отзывов текущего профиля над комментируемым [MINE, ALL]
+GET {{reviewUrl}}/profile/{{profileId}}/?reviewType=ALL&pageNumber=1&pageSize=5
+Authorization: Bearer {{access_token}}
+Accept: application/json
+
+### Метод для удаления отзыва по id
+DELETE {{reviewUrl}}/{{reviewId}}/
+Authorization: Bearer {{access_token}}
