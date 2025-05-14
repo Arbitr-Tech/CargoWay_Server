@@ -20,7 +20,8 @@ public class DriverDto {
     private String fullName;
 
     @NotBlank(message = "Категория прав не может быть пустой")
-    @Pattern(regexp = "^([A-E][1-2]?)(,([A-E][1-2]?))*$", message = "Недопустимая категория прав")
+    @Pattern(regexp = "^(A|A1|B|B1|BE|C|C1|CE|C1E|D|D1|DE|D1E|M|Tb|Tm)(,(A|A1|B|B1|BE|C|C1|CE|C1E|D|D1|DE|D1E|M|Tb|Tm))*$",
+            message = "Недопустимая категория прав")
     @Schema(description = "Категория прав")
     private String licenseCategory;
 
