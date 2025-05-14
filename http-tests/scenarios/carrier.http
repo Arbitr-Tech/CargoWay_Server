@@ -2,6 +2,7 @@
 @cargoUrl=http://localhost:8080/api/v1/cargos
 @driverUrl=http://localhost:8080/api/v1/drivers
 @trailersUrl=http://localhost:8080/api/v1/trailers
+@reviewUrl=http://localhost:8080/api/v1/reviews
 
 ### Метод для регистрации компании
 POST http://localhost:8080/api/v1/auth/register/
@@ -42,7 +43,7 @@ Content-Type: application/json
 }
 
 ###
-@driverId=4b3fac24-5630-4650-b7f1-945186ba7949
+@driverId=5fd53fc1-5ced-4415-bed6-d20a062dd5d5
 
 ### Метод для создания записи о [прицепе]
 POST {{trailersUrl}}//
@@ -63,7 +64,7 @@ Content-Type: application/json
 }
 
 ###
-@trailerId=36628643-be57-4433-ac26-e95165db06fe
+@trailerId=631a9ef2-db16-47ee-be5b-a4e91af59ed2
 
 ### Метод для создания записи о транспорте
 POST {{transportUrl}}//
@@ -88,7 +89,7 @@ Authorization: Bearer {{access_token}}
 Accept: application/json
 
 ###
-@transport_id=723c33e0-5934-4488-8fb0-c2e22d3df603
+@transport_id=60f0b561-6364-405c-8df2-4d6c0e1922fa
 
 ### Запрос на получение списка записей грузов
 POST {{cargoUrl}}/search/?pageNumber=1&pageSize=5
@@ -101,7 +102,7 @@ Accept: application/json
 }
 
 ###
-@cargo_order_id=5585ceb3-048e-4d82-919f-5fa427fc1d25
+@cargo_order_id=0f0f6229-3f07-4a1e-99bd-36bdccd46c6d
 
 ### Создать отклик от перевозчика на груз
 POST {{cargoUrl}}/{{cargo_order_id}}/transport/{{transport_id}}/response/
@@ -109,7 +110,7 @@ Authorization: Bearer {{access_token}}
 Accept: application/json
 
 ### Идентификатор отклика [МОЖНО ПОСМОТРЕТЬ ДЕТАЛИ ГРУЗА]
-@response_id=521b08b0-6b48-4ab8-9a6a-f971c8829df3
+@response_id=230f2085-6d34-4c3a-be73-cf97af79e5b5
 
 ### Отменить отклик от перевозчкаи на груз
 POST {{cargoUrl}}/{{cargo_order_id}}/response/cancel/
@@ -131,3 +132,16 @@ Accept: application/json
 POST {{cargoUrl}}/{{cargo_order_id}}/endExecution/
 Authorization: Bearer {{access_token}}
 Accept: application/json
+
+### Идентификатор профиля, которому выставляется отзыв (комментируемый профиль)
+@profileId=
+
+### Метод для создания отзыва
+POST {{reviewUrl}}/profile/{{profileId}}/
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "comment": "Неплохо справился с работой. Можно будет повторить контракт",
+  "rating": 4
+}
