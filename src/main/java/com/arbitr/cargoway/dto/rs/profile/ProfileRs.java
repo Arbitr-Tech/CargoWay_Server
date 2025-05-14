@@ -10,7 +10,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -45,7 +44,4 @@ public class ProfileRs {
 
     @Schema(description = "Контактные данные для связи")
     ContactDataDetails contactData;
-
-    @Schema(description = "Список отзывов")
-    List<ReviewRs> reviews;
 }
