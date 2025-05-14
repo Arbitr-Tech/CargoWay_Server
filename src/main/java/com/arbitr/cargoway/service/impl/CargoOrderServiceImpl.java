@@ -18,6 +18,7 @@ import com.arbitr.cargoway.exception.NotFoundException;
 import com.arbitr.cargoway.exception.ResourceConflictException;
 import com.arbitr.cargoway.mapper.CargoOrderMapper;
 import com.arbitr.cargoway.repository.CargoOrderRepository;
+import com.arbitr.cargoway.repository.CargoOrderResponseRepository;
 import com.arbitr.cargoway.repository.CargoRepository;
 import com.arbitr.cargoway.repository.specification.CargoSpecification;
 import com.arbitr.cargoway.service.CargoOrderService;
@@ -41,6 +42,7 @@ public class CargoOrderServiceImpl implements CargoOrderService {
     private final CargoOrderRepository cargoOrderRepository;
     private final CargoRepository cargoRepository;
     private final CargoOrderMapper cargoOrderMapper;
+    private final CargoOrderResponseRepository cargoOrderResponseRepository;
 
     public PaginationRs<CargoOrderRs> getGeneralCargosByCategory(VisibilityCategory visibilityCategory,
                                                                  PaginationRq  paginationRq) {
@@ -138,26 +140,31 @@ public class CargoOrderServiceImpl implements CargoOrderService {
 
     @Override
     public CargoOrderRs publishCargoOrder(UUID cargoOrderId) {
-        return changeInternalVisibilityStatus(cargoOrderId, CargoOrderStatus.DRAFT, CargoOrderStatus.PUBLISHED);
+        CargoOrder foundCargoOrder = this.getCargoOrderByIdAndCurrentProfile(cargoOrderId);
+
+        if (!foundCargoOrder.getVisibility().equals(CargoOrderStatus.DRAFT)) {
+            throw new ResourceConflictException("Ошибка при публикации записи! Id записи=%s".formatted(cargoOrderId));
+        }
+
+        foundCargoOrder.setVisibility(CargoOrderStatus.PUBLISHED);
+
+        cargoOrderRepository.save(foundCargoOrder);
+        return cargoOrderMapper.toRsDto(foundCargoOrder);
     }
 
     @Override
     public CargoOrderRs draftCargoOrder(UUID cargoOrderId) {
-        return changeInternalVisibilityStatus(cargoOrderId, CargoOrderStatus.PUBLISHED, CargoOrderStatus.DRAFT);
-    }
-
-    private CargoOrderRs changeInternalVisibilityStatus(UUID cargoOrderId, CargoOrderStatus currentStatus,
-                                                        CargoOrderStatus newStatus) {
         CargoOrder foundCargoOrder = this.getCargoOrderByIdAndCurrentProfile(cargoOrderId);
 
-        if (!foundCargoOrder.getVisibility().equals(currentStatus)) {
+        if (!foundCargoOrder.getVisibility().equals(CargoOrderStatus.PUBLISHED) &&
+                !foundCargoOrder.getVisibility().equals(CargoOrderStatus.BIDDING)) {
             throw new ResourceConflictException(
-                    "Ошибка при изменении статуса записи с %s на %s! Id=%s"
-                            .formatted(currentStatus, newStatus, cargoOrderId)
+                    "Ошибка при снятии записи с публикации или отмене торгов! Id записи=%s".formatted(cargoOrderId)
             );
         }
 
-        foundCargoOrder.setVisibility(newStatus);
+        cargoOrderResponseRepository.deleteCargoOrderResponsesByCargoOrder_Id(cargoOrderId);
+        foundCargoOrder.setVisibility(CargoOrderStatus.DRAFT);
 
         cargoOrderRepository.save(foundCargoOrder);
         return cargoOrderMapper.toRsDto(foundCargoOrder);
@@ -308,9 +315,9 @@ public class CargoOrderServiceImpl implements CargoOrderService {
     public void deleteCargoOrder(UUID cargoOrderId) {
         CargoOrder foundCargoOrder = this.getCargoOrderByIdAndCurrentProfile(cargoOrderId);
 
-        if (!foundCargoOrder.getVisibility().equals(CargoOrderStatus.DRAFT)) {
+        if (foundCargoOrder.getVisibility().equals(CargoOrderStatus.IN_PROGRESS)) {
             throw new ResourceConflictException(
-                    "Запись о грузе невозможно удалить, так как запись не в статусе черновика! Id=%s"
+                    "Запись о грузе невозможно удалить, так как заказ находится в исполнении! Id=%s"
                             .formatted(cargoOrderId)
             );
         }

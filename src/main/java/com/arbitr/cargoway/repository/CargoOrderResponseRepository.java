@@ -13,4 +13,5 @@ public interface CargoOrderResponseRepository extends JpaRepository<CargoOrderRe
     Optional<CargoOrderResponse> findCargoOrderResponseByIdAndCargoOrder_Id(UUID responseId, UUID cargoOrderId);
     List<CargoOrderResponse> findCargoOrderResponsesByCargoOrder_IdAndResponder_Id(UUID cargoOrderId, UUID responderId);
     Optional<CargoOrderResponse> findCargoOrderResponseByCargoOrder_IdAndResponder_Id(UUID cargoOrderId, UUID responderId);
+    void deleteCargoOrderResponsesByCargoOrder_Id(UUID cargoOrderId);
 }
