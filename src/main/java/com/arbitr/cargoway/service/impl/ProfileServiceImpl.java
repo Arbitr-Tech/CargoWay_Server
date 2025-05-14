@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +33,14 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public ProfileRs getProfile() {
         User authenticatedUser = authService.getAuthenticatedUser();
-        return profileMapper.buildProfileRsFrom(authenticatedUser.getProfile());
+        return profileMapper.toRsDto(authenticatedUser.getProfile());
+    }
+
+    @Override
+    public Profile getProfileById(UUID profileId) {
+        return profileRepository.findById(profileId).orElseThrow(
+                () -> new NotFoundException("Профиль с id=%s не был найден!".formatted(profileId))
+        );
     }
 
     @Override
@@ -51,7 +59,7 @@ public class ProfileServiceImpl implements ProfileService {
         }
 
         profileRepository.save(profile);
-        return profileMapper.buildProfileRsFrom(profile);
+        return profileMapper.toRsDto(profile);
     }
 
     @Override
