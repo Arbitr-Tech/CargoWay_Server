@@ -14,7 +14,7 @@ Content-Type: application/json
 %}
 
 ### Идентификатор профиля, которому выставляется отзыв (комментируемый профиль)
-@profileId=
+@profileId=8580715a-c7b0-41d4-9112-0deae1ac0e7f
 
 ### Метод для создания отзыва
 POST {{reviewUrl}}/profile/{{profileId}}/
@@ -27,7 +27,7 @@ Content-Type: application/json
 }
 
 ### Идентификатор отзыва
-@reviewId=
+@reviewId=06397646-5d7d-438d-a0bb-a13e0e116cab
 
 ### Метода для обновления данных отзыва
 PATCH {{reviewUrl}}/{{reviewId}}/
@@ -35,8 +35,8 @@ Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-  "comment": "Отличная работа!",
-  "rating": 5
+  "comment": "Отличная работа супер!",
+  "rating": 3
 }
 
 ### Метод для получения данных по отзыву
@@ -46,6 +46,11 @@ Accept: application/json
 
 ### Метод для получения списка отзывов профиля и отзывов текущего профиля над комментируемым [MINE, ALL]
 GET {{reviewUrl}}/profile/{{profileId}}/?reviewType=ALL&pageNumber=1&pageSize=5
+Authorization: Bearer {{access_token}}
+Accept: application/json
+
+### Метод для получения списка отзывов авторизованного пользователя (текущего пользователя)
+GET {{reviewUrl}}/mine/?pageNumber=1&pageSize=5
 Authorization: Bearer {{access_token}}
 Accept: application/json
 
