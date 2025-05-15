@@ -47,6 +47,11 @@ public class ReviewController {
         return reviewService.getReviews(reviewType, profileId, paginationRq);
     }
 
+    @GetMapping("mine/")
+    public PaginationRs<ReviewRs> getMyReviews(@ModelAttribute PaginationRq paginationRq) {
+        return reviewService.getMyProfileReviews(paginationRq);
+    }
+
     @DeleteMapping("{reviewId}/")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteReview(@PathVariable("reviewId") UUID reviewId) {

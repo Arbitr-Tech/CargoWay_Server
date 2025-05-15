@@ -14,5 +14,6 @@ public interface ReviewService {
     ReviewRs updateReview(UUID reviewId, ReviewUpdateRq reviewUpdateRq);
     ReviewRs getReview(UUID reviewId);
     PaginationRs<ReviewRs> getReviews(ReviewType reviewType, UUID profileId, PaginationRq paginationRq);
+    PaginationRs<ReviewRs> getMyProfileReviews(PaginationRq paginationRq);
     void deleteReview(UUID reviewId);
 }

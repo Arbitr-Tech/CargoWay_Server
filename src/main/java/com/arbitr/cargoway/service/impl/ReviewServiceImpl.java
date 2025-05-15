@@ -111,6 +111,27 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public PaginationRs<ReviewRs> getMyProfileReviews(PaginationRq paginationRq) {
+        Profile currentProfile = profileService.getAuthenticatedProfile();
+
+        Page<Review> myReviews = reviewRepository.findReviewsByProfile_Id(
+                currentProfile.getId(),
+                PageRequest.of(paginationRq.getPageNumber(), paginationRq.getPageSize())
+        );
+
+        List<ReviewRs> myReviewsRs = myReviews.getContent().stream()
+                .map(reviewMapper::toRsDto)
+                .toList();
+
+        return PaginationRs.of(
+                myReviewsRs,
+                myReviews.getNumber(),
+                myReviews.getSize(),
+                myReviews.getTotalPages()
+        );
+    }
+
+    @Override
     public void deleteReview(UUID reviewId) {
         Review existingReview = this.getReviewById(reviewId);
         reviewRepository.delete(existingReview);
