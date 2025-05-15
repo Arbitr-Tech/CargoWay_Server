@@ -152,6 +152,7 @@ public class CargoOrderServiceImpl implements CargoOrderService {
         return cargoOrderMapper.toRsDto(foundCargoOrder);
     }
 
+    @Transactional
     @Override
     public CargoOrderRs draftCargoOrder(UUID cargoOrderId) {
         CargoOrder foundCargoOrder = this.getCargoOrderByIdAndCurrentProfile(cargoOrderId);
@@ -164,6 +165,7 @@ public class CargoOrderServiceImpl implements CargoOrderService {
         }
 
         cargoOrderResponseRepository.deleteCargoOrderResponsesByCargoOrder_Id(cargoOrderId);
+        cargoOrderResponseRepository.flush();
         foundCargoOrder.setVisibility(CargoOrderStatus.DRAFT);
 
         cargoOrderRepository.save(foundCargoOrder);
