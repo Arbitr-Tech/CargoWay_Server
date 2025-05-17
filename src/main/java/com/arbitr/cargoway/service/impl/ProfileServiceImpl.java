@@ -31,9 +31,15 @@ public class ProfileServiceImpl implements ProfileService {
     private final ProfileMapper profileMapper;
 
     @Override
-    public ProfileRs getProfile() {
+    public ProfileRs getCurrentProfile() {
         User authenticatedUser = authService.getAuthenticatedUser();
         return profileMapper.toRsDto(authenticatedUser.getProfile());
+    }
+
+    @Override
+    public ProfileRs getForeignProfile(UUID profileId) {
+        Profile foreignProfile = this.getProfileById(profileId);
+        return profileMapper.toRsDto(foreignProfile);
     }
 
     @Override

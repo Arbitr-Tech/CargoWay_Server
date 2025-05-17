@@ -7,7 +7,9 @@ import com.arbitr.cargoway.entity.Profile;
 import java.util.UUID;
 
 public interface ProfileService {
-    ProfileRs getProfile();
+    ProfileRs getCurrentProfile();
+
+    ProfileRs getForeignProfile(UUID profileId);
 
     Profile getProfileById(UUID profileId);
 

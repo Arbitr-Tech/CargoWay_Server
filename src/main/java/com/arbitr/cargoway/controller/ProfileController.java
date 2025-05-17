@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/v1/profile/")
 @RequiredArgsConstructor
@@ -15,8 +17,13 @@ public class ProfileController {
     private final ProfileService profileService;
 
     @GetMapping
-    public ProfileRs getProfile() {
-        return profileService.getProfile();
+    public ProfileRs getCurrentProfile() {
+        return profileService.getCurrentProfile();
+    }
+
+    @GetMapping("{profileId}/")
+    public ProfileRs getForeignProfile(@PathVariable("profileId") UUID profileId) {
+        return profileService.getForeignProfile(profileId);
     }
 
     @PatchMapping

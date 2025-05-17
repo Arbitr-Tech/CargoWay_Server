@@ -3,7 +3,7 @@ POST http://localhost:8080/api/v1/auth/login/
 Content-Type: application/json
 
 {
-  "email": "annten@mail.com",
+  "email": "annten1@mail.com",
   "password": "SecurePass456!"
 }
 
@@ -13,6 +13,13 @@ Content-Type: application/json
 
 ### Метод для получения данных о профиле
 GET http://localhost:8080/api/v1/profile/
+Authorization: Bearer {{access_token}}
+
+### Идентификатор профиля другого пользователя
+@foreignProfileId=
+
+### Метод для получения профиля другого пользователя по ID
+GET http://localhost:8080/api/v1/profile/{{foreignProfileId}}/
 Authorization: Bearer {{access_token}}
 
 ### Метод для обновления данных профиля
@@ -27,8 +34,8 @@ Content-Type: application/json
     "phoneNumber": "123 Main Street, City, Country"
   },
   "individual": {
-    "fullName": "Иван Иванов",
-    "passportNumber": "1234 567890",
+    "fullName": "Micha Иванов",
+    "passportNumber": "1235 567890",
     "issuedBy": "УФМС России по г. Москве",
     "issueDate": "2020-01-15",
     "departmentCode": "770-001",
