@@ -13,10 +13,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "Данные возвращаемого изображения")
-public class ImageRef {
-
-    @Schema(description = "Уникальный глобальный строковый идентификатор")
-    private UUID guid;
+public class FileRs {
+    @Schema(description = "Идентификатор ресурса")
+    private UUID id;
 
     @Schema(description = "Пусть к ресурсу")
     private String path;

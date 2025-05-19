@@ -15,7 +15,7 @@ public interface StorageService {
      * @param fileName - имя файла
      * @return - ссылка на файл
      */
-    String uploadFile(InputStream inputStream, Long fileSize, String fileName);
+    String uploadFile(InputStream inputStream, Long fileSize, String fileName, String contentType);
 
     /**
      * Метод для удаления файла по его id

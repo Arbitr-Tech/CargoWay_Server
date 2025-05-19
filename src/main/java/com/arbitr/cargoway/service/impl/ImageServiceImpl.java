@@ -1,6 +1,6 @@
 package com.arbitr.cargoway.service.impl;
 
-import com.arbitr.cargoway.dto.rs.ImageRef;
+import com.arbitr.cargoway.dto.rs.FileRs;
 import com.arbitr.cargoway.entity.Image;
 import com.arbitr.cargoway.mapper.ImageMapper;
 import com.arbitr.cargoway.repository.ImageRepository;
@@ -21,8 +21,8 @@ public class ImageServiceImpl implements ImageService {
     private final ImageMapper imageMapper;
 
     @Override
-    public ImageRef saveImage(InputStream inputStream, Long fileSize, String fileName) {
-        String pathToFile = storageService.uploadFile(inputStream, fileSize, UUID.randomUUID().toString());
+    public FileRs saveImage(InputStream inputStream, Long fileSize, String fileName, String contentType) {
+        String pathToFile = storageService.uploadFile(inputStream, fileSize, UUID.randomUUID().toString(), contentType);
 
         Image image = Image.builder()
                 .imagePath(pathToFile)
@@ -31,6 +31,6 @@ public class ImageServiceImpl implements ImageService {
 
         imageRepository.save(image);
 
-        return imageMapper.buildImageRef(image);
+        return imageMapper.toRsDto(image);
     }
 }

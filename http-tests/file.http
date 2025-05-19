@@ -1,5 +1,16 @@
-### Метод для загрузки файла
-POST http://localhost:8080/api/v1/file/
+### Метод для загрузки файла [ПОКА НЕ РАБОТАЕТ]
+POST http://localhost:8080/api/v1/file/upload/
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="rabbitmq.png"
+Content-Type: image/png
+
+< docs/rabbitmq.png
+--boundary--
+
+### Метод для загрузки изображения
+POST http://localhost:8080/api/v1/images/upload/
 Content-Type: multipart/form-data; boundary=boundary
 
 --boundary

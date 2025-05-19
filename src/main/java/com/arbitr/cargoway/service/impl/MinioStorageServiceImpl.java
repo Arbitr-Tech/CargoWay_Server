@@ -66,12 +66,13 @@ public class MinioStorageServiceImpl implements StorageService {
 
 
     @Override
-    public String uploadFile(InputStream inputStream, Long fileSize, String fileName) {
+    public String uploadFile(InputStream inputStream, Long fileSize, String fileName, String contentType) {
         try (inputStream) {
             minioClient.putObject(PutObjectArgs.builder()
                     .bucket(minioProperties.getBucketName())
                     .object(fileName)
                     .stream(inputStream, fileSize, -1)
+                    .contentType(contentType)
                     .build());
         } catch (Exception e) {
             throw new FileUploadException(e.getMessage());

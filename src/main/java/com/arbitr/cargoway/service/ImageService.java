@@ -1,6 +1,6 @@
 package com.arbitr.cargoway.service;
 
-import com.arbitr.cargoway.dto.rs.ImageRef;
+import com.arbitr.cargoway.dto.rs.FileRs;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
@@ -13,5 +13,5 @@ public interface ImageService {
      * @param fileSize - размер файла
      * @param fileName - имя файла
      */
-    ImageRef saveImage(InputStream inputStream, Long fileSize, String fileName) ;
+    FileRs saveImage(InputStream inputStream, Long fileSize, String fileName, String contentType) ;
 }
