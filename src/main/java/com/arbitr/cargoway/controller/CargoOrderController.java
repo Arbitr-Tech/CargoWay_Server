@@ -1,6 +1,6 @@
 package com.arbitr.cargoway.controller;
 
-import com.arbitr.cargoway.dto.general.cargo.VisibilityCategory;
+import com.arbitr.cargoway.dto.general.cargo.CustomerVisibilityCategory;
 import com.arbitr.cargoway.dto.rq.PaginationRq;
 import com.arbitr.cargoway.dto.rq.cargo.CargoOrderCreateRq;
 import com.arbitr.cargoway.dto.rq.cargo.CargoOrderUpdateRq;
@@ -24,7 +24,7 @@ public class CargoOrderController {
     private final CargoOrderService cargoOrderService;
 
     @GetMapping("general/")
-    public PaginationRs<CargoOrderRs> getInternalCargos(@RequestParam VisibilityCategory cargoCategory,
+    public PaginationRs<CargoOrderRs> getInternalCargos(@RequestParam CustomerVisibilityCategory cargoCategory,
             @ModelAttribute PaginationRq paginationRq) {
         return cargoOrderService.getGeneralCargosByCategory(cargoCategory, paginationRq);
     }

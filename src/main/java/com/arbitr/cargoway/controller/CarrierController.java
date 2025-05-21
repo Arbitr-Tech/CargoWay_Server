@@ -1,7 +1,6 @@
 package com.arbitr.cargoway.controller;
 
 import com.arbitr.cargoway.dto.general.cargo.CarrierVisibilityCategory;
-import com.arbitr.cargoway.dto.general.cargo.VisibilityCategory;
 import com.arbitr.cargoway.dto.rq.PaginationRq;
 import com.arbitr.cargoway.dto.rq.cargo.FilterCargoRq;
 import com.arbitr.cargoway.dto.rs.PaginationRs;

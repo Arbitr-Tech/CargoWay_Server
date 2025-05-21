@@ -1,7 +1,7 @@
 package com.arbitr.cargoway.service.impl;
 
 import com.arbitr.cargoway.dto.general.cargo.CarrierVisibilityCategory;
-import com.arbitr.cargoway.dto.general.cargo.VisibilityCategory;
+import com.arbitr.cargoway.dto.general.cargo.CustomerVisibilityCategory;
 import com.arbitr.cargoway.dto.general.cargo.CargoDto;
 import com.arbitr.cargoway.dto.rq.PaginationRq;
 import com.arbitr.cargoway.dto.rq.cargo.CargoOrderCreateRq;
@@ -44,12 +44,12 @@ public class CargoOrderServiceImpl implements CargoOrderService {
     private final CargoOrderMapper cargoOrderMapper;
     private final CargoOrderResponseRepository cargoOrderResponseRepository;
 
-    public PaginationRs<CargoOrderRs> getGeneralCargosByCategory(VisibilityCategory visibilityCategory,
+    public PaginationRs<CargoOrderRs> getGeneralCargosByCategory(CustomerVisibilityCategory customerVisibilityCategory,
                                                                  PaginationRq  paginationRq) {
         Profile currentProfile = profileService.getAuthenticatedProfile();
 
         Page<CargoOrder> generalCargosPage =
-                cargoOrderRepository.findCargoOrdersByVisibilityIsInAndOwner_Id(visibilityCategory.getVisibleStatuses(),
+                cargoOrderRepository.findCargoOrdersByVisibilityIsInAndOwner_Id(customerVisibilityCategory.getVisibleStatuses(),
                         currentProfile.getId(),
                         PageRequest.of(paginationRq.getPageNumber(), paginationRq.getPageSize())
                 );
