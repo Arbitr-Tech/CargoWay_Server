@@ -19,3 +19,10 @@ Content-Type: image/png
 
 < docs/rabbitmq.png
 --boundary--
+
+### Идентификатор изображения
+@image_id=63acecb5-253a-4453-8213-586590afef60
+
+### Методя для удаления изображения
+DELETE http://localhost:8080/api/v1/images/{{image_id}}/
+
