@@ -8,8 +8,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-@Mapper(componentModel = "spring", uses = {UserMapper.class})
+@Mapper(componentModel = "spring", uses = {UserMapper.class, ImageMapper.class})
 public interface ProfileMapper {
+    @Mapping(source = "individual.passportImages", target = "individual.images")
     @Mapping(source = "user", target = "userData")
     ProfileRs toRsDto(Profile profile);
 

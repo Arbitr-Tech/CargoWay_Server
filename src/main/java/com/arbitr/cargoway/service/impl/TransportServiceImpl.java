@@ -6,17 +6,11 @@ import com.arbitr.cargoway.dto.rq.transaport.TransportCreateRq;
 import com.arbitr.cargoway.dto.rq.transaport.TransportUpdateRq;
 import com.arbitr.cargoway.dto.rs.PaginationRs;
 import com.arbitr.cargoway.dto.rs.transport.TransportRs;
-import com.arbitr.cargoway.entity.Driver;
-import com.arbitr.cargoway.entity.Profile;
-import com.arbitr.cargoway.entity.Trailer;
-import com.arbitr.cargoway.entity.Transport;
+import com.arbitr.cargoway.entity.*;
 import com.arbitr.cargoway.exception.NotFoundException;
 import com.arbitr.cargoway.mapper.TransportMapper;
 import com.arbitr.cargoway.repository.TransportRepository;
-import com.arbitr.cargoway.service.DriverService;
-import com.arbitr.cargoway.service.ProfileService;
-import com.arbitr.cargoway.service.TrailerService;
-import com.arbitr.cargoway.service.TransportService;
+import com.arbitr.cargoway.service.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,6 +26,7 @@ public class TransportServiceImpl implements TransportService {
     private final ProfileService profileService;
     private final DriverService driverService;
     private final TrailerService trailerService;
+    private final ImageService imageService;
     private final TransportRepository transportRepository;
     private final TransportMapper transportMapper;
 
@@ -45,12 +40,15 @@ public class TransportServiceImpl implements TransportService {
             throw new NotFoundException("Один или несколько элементов из переданного списка не были обнаружены в БД");
         }
 
+        List<Image> images = imageService.findImagesByIds(transportCreateRq.getImagesIds());
+
         Driver foundDriver = driverService.getDriverByIdAndCurrentProfile(transportCreateRq.getDriverId());
 
         Transport newTransport = transportMapper.toEntity(transportCreateRq);
         newTransport.setProfile(currentProfile);
         newTransport.setDriver(foundDriver);
         newTransport.setTrailers(transportTrailers);
+        newTransport.setImages(images);
         transportTrailers.forEach(trailer -> trailer.setTransport(newTransport));
 
         transportRepository.save(newTransport);

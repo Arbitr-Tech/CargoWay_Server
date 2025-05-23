@@ -10,7 +10,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-@Mapper(uses = {TrailerMapper.class, DriverMapper.class})
+@Mapper(uses = {TrailerMapper.class, DriverMapper.class, ImageMapper.class})
 public interface TransportMapper extends GeneralMapper {
     default Transport toEntity(TransportCreateRq transportCreateRq) {
         Transport newTransport = Transport.builder()

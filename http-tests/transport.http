@@ -26,8 +26,9 @@ Content-Type: application/json
 %}
 
 ###
-@driverId=cb2ddc1f-5141-4286-bc85-88b5649f2db1
+@driverId=3d6e80b7-1ebd-46aa-897c-347330b4f54e
 @trailerId=5a9aecb5-abe0-4a78-b587-1f638ac1dcad
+@transport_image_1=0b594908-c8fe-4c9b-8af9-900d406027ae
 
 ### Метод для создания транспорта
 POST {{baseUrl}}//
@@ -52,6 +53,9 @@ Content-Type: application/json
   },
   "trailersIds": [
     "{{trailerId}}"
+  ],
+  "imagesIds": [
+    "{{transport_image_1}}"
   ]
 }
 
@@ -89,6 +93,9 @@ Content-Type: application/json
     },
     "trailersIds": [
         "{{trailerId}}"
+    ],
+    "imagesIds": [
+      "{{transport_image_1}}"
     ]
 }
 

@@ -38,5 +38,5 @@ public class TransportCreateRq {
     private List<UUID> trailersIds;
 
     @Schema(description = "ID фотографий транспорта")
-    private List<UUID> photos;
+    private List<UUID> imagesIds;
 }

@@ -22,6 +22,10 @@ Authorization: Bearer {{access_token}}
 GET http://localhost:8080/api/v1/profile/{{foreignProfileId}}/
 Authorization: Bearer {{access_token}}
 
+### Идентификатор изображений пасспорта
+@imageId_1=a57bf467-0bfa-44b2-bb66-c3e6bc139c18
+@imageId_2=cc65d8bc-2438-44e8-8ff4-7620adc18203
+
 ### Метод для обновления данных профиля
 PATCH http://localhost:8080/api/v1/profile/
 Authorization: Bearer {{access_token}}
@@ -35,11 +39,15 @@ Content-Type: application/json
   },
   "individual": {
     "fullName": "Micha Иванов",
-    "passportNumber": "1235 567890",
+    "passportNumber": "1234 567890",
     "issuedBy": "УФМС России по г. Москве",
     "issueDate": "2020-01-15",
     "departmentCode": "770-001",
-    "registrationAddress": "г. Москва, ул. Ленина, д. 10"
+    "registrationAddress": "г. Москва, ул. Ленина, д. 10",
+    "imagesIds": [
+      "{{imageId_1}}",
+      "{{imageId_2}}"
+    ]
   }
 }
 

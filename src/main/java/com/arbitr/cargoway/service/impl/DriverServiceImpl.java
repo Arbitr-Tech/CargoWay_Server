@@ -7,12 +7,15 @@ import com.arbitr.cargoway.dto.rs.driver.DriverRs;
 import com.arbitr.cargoway.dto.rs.PaginationRs;
 import com.arbitr.cargoway.dto.rs.driver.DriverShortInfoRs;
 import com.arbitr.cargoway.entity.Driver;
+import com.arbitr.cargoway.entity.Image;
 import com.arbitr.cargoway.entity.Profile;
 import com.arbitr.cargoway.exception.NotFoundException;
 import com.arbitr.cargoway.mapper.DriverMapper;
 import com.arbitr.cargoway.repository.DriverRepository;
 import com.arbitr.cargoway.service.DriverService;
+import com.arbitr.cargoway.service.ImageService;
 import com.arbitr.cargoway.service.ProfileService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,17 +28,18 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class DriverServiceImpl implements DriverService {
     private final ProfileService profileService;
+    private final ImageService imageService;
     private final DriverRepository driverRepository;
     private final DriverMapper driverMapper;
-
-    // TODO: создание и обновление с фотографиями прав
 
     @Override
     public DriverRs createDriver(DriverCreateRq driverCreateRq) {
         Profile currentProfile = profileService.getAuthenticatedProfile();
+        List<Image> existingImages = imageService.findImagesByIds(driverCreateRq.getImagesIds());
 
         Driver newDriver = driverMapper.toEntity(driverCreateRq);
         newDriver.setProfile(currentProfile);
+        newDriver.setLicenseImages(existingImages);
         driverRepository.save(newDriver);
 
         return driverMapper.toRsDto(newDriver);
@@ -87,6 +91,7 @@ public class DriverServiceImpl implements DriverService {
         );
     }
 
+    @Transactional
     @Override
     public DriverRs updateDriver(UUID driverId, DriverUpdateRq driverUpdateRq) {
         Driver existingDriver = this.getDriverByIdAndCurrentProfile(driverId);
@@ -105,6 +110,10 @@ public class DriverServiceImpl implements DriverService {
         }
         if (driverUpdateRq.getExpirationDate() != null) {
             existingDriver.setExpirationDate(driverUpdateRq.getExpirationDate());
+        }
+        if (driverUpdateRq.getImagesIds() != null && !driverUpdateRq.getImagesIds().isEmpty()) {
+            List<Image> existingImages = imageService.findImagesByIds(driverUpdateRq.getImagesIds());
+            existingDriver.setLicenseImages(existingImages);
         }
 
         driverRepository.save(existingDriver);

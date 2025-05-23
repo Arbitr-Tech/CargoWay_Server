@@ -13,6 +13,9 @@ Content-Type: application/json
     client.global.set("access_token", response.body.access_token);
 %}
 
+### Идентификатор изображений
+@cargo_image_1=a57bf467-0bfa-44b2-bb66-c3e6bc139c18
+
 ### Метод для создания груза
 POST {{baseUrl}}//
 Authorization: Bearer {{access_token}}
@@ -37,8 +40,11 @@ Content-Type: application/json
   },
   "price": 5000000,
   "typePay": "НДС",
-  "readyDate": "2025-05-22",
-  "deliveryDate": "2025-06-01"
+  "readyDate": "2025-06-22",
+  "deliveryDate": "2025-06-01",
+  "imagesIds": [
+    "{{cargo_image_1}}"
+  ]
 }
 
 ### Получение списка груза [INTERNAL, EXTERNAL, HISTORY]
@@ -47,7 +53,7 @@ Authorization: Bearer {{access_token}}
 Accept: application/json
 
 ### f34f357b-ba53-454e-8f11-74e8afcf97cf
-@cargo_uuid = 076b025d-f7e7-4c80-ae61-21df94a1173e
+@cargo_uuid=c0b828fe-8ff3-4397-8ccb-0147b19747d6
 
 ### Получение деталей груза
 GET {{baseUrl}}/{{cargo_uuid}}/
@@ -55,12 +61,12 @@ Authorization: Bearer {{access_token}}
 Accept: application/json
 
 ### Публикация записи
-PATCH {{baseUrl}}/{{cargo_uuid}}/publish
+PATCH {{baseUrl}}/{{cargo_uuid}}/publish/
 Authorization: Bearer {{access_token}}
 Accept: application/json
 
 ### Снятие записи с публикации
-PATCH {{baseUrl}}/{{cargo_uuid}}/draft
+PATCH {{baseUrl}}/{{cargo_uuid}}/draft/
 Authorization: Bearer {{access_token}}
 Accept: application/json
 
@@ -89,7 +95,10 @@ Content-Type: application/json
   "price": 10000,
   "typePay": "НДС",
   "readyDate": "2025-05-22",
-  "deliveryDate": "2025-06-01"
+  "deliveryDate": "2025-06-01",
+  "imagesIds": [
+    "{{cargo_image_1}}"
+  ]
 }
 
 ### Удаление записи груза

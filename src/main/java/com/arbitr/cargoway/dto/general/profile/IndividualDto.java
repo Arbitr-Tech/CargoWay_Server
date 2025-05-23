@@ -1,18 +1,23 @@
 package com.arbitr.cargoway.dto.general.profile;
 
-import com.arbitr.cargoway.dto.general.Photo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Data
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 @Schema(description = "DTO для физ. лица")
-public class IndividualDetails {
+public class IndividualDto {
     @Schema(description = "Полное имя", example = "Иван Иванов")
     @Size(max = 255, message = "Полное имя не должно превышать 255 символов")
     private String fullName;
@@ -36,7 +41,4 @@ public class IndividualDetails {
     @Schema(description = "Адрес регистрации", example = "г. Москва, ул. Ленина, д. 10")
     @Size(max = 500, message = "Адрес регистрации не должен превышать 500 символов")
     private String registrationAddress;
-
-    @Schema(description = "Фотографии паспорта")
-    private List<Photo> photos;
 }

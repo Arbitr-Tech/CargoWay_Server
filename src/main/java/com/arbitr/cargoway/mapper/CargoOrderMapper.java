@@ -12,7 +12,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-@Mapper(componentModel = "spring", uses = {ProfileMapper.class, TransportMapper.class})
+@Mapper(componentModel = "spring", uses = {ProfileMapper.class, TransportMapper.class, ImageMapper.class})
 public interface CargoOrderMapper {
     @Mapping(source = "responses", target = "responses", qualifiedByName = "toCargoOrderResponseDto")
     @Mapping(source = "id", target = "id")
@@ -22,6 +22,9 @@ public interface CargoOrderMapper {
     @Mapping(source = "endExecution", target = "endExecution")
     @Mapping(source = "visibility", target = "visibilityStatus", qualifiedByName = "mapVisibilityStatus")
     @Mapping(source = "cargo", target = "cargo", qualifiedByName = "toCargoDto")
+    @Mapping(source = "cargo.images", target = "cargo.images")
+//    @Mapping(source = "cargo", target = "cargo.route", qualifiedByName = "toRouteDto")
+//    @Mapping(source = "cargo", target = "cargo.dimensions", qualifiedByName = "toDimensionsDto")
     @Mapping(source = "executor", target = "executor", qualifiedByName = "toProfileShortDto")
     @Mapping(source = "executorTransport", target = "executorTransport")
     @Mapping(source = "owner", target = "owner", qualifiedByName = "toProfileShortDto")
@@ -35,6 +38,9 @@ public interface CargoOrderMapper {
     @Mapping(source = "cargoOrder.endExecution", target = "endExecution")
     @Mapping(source = "cargoOrder.visibility", target = "visibilityStatus", qualifiedByName = "mapVisibilityStatus")
     @Mapping(source = "cargo", target = "cargo", qualifiedByName = "toCargoDto")
+    @Mapping(source = "images", target = "cargo.images")
+//    @Mapping(source = "cargo", target = "cargo.route", qualifiedByName = "toRouteDto")
+//    @Mapping(source = "cargo", target = "cargo.dimensions", qualifiedByName = "toDimensionsDto")
     @Mapping(source = "cargoOrder.executor", target = "executor", qualifiedByName = "toProfileShortDto")
     @Mapping(source = "cargoOrder.executorTransport", target = "executorTransport")
     @Mapping(source = "cargoOrder.owner", target = "owner", qualifiedByName = "toProfileShortDto")
@@ -57,8 +63,6 @@ public interface CargoOrderMapper {
                 .typePay(cargo.getTypePay())
                 .readyDate(cargo.getReadyDate())
                 .deliveryDate(cargo.getDeliveryDate())
-                .dimensions(toDimensionsDto(cargo))
-                .route(toRouteDto(cargo))
                 .build();
     }
 

@@ -1,7 +1,6 @@
 package com.arbitr.cargoway.dto.rq.transaport;
 
 import com.arbitr.cargoway.dto.general.EmbeddedTrailerDto;
-import com.arbitr.cargoway.dto.general.TrailerDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Data;
@@ -39,5 +38,5 @@ public class TransportUpdateRq {
     private List<UUID> trailersIds;
 
     @Schema(description = "ID фотографий транспорта")
-    private List<UUID> photos;
+    private List<UUID> imagesIds;
 }

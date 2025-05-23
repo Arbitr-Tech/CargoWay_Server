@@ -16,9 +16,9 @@ import java.util.UUID;
 @Table(name = "images")
 public class Image {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @Builder.Default
     @Column(name = "id")
-    private UUID id;
+    private UUID id = UUID.randomUUID();
 
     @Column(name = "image_name", nullable = false)
     private String imageName;

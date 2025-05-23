@@ -36,14 +36,14 @@ Content-Type: application/json
 
 {
   "fullName": "Алексей Яковлев",
-  "licenseCategory": "A",
-  "licenseNumber": "0319 445115",
+  "licenseCategory": "A,BE,C",
+  "licenseNumber": "0320 445115",
   "issueDate": "2023-04-30",
   "expirationDate": "2033-04-30"
 }
 
 ###
-@driverId=5fd53fc1-5ced-4415-bed6-d20a062dd5d5
+@driverId=3d6e80b7-1ebd-46aa-897c-347330b4f54e
 
 ### Метод для создания записи о [прицепе]
 POST {{trailersUrl}}//
@@ -64,7 +64,7 @@ Content-Type: application/json
 }
 
 ###
-@trailerId=631a9ef2-db16-47ee-be5b-a4e91af59ed2
+@trailerId=f7c8026b-34a5-4877-922a-21b8aec54593
 
 ### Метод для создания записи о транспорте
 POST {{transportUrl}}//
@@ -89,7 +89,7 @@ Authorization: Bearer {{access_token}}
 Accept: application/json
 
 ###
-@transport_id=60f0b561-6364-405c-8df2-4d6c0e1922fa
+@transport_id=34e8544a-78f2-428a-b2e1-2c15ebe838d2
 
 ### Запрос на получение списка записей грузов
 POST {{cargoUrl}}/search/?pageNumber=1&pageSize=5
@@ -102,7 +102,7 @@ Accept: application/json
 }
 
 ###
-@cargo_order_id=0f0f6229-3f07-4a1e-99bd-36bdccd46c6d
+@cargo_order_id=d8ca6d98-7364-4644-a814-a10e0f68c09d
 
 ### Создать отклик от перевозчика на груз
 POST {{cargoUrl}}/{{cargo_order_id}}/transport/{{transport_id}}/response/
@@ -118,7 +118,7 @@ Authorization: Bearer {{access_token}}
 Accept: application/json
 
 ### Просмотреть список записей перевозчика [ACTIVE, WAITING, HISTORY]
-GET {{cargoUrl}}/carrier/general/?cargoCategory=ACTIVE&pageNumber=1&pageSize=5
+GET {{cargoUrl}}/carrier/general/?cargoCategory=WAITING&pageNumber=1&pageSize=5
 Authorization: Bearer {{access_token}}
 Accept: application/json
 
@@ -134,7 +134,7 @@ Authorization: Bearer {{access_token}}
 Accept: application/json
 
 ### Идентификатор профиля, которому выставляется отзыв (комментируемый профиль)
-@profileId=
+@profileId=a15014c0-64b0-48f8-8dda-6b2401a519c7
 
 ### Метод для создания отзыва
 POST {{reviewUrl}}/profile/{{profileId}}/

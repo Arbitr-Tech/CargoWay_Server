@@ -25,6 +25,9 @@ Content-Type: application/json
     client.global.set("access_token", response.body.access_token);
 %}
 
+### Идентификатор изображения трейлера
+@trailer_image=
+
 ### Метод для создания записи о [прицепе]
 POST {{trailersUrl}}//
 Authorization: Bearer {{access_token}}
@@ -40,7 +43,10 @@ Content-Type: application/json
   "length": 10,
   "width": 3,
   "height": 3,
-  "volume": 30
+  "volume": 30,
+  "imagesIds": [
+    "{{trailer_image}}"
+  ]
 }
 
 ### Метод для получения всех записей о водителях профиля с пагинацией
@@ -67,7 +73,10 @@ Content-Type: application/json
   "name": "lexus",
   "trailerNumber": "A123BC",
   "liftingCapacity": 4626,
-  "bodyType": "Тент"
+  "bodyType": "Тент",
+  "imagesIds": [
+    "{{trailer_image}}"
+  ]
 }
 
 ### Метод удаления записи о прицепе

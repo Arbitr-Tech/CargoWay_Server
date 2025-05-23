@@ -1,5 +1,6 @@
 package com.arbitr.cargoway.dto.general.cargo;
 
+import com.arbitr.cargoway.dto.rs.FileRs;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Future;
@@ -13,7 +14,6 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @Builder
@@ -69,8 +69,8 @@ public class CargoDto {
     @Schema(description = "Маршрут предмета")
     private RouteDto route;
 
-    @Schema(description = "id фотографий груза")
-    private List<UUID> photos;
+    @Schema(description = "Изображения груза + id")
+    private List<FileRs> images;
 
     @Data
     @Builder

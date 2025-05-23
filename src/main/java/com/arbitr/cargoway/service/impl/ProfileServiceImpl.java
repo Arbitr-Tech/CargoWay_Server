@@ -2,23 +2,23 @@ package com.arbitr.cargoway.service.impl;
 
 import com.arbitr.cargoway.dto.general.profile.CompanyDetails;
 import com.arbitr.cargoway.dto.general.profile.ContactDataDetails;
-import com.arbitr.cargoway.dto.general.profile.IndividualDetails;
+import com.arbitr.cargoway.dto.general.profile.IndividualDto;
+import com.arbitr.cargoway.dto.rq.profile.IndividualRq;
 import com.arbitr.cargoway.dto.rq.profile.ProfileUpdateRq;
 import com.arbitr.cargoway.dto.rs.profile.ProfileRs;
-import com.arbitr.cargoway.entity.Company;
-import com.arbitr.cargoway.entity.ContactData;
-import com.arbitr.cargoway.entity.Individual;
-import com.arbitr.cargoway.entity.Profile;
+import com.arbitr.cargoway.entity.*;
 import com.arbitr.cargoway.entity.enums.LegalType;
 import com.arbitr.cargoway.entity.security.User;
 import com.arbitr.cargoway.exception.NotFoundException;
 import com.arbitr.cargoway.mapper.ProfileMapper;
 import com.arbitr.cargoway.repository.ProfileRepository;
 import com.arbitr.cargoway.service.AuthService;
+import com.arbitr.cargoway.service.ImageService;
 import com.arbitr.cargoway.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,6 +26,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ProfileServiceImpl implements ProfileService {
     private final AuthService authService;
+    private final ImageService imageService;
     private final ProfileRepository profileRepository;
 
     private final ProfileMapper profileMapper;
@@ -137,8 +138,8 @@ public class ProfileServiceImpl implements ProfileService {
         }
     }
 
-    private void updateIndividualData(Profile profile, IndividualDetails individualDetails) {
-        if (individualDetails == null) return;
+    private void updateIndividualData(Profile profile, IndividualRq individualRq) {
+        if (individualRq == null) return;
 
         Individual individual = profile.getIndividual();
         if (individual == null) {
@@ -147,28 +148,33 @@ public class ProfileServiceImpl implements ProfileService {
             profile.setIndividual(individual);
         }
 
-        if (individualDetails.getFullName() != null) {
-            individual.setFullName(individualDetails.getFullName());
+        if (individualRq.getFullName() != null) {
+            individual.setFullName(individualRq.getFullName());
         }
 
-        if (individualDetails.getPassportNumber() != null) {
-            individual.setPassportNumber(individualDetails.getPassportNumber());
+        if (individualRq.getPassportNumber() != null) {
+            individual.setPassportNumber(individualRq.getPassportNumber());
         }
 
-        if (individualDetails.getIssueDate() != null) {
-            individual.setIssueDate(individualDetails.getIssueDate());
+        if (individualRq.getIssueDate() != null) {
+            individual.setIssueDate(individualRq.getIssueDate());
         }
 
-        if (individualDetails.getIssuedBy() != null) {
-            individual.setIssuedBy(individualDetails.getIssuedBy());
+        if (individualRq.getIssuedBy() != null) {
+            individual.setIssuedBy(individualRq.getIssuedBy());
         }
 
-        if (individualDetails.getDepartmentCode() != null) {
-            individual.setDepartmentCode(individualDetails.getDepartmentCode());
+        if (individualRq.getDepartmentCode() != null) {
+            individual.setDepartmentCode(individualRq.getDepartmentCode());
         }
 
-        if (individualDetails.getRegistrationAddress() != null) {
-            individual.setRegistrationAddress(individualDetails.getRegistrationAddress());
+        if (individualRq.getRegistrationAddress() != null) {
+            individual.setRegistrationAddress(individualRq.getRegistrationAddress());
+        }
+
+        if (individualRq.getImagesIds() != null && !individualRq.getImagesIds().isEmpty()) {
+            List<Image> existingImages = imageService.findImagesByIds(individualRq.getImagesIds());
+            individual.setPassportImages(existingImages);
         }
     }
 

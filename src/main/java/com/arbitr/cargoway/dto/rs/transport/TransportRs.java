@@ -1,6 +1,7 @@
 package com.arbitr.cargoway.dto.rs.transport;
 
 import com.arbitr.cargoway.dto.general.EmbeddedTrailerDto;
+import com.arbitr.cargoway.dto.rs.FileRs;
 import com.arbitr.cargoway.dto.rs.driver.DriverRs;
 import com.arbitr.cargoway.dto.rs.trailer.TrailerRs;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -49,6 +50,6 @@ public class TransportRs {
     @Schema(description = "Информация о прицепах транспорта")
     private List<TrailerRs> trailers;
 
-//    @Schema(description = "ID фотографий транспорта")
-//    private List<UUID> photos;
+    @Schema(description = "Изображения транспортов")
+    private List<FileRs> images;
 }

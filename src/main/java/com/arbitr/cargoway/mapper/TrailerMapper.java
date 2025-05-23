@@ -6,7 +6,7 @@ import com.arbitr.cargoway.dto.rs.trailer.TrailerShortInfoRs;
 import com.arbitr.cargoway.entity.Trailer;
 import org.mapstruct.Mapper;
 
-@Mapper
+@Mapper(componentModel = "spring", uses = {ImageMapper.class})
 public interface TrailerMapper {
     Trailer toEntity(TrailerDto trailerDto);
     TrailerRs toRsDto(Trailer trailer);

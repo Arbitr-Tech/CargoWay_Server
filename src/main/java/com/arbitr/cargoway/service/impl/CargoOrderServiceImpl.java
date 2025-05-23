@@ -11,6 +11,7 @@ import com.arbitr.cargoway.dto.rs.PaginationRs;
 import com.arbitr.cargoway.dto.rs.cargo.CargoOrderRs;
 import com.arbitr.cargoway.entity.Cargo;
 import com.arbitr.cargoway.entity.CargoOrder;
+import com.arbitr.cargoway.entity.Image;
 import com.arbitr.cargoway.entity.Profile;
 import com.arbitr.cargoway.entity.enums.CargoOrderStatus;
 import com.arbitr.cargoway.exception.BadRequestException;
@@ -22,6 +23,7 @@ import com.arbitr.cargoway.repository.CargoOrderResponseRepository;
 import com.arbitr.cargoway.repository.CargoRepository;
 import com.arbitr.cargoway.repository.specification.CargoSpecification;
 import com.arbitr.cargoway.service.CargoOrderService;
+import com.arbitr.cargoway.service.ImageService;
 import com.arbitr.cargoway.service.ProfileService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +41,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CargoOrderServiceImpl implements CargoOrderService {
     private final ProfileService profileService;
+    private final ImageService imageService;
     private final CargoOrderRepository cargoOrderRepository;
     private final CargoRepository cargoRepository;
     private final CargoOrderMapper cargoOrderMapper;
@@ -124,7 +127,10 @@ public class CargoOrderServiceImpl implements CargoOrderService {
     public CargoOrderRs createNewCargoOrder(CargoOrderCreateRq cargoOrderCreateRq) {
         Profile currentProfile = profileService.getAuthenticatedProfile();
 
+        List<Image> existingImages = imageService.findImagesByIds(cargoOrderCreateRq.getImagesIds());
+
         Cargo newCargo = cargoOrderMapper.toEntity(cargoOrderCreateRq);
+        newCargo.setImages(existingImages);
 
         CargoOrder newCargoOrder = CargoOrder.builder()
                 .cargo(newCargo)
@@ -244,11 +250,14 @@ public class CargoOrderServiceImpl implements CargoOrderService {
             }
         }
 
+        if (cargoOrderUpdateRq.getImagesIds() != null && !cargoOrderUpdateRq.getImagesIds().isEmpty()) {
+            List<Image> existingImages = imageService.findImagesByIds(cargoOrderUpdateRq.getImagesIds());
+            cargoDetails.setImages(existingImages);
+        }
+
         foundCargoOrder.setOrderUpdatedAt(LocalDateTime.now());
         foundCargoOrder.setCargo(cargoDetails);
-//        if (!cargoOrderUpdateRq.getPhotos().isEmpty()) {
-//            cargoOrder.setPhotos(cargoOrderUpdateRq.getPhotos());
-//        }
+
         cargoOrderRepository.save(foundCargoOrder);
 
         return cargoOrderMapper.toRsDto(foundCargoOrder);

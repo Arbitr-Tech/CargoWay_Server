@@ -3,6 +3,7 @@ package com.arbitr.cargoway.dto.rs.cargo;
 import com.arbitr.cargoway.dto.general.cargo.CargoDto;
 import com.arbitr.cargoway.dto.general.cargo.CargoOrderStatusDto;
 import com.arbitr.cargoway.dto.general.profile.ProfileShortDto;
+import com.arbitr.cargoway.dto.rs.FileRs;
 import com.arbitr.cargoway.dto.rs.transport.TransportShortDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -53,6 +54,4 @@ public class CargoOrderRs {
 
     @Schema(description = "Список откликов")
     private List<CargoOrderResponseDto> responses;
-
-    // TODO: добавить возвращение фотографий
 }

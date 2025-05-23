@@ -6,11 +6,13 @@ import com.arbitr.cargoway.dto.rq.trailer.TrailerUpdateRq;
 import com.arbitr.cargoway.dto.rs.PaginationRs;
 import com.arbitr.cargoway.dto.rs.trailer.TrailerRs;
 import com.arbitr.cargoway.dto.rs.trailer.TrailerShortInfoRs;
+import com.arbitr.cargoway.entity.Image;
 import com.arbitr.cargoway.entity.Profile;
 import com.arbitr.cargoway.entity.Trailer;
 import com.arbitr.cargoway.exception.NotFoundException;
 import com.arbitr.cargoway.mapper.TrailerMapper;
 import com.arbitr.cargoway.repository.TrailerRepository;
+import com.arbitr.cargoway.service.ImageService;
 import com.arbitr.cargoway.service.ProfileService;
 import com.arbitr.cargoway.service.TrailerService;
 import lombok.RequiredArgsConstructor;
@@ -25,15 +27,18 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class TrailerServiceImpl implements TrailerService {
     private final ProfileService profileService;
+    private final ImageService imageService;
     private final TrailerRepository trailerRepository;
     private final TrailerMapper trailerMapper;
 
     @Override
     public TrailerRs createTrailer(TrailerCreateRq trailerCreateRq) {
         Profile currentProfile = profileService.getAuthenticatedProfile();
+        List<Image> existingImages = imageService.findImagesByIds(trailerCreateRq.getImagesIds());
 
         Trailer newTrailer = trailerMapper.toEntity(trailerCreateRq);
         newTrailer.setProfile(currentProfile);
+        newTrailer.setImages(existingImages);
 
         trailerRepository.save(newTrailer);
         return trailerMapper.toRsDto(newTrailer);
@@ -124,6 +129,10 @@ public class TrailerServiceImpl implements TrailerService {
         }
         if (trailerUpdateRq.getVolume() != null) {
             existingTrailer.setVolume(trailerUpdateRq.getVolume());
+        }
+        if (trailerUpdateRq.getImagesIds() != null &&  !trailerUpdateRq.getImagesIds().isEmpty()) {
+            List<Image> existingImages = imageService.findImagesByIds(trailerUpdateRq.getImagesIds());
+            existingTrailer.setImages(existingImages);
         }
 
         trailerRepository.save(existingTrailer);

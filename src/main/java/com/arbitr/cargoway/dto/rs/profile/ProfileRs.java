@@ -2,7 +2,6 @@ package com.arbitr.cargoway.dto.rs.profile;
 
 import com.arbitr.cargoway.dto.general.profile.CompanyDetails;
 import com.arbitr.cargoway.dto.general.profile.ContactDataDetails;
-import com.arbitr.cargoway.dto.general.profile.IndividualDetails;
 import com.arbitr.cargoway.dto.general.profile.LegalTypeDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -19,10 +18,10 @@ import java.util.UUID;
 @Schema(description = "DTO-класс с информацией о профиле пользователя")
 public class ProfileRs {
     @Schema(description = "id профиля")
-    UUID id;
+    private UUID id;
 
     @Schema(description = "Правовая форма профиля (физ. или юр. лицо)")
-    LegalTypeDto legalType;
+    private LegalTypeDto legalType;
 
     @Schema(description = "Рейтинг пользователей")
     private Double userRating;
@@ -34,14 +33,14 @@ public class ProfileRs {
     private Boolean activated;
 
     @Schema(description = "Данные учетной записи")
-    UserRs userData;
+    private UserRs userData;
 
     @Schema(description = "Данные по юр. лицу")
-    CompanyDetails company;
+    private CompanyDetails company;
 
     @Schema(description = "Данные по физ. лицу")
-    IndividualDetails individual;
+    private IndividualRs individual;
 
     @Schema(description = "Контактные данные для связи")
-    ContactDataDetails contactData;
+    private ContactDataDetails contactData;
 }

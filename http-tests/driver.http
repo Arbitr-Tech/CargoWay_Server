@@ -25,6 +25,9 @@ Content-Type: application/json
     client.global.set("access_token", response.body.access_token);
 %}
 
+### Идентификатор изображения
+@driver_image_1=0b594908-c8fe-4c9b-8af9-900d406027ae
+
 ### Метод для создания записи о [водителе]
 POST {{driverUrl}}//
 Authorization: Bearer {{access_token}}
@@ -33,9 +36,12 @@ Content-Type: application/json
 {
   "fullName": "Михаил Петрович",
   "licenseCategory": "B",
-  "licenseNumber": "0113 445115",
+  "licenseNumber": "0127 445115",
   "issueDate": "2023-04-30",
-  "expirationDate": "2033-04-30"
+  "expirationDate": "2033-04-30",
+  "imagesIds": [
+    "{{driver_image_1}}"
+  ]
 }
 
 ### Метод для получения всех записей о водителях профиля с пагинацией
@@ -47,7 +53,7 @@ GET {{driverUrl}}/list/
 Authorization: Bearer {{access_token}}
 
 ###
-@driverId=8f7ac654-67c5-406f-ac62-2035c8f45f5b
+@driverId=3d6e80b7-1ebd-46aa-897c-347330b4f54e
 
 ### Метод для получения данных записи водителя по id
 GET {{driverUrl}}/{{driverId}}/
@@ -63,7 +69,10 @@ Content-Type: application/json
   "licenseCategory": "C",
   "licenseNumber": "0503 445115",
   "issueDate": "2023-04-30",
-  "expirationDate": "2033-04-30"
+  "expirationDate": "2033-04-30",
+  "imagesIds": [
+    "{{driver_image_1}}"
+  ]
 }
 
 ### Метод для удаление записи о водителя по id

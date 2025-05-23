@@ -10,6 +10,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -40,6 +42,14 @@ public class Driver {
     @FutureOrPresent(message = "Дата окончания действия прав не может быть в прошлом")
     @Column(name = "expiration_date", nullable = false)
     private LocalDate expirationDate;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "driver_data_image",
+            joinColumns = @JoinColumn(name = "driver_data_id"),
+            inverseJoinColumns = @JoinColumn(name = "image_id")
+    )
+    private List<Image> licenseImages = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "profile_id", referencedColumnName = "id", nullable = false)

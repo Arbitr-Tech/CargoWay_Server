@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -49,6 +51,14 @@ public class Trailer {
 
     @Column(name = "trailer_volume", nullable = false)
     private Integer volume;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "trailer_data_image",
+            joinColumns = @JoinColumn(name = "trailer_id"),
+            inverseJoinColumns = @JoinColumn(name = "image_id")
+    )
+    private List<Image> images = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "profile_id", referencedColumnName = "id")
