@@ -111,7 +111,7 @@ public class DriverServiceImpl implements DriverService {
         if (driverUpdateRq.getExpirationDate() != null) {
             existingDriver.setExpirationDate(driverUpdateRq.getExpirationDate());
         }
-        if (driverUpdateRq.getImagesIds() != null && !driverUpdateRq.getImagesIds().isEmpty()) {
+        if (driverUpdateRq.getImagesIds() != null) {
             List<Image> existingImages = imageService.findImagesByIds(driverUpdateRq.getImagesIds());
             existingDriver.setLicenseImages(existingImages);
         }

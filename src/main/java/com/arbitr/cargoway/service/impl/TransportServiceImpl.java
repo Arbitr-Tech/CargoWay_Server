@@ -157,6 +157,11 @@ public class TransportServiceImpl implements TransportService {
             transportTrailers.forEach(trailer -> trailer.setTransport(existingTransport));
         }
 
+        if (transportUpdateRq.getImagesIds() != null) {
+            List<Image> images = imageService.findImagesByIds(transportUpdateRq.getImagesIds());
+            existingTransport.setImages(images);
+        }
+
         transportRepository.save(existingTransport);
 
         return transportMapper.toRsDto(existingTransport);

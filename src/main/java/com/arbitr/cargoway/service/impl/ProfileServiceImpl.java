@@ -172,7 +172,7 @@ public class ProfileServiceImpl implements ProfileService {
             individual.setRegistrationAddress(individualRq.getRegistrationAddress());
         }
 
-        if (individualRq.getImagesIds() != null && !individualRq.getImagesIds().isEmpty()) {
+        if (individualRq.getImagesIds() != null) {
             List<Image> existingImages = imageService.findImagesByIds(individualRq.getImagesIds());
             individual.setPassportImages(existingImages);
         }

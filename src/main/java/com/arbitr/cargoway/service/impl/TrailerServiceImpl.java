@@ -130,7 +130,7 @@ public class TrailerServiceImpl implements TrailerService {
         if (trailerUpdateRq.getVolume() != null) {
             existingTrailer.setVolume(trailerUpdateRq.getVolume());
         }
-        if (trailerUpdateRq.getImagesIds() != null &&  !trailerUpdateRq.getImagesIds().isEmpty()) {
+        if (trailerUpdateRq.getImagesIds() != null) {
             List<Image> existingImages = imageService.findImagesByIds(trailerUpdateRq.getImagesIds());
             existingTrailer.setImages(existingImages);
         }

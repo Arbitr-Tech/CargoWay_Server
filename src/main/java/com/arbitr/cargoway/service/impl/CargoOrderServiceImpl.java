@@ -250,7 +250,7 @@ public class CargoOrderServiceImpl implements CargoOrderService {
             }
         }
 
-        if (cargoOrderUpdateRq.getImagesIds() != null && !cargoOrderUpdateRq.getImagesIds().isEmpty()) {
+        if (cargoOrderUpdateRq.getImagesIds() != null) {
             List<Image> existingImages = imageService.findImagesByIds(cargoOrderUpdateRq.getImagesIds());
             cargoDetails.setImages(existingImages);
         }
