@@ -26,8 +26,8 @@ public class CargoSpecification {
             if (filter.getWeightFrom() != null || filter.getWeightTo() != null) {
                 predicates.add(criteriaBuilder.between(
                         root.get("weight"),
-                        filter.getWeightFrom() != null ? filter.getWeightFrom() : 0,
-                        filter.getWeightTo() != null ? filter.getWeightTo() : Integer.MAX_VALUE
+                        filter.getWeightFrom(),
+                        filter.getWeightTo()
                 ));
             }
 
@@ -35,8 +35,8 @@ public class CargoSpecification {
             if (filter.getVolumeFrom() != null || filter.getVolumeTo() != null) {
                 predicates.add(criteriaBuilder.between(
                         root.get("volume"),
-                        filter.getVolumeFrom() != null ? filter.getVolumeFrom() : 0,
-                        filter.getVolumeTo() != null ? filter.getVolumeTo() : Integer.MAX_VALUE
+                        filter.getVolumeFrom(),
+                        filter.getVolumeTo()
                 ));
             }
 
@@ -79,14 +79,26 @@ public class CargoSpecification {
 
             // Фильтр по габаритам
             if (filter.getDimensions() != null) {
-                if (filter.getDimensions().getLength() != null) {
-                    predicates.add(criteriaBuilder.equal(root.get("length"), filter.getDimensions().getLength()));
+                if (filter.getDimensions().getLengthFrom() != null && filter.getDimensions().getLengthTo() != null) {
+                    predicates.add(criteriaBuilder.between(
+                            root.get("length"),
+                            filter.getDimensions().getLengthFrom(),
+                            filter.getDimensions().getLengthTo()
+                    ));
                 }
-                if (filter.getDimensions().getWidth() != null) {
-                    predicates.add(criteriaBuilder.equal(root.get("width"), filter.getDimensions().getWidth()));
+                if (filter.getDimensions().getWidthFrom() != null && filter.getDimensions().getWidthTo() != null) {
+                    predicates.add(criteriaBuilder.between(
+                            root.get("width"),
+                            filter.getDimensions().getWidthFrom(),
+                            filter.getDimensions().getWidthTo()
+                    ));
                 }
-                if (filter.getDimensions().getHeight() != null) {
-                    predicates.add(criteriaBuilder.equal(root.get("height"), filter.getDimensions().getHeight()));
+                if (filter.getDimensions().getHeightFrom() != null && filter.getDimensions().getHeightTo() != null) {
+                    predicates.add(criteriaBuilder.between(
+                            root.get("height"),
+                            filter.getDimensions().getHeightFrom(),
+                            filter.getDimensions().getHeightTo()
+                    ));
                 }
             }
 

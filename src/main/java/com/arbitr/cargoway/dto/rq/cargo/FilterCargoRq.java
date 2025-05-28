@@ -56,13 +56,22 @@ public class FilterCargoRq {
 
     @Data
     public static class DimensionsDto {
-        @Schema(description = "Длина груза (в см)", example = "100")
-        private Integer length;
+        @Schema(description = "Длина груза ОТ (в см)", example = "100")
+        private Integer lengthFrom;
 
-        @Schema(description = "Ширина груза (в см)", example = "50")
-        private Integer width;
+        @Schema(description = "Длина груза ДО (в см)", example = "100")
+        private Integer lengthTo;
 
-        @Schema(description = "Высота груза (в см)", example = "75")
-        private Integer height;
+        @Schema(description = "Ширина груза ОТ (в см)", example = "50")
+        private Integer widthFrom;
+
+        @Schema(description = "Ширина груза ДО (в см)", example = "50")
+        private Integer widthTo;
+
+        @Schema(description = "Высота груза ОТ (в см)", example = "75")
+        private Integer heightFrom;
+
+        @Schema(description = "Высота груза ДО (в см)", example = "75")
+        private Integer heightTo;
     }
 }
