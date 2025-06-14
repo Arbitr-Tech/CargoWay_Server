@@ -26,10 +26,19 @@ public class JwtProperties {
     private TokenProperties refreshToken;
 
     /**
+     * Максимальный срок куки
+     */
+    private int maxAge;
+
+    /**
      * Вложенный класс, содержащий настройки токенов (время жизни).
      */
     @Data
     public static class TokenProperties {
+        /**
+         * Название токена
+         */
+        private String name;
 
         /**
          * Время жизни токена в миллисекундах.

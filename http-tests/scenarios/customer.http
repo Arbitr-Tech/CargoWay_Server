@@ -25,17 +25,14 @@ Content-Type: application/json
   "password": "SecurePass456!"
 }
 
-> {%
-    client.global.set("access_token", response.body.access_token);
-%}
-
 ### Идентификаторы изображений
 @cargo_image_1=bc3f151a-ee87-4058-bd0e-f7355207f133
 @cargo_image_2=d42aa53e-b3c1-49db-93c5-37bbe8e65aee
 
 ### Метод для создания груза
 POST {{cargoUrl}}//
-Authorization: Bearer {{access_token}}
+Set-Cookie: access_token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsb2xpazEiLCJpYXQiOjE3NDk4NDQwMjQsImV4cCI6MTc0OTg1MjY2NH0.ZyijeFvs6CNv2MdkB8SgQG8HJIW9wwtn_0saUJf_Ty0; Max-Age=60480000; Expires=Fri, 14 May 2027 19:47:04 GMT; Path=/; HttpOnly
+Set-Cookie: refresh_token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsb2xpazEiLCJpYXQiOjE3NDk4NDQwMjQsImV4cCI6MTc0OTkwNDUwNH0.zIoaIj_Wgy0t1y709IfZQh_W9E_Xabm58x62CefupBU; Max-Age=60480000; Expires=Fri, 14 May 2027 19:47:04 GMT; Path=/; HttpOnly
 Content-Type: application/json
 
 {
@@ -67,7 +64,7 @@ Content-Type: application/json
 
 ### Получение списка груза [INTERNAL]
 GET {{cargoUrl}}/general/?cargoCategory=INTERNAL&pageNumber=1&pageSize=5
-Authorization: Bearer {{access_token}}
+Set-Cookie: access_token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsb2xpazEiLCJpYXQiOjE3NDk4NDMyMzMsImV4cCI6MTc0OTg1MTg3M30.4ZnN3NB3pmrfbzZibDIeOEwRXDJIzFWj4msCq73qciQ; Max-Age=60480; Expires=Sat, 14 Jun 2025 12:21:53 GMT; Path=/; HttpOnly
 Accept: application/json
 
 ### [ЭТОТ ID НАДО ПЕРЕДАТЬ В СЦЕНАРИЙ В ФАЙЛЕ carrier]

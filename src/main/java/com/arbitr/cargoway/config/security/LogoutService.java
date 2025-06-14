@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class LogoutService implements LogoutHandler {
-
+    private final JwtService jwtService;
     private final TokenRepository tokenRepository;
 
     @Override
@@ -21,12 +21,11 @@ public class LogoutService implements LogoutHandler {
             HttpServletResponse response,
             Authentication authentication
     ) {
-        final String authHeader = request.getHeader("Authorization");
-        final String jwt;
-        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+        final String jwt = jwtService.getJwtFromCookies(request);
+        if (jwt == null) {
             return;
         }
-        jwt = authHeader.substring(7);
+
         var storedToken = tokenRepository.findByToken(jwt)
                 .orElse(null);
         if (storedToken != null) {

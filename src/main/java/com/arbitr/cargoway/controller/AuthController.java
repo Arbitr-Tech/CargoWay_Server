@@ -4,11 +4,8 @@ import com.arbitr.cargoway.dto.rq.SignInRequest;
 import com.arbitr.cargoway.dto.rq.SignUpRequest;
 import com.arbitr.cargoway.dto.rq.auth.RecoveryEmailRq;
 import com.arbitr.cargoway.dto.rq.auth.ResetPasswordRq;
-import com.arbitr.cargoway.dto.rs.AuthenticationResponse;
 import com.arbitr.cargoway.service.AuthService;
 import com.arbitr.cargoway.service.PasswordManagementService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,19 +22,19 @@ public class AuthController {
     private final PasswordManagementService passwordManagementService;
 
     @PostMapping("register/")
-    public AuthenticationResponse register(@RequestBody @Valid SignUpRequest signUpRequest,
+    public void register(@RequestBody @Valid SignUpRequest signUpRequest,
                                            HttpServletResponse response) {
-        return authService.register(signUpRequest, response);
+        authService.register(signUpRequest, response);
     }
 
     @PostMapping("login/")
-    public AuthenticationResponse login(@RequestBody @Valid SignInRequest signInRequest, HttpServletResponse response) {
-        return authService.login(signInRequest, response);
+    public void login(@RequestBody @Valid SignInRequest signInRequest, HttpServletResponse response) {
+        authService.login(signInRequest, response);
     }
 
     @PostMapping("refresh-token/")
-    AuthenticationResponse refreshToken(HttpServletRequest request, HttpServletResponse response) {
-        return authService.refreshToken(request, response);
+    public void refreshToken(HttpServletRequest request, HttpServletResponse response) {
+        authService.refreshToken(request, response);
     }
 
     @PostMapping("password-recovery/")

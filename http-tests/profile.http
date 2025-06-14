@@ -13,14 +13,15 @@ Content-Type: application/json
 
 ### Метод для получения данных о профиле
 GET http://localhost:8080/api/v1/profile/
-Authorization: Bearer {{access_token}}
+Set-Cookie: access_token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsb2xpazEiLCJpYXQiOjE3NDk4NDMyMzMsImV4cCI6MTc0OTg1MTg3M30.4ZnN3NB3pmrfbzZibDIeOEwRXDJIzFWj4msCq73qciQ; Max-Age=60480; Expires=Sat, 14 Jun 2025 12:21:53 GMT; Path=/; HttpOnly
 
 ### Идентификатор профиля другого пользователя
 @foreignProfileId=
 
 ### Метод для получения профиля другого пользователя по ID
 GET http://localhost:8080/api/v1/profile/{{foreignProfileId}}/
-Authorization: Bearer {{access_token}}
+Set-Cookie: access_token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsb2xpazEiLCJpYXQiOjE3NDk4NDQwMjQsImV4cCI6MTc0OTg1MjY2NH0.ZyijeFvs6CNv2MdkB8SgQG8HJIW9wwtn_0saUJf_Ty0; Max-Age=60480000; Expires=Fri, 14 May 2027 19:47:04 GMT; Path=/; HttpOnly
+Set-Cookie: refresh_token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsb2xpazEiLCJpYXQiOjE3NDk4NDQwMjQsImV4cCI6MTc0OTkwNDUwNH0.zIoaIj_Wgy0t1y709IfZQh_W9E_Xabm58x62CefupBU; Max-Age=60480000; Expires=Fri, 14 May 2027 19:47:04 GMT; Path=/; HttpOnly
 
 ### Идентификатор изображений пасспорта
 @imageId_1=a57bf467-0bfa-44b2-bb66-c3e6bc139c18
@@ -28,7 +29,8 @@ Authorization: Bearer {{access_token}}
 
 ### Метод для обновления данных профиля
 PATCH http://localhost:8080/api/v1/profile/
-Authorization: Bearer {{access_token}}
+Set-Cookie: access_token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsb2xpazEiLCJpYXQiOjE3NDk4NDQwMjQsImV4cCI6MTc0OTg1MjY2NH0.ZyijeFvs6CNv2MdkB8SgQG8HJIW9wwtn_0saUJf_Ty0; Max-Age=60480000; Expires=Fri, 14 May 2027 19:47:04 GMT; Path=/; HttpOnly
+Set-Cookie: refresh_token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsb2xpazEiLCJpYXQiOjE3NDk4NDQwMjQsImV4cCI6MTc0OTkwNDUwNH0.zIoaIj_Wgy0t1y709IfZQh_W9E_Xabm58x62CefupBU; Max-Age=60480000; Expires=Fri, 14 May 2027 19:47:04 GMT; Path=/; HttpOnly
 Content-Type: application/json
 
 {

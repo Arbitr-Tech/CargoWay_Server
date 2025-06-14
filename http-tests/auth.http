@@ -29,10 +29,12 @@ Content-Type: application/json
 
 ### Метод для обновления токена доступа
 POST http://localhost:8080/api/v1/auth/refresh-token/
-Set-Cookie: refreshToken={{refresh_token}}; Max-Age=604800; Expires=Mon, 24 Mar 2025 18:02:19 GMT; Path=/; HttpOnly
+Set-Cookie: access_token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsb2xpazEiLCJpYXQiOjE3NDk4NDQwMjQsImV4cCI6MTc0OTg1MjY2NH0.ZyijeFvs6CNv2MdkB8SgQG8HJIW9wwtn_0saUJf_Ty0; Max-Age=60480000; Expires=Fri, 14 May 2027 19:47:04 GMT; Path=/; HttpOnly
 
 ### Метод для сбора пароля
 POST http://localhost:8080/api/v1/auth/password-recovery/
+Set-Cookie: access_token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsb2xpazEiLCJpYXQiOjE3NDk4NDQwMjQsImV4cCI6MTc0OTg1MjY2NH0.ZyijeFvs6CNv2MdkB8SgQG8HJIW9wwtn_0saUJf_Ty0; Max-Age=60480000; Expires=Fri, 14 May 2027 19:47:04 GMT; Path=/; HttpOnly
+Set-Cookie: refresh_token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsb2xpazEiLCJpYXQiOjE3NDk4NDQwMjQsImV4cCI6MTc0OTkwNDUwNH0.zIoaIj_Wgy0t1y709IfZQh_W9E_Xabm58x62CefupBU; Max-Age=60480000; Expires=Fri, 14 May 2027 19:47:04 GMT; Path=/; HttpOnly
 Content-Type: application/json
 
 {
@@ -49,4 +51,5 @@ Content-Type: application/json
 
 ### Метод для выхода из системы
 POST http://localhost:8080/api/v1/auth/logout/
-Authorization: Bearer {{access_token}}
+Set-Cookie: access_token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsb2xpazEiLCJpYXQiOjE3NDk4NDQwMjQsImV4cCI6MTc0OTg1MjY2NH0.ZyijeFvs6CNv2MdkB8SgQG8HJIW9wwtn_0saUJf_Ty0; Max-Age=60480000; Expires=Fri, 14 May 2027 19:47:04 GMT; Path=/; HttpOnly
+Set-Cookie: refresh_token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsb2xpazEiLCJpYXQiOjE3NDk4NDQwMjQsImV4cCI6MTc0OTkwNDUwNH0.zIoaIj_Wgy0t1y709IfZQh_W9E_Xabm58x62CefupBU; Max-Age=60480000; Expires=Fri, 14 May 2027 19:47:04 GMT; Path=/; HttpOnly

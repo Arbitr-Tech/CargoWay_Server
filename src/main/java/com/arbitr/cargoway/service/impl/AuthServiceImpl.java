@@ -1,10 +1,10 @@
 package com.arbitr.cargoway.service.impl;
 
+import com.arbitr.cargoway.config.properties.JwtProperties;
 import com.arbitr.cargoway.config.security.JwtService;
 import com.arbitr.cargoway.event.EmailDto;
 import com.arbitr.cargoway.dto.rq.SignInRequest;
 import com.arbitr.cargoway.dto.rq.SignUpRequest;
-import com.arbitr.cargoway.dto.rs.AuthenticationResponse;
 import com.arbitr.cargoway.entity.Profile;
 import com.arbitr.cargoway.entity.enums.LegalType;
 import com.arbitr.cargoway.entity.security.User;
@@ -36,12 +36,13 @@ public class AuthServiceImpl implements AuthService {
 
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final JwtProperties jwtProperties;
     private final EmailEventPublisher emailEventPublisher;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
 
     @Override
-    public AuthenticationResponse register(SignUpRequest signUpRequest, HttpServletResponse response) {
+    public void register(SignUpRequest signUpRequest, HttpServletResponse response) {
         User user = userMapper.buildUserFrom(signUpRequest);
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
 
@@ -62,11 +63,11 @@ public class AuthServiceImpl implements AuthService {
                         .build()
         );
 
-        return setupAuthResponse(user, response);
+        setupAuthResponse(user, response);
     }
 
     @Override
-    public AuthenticationResponse login(SignInRequest signInRequest, HttpServletResponse response) {
+    public void login(SignInRequest signInRequest, HttpServletResponse response) {
         User user = userRepository.findByEmail(signInRequest.getEmail())
                 .orElseThrow(() -> new NotFoundException("Участник с почтой %s не был найден!".formatted(signInRequest.getEmail())));
 
@@ -77,26 +78,26 @@ public class AuthServiceImpl implements AuthService {
                 )
         );
 
-        String accessToken = jwtService.generateToken(user);
-        String refreshToken = jwtService.generateRefreshToken(user);
+        String accessTokenValue = jwtService.generateToken(user);
+        String refreshTokenValue = jwtService.generateRefreshToken(user);
 
         revokeAllUserTokens(user);
-        saveUserToken(user, accessToken);
-        setRefreshTokenInCookie(response, refreshToken);
+        saveUserToken(user, accessTokenValue);
 
-        return new AuthenticationResponse(accessToken);
+        setTokenInCookie(response, jwtProperties.getAccessToken().getName(), accessTokenValue);
+        setTokenInCookie(response, jwtProperties.getRefreshToken().getName(), refreshTokenValue);
     }
 
-    private AuthenticationResponse setupAuthResponse(User user, HttpServletResponse response) {
-        String accessToken = jwtService.generateToken(user);
-        String refreshToken = jwtService.generateRefreshToken(user);
+    private void setupAuthResponse(User user, HttpServletResponse response) {
+        String accessTokenValue = jwtService.generateToken(user);
+        String refreshTokenValue = jwtService.generateRefreshToken(user);
 
         revokeAllUserTokens(user);
 
-        saveUserToken(user, accessToken);
-        setRefreshTokenInCookie(response, refreshToken);
+        saveUserToken(user, accessTokenValue);
 
-        return new AuthenticationResponse(accessToken);
+        setTokenInCookie(response, jwtProperties.getAccessToken().getName(), accessTokenValue);
+        setTokenInCookie(response, jwtProperties.getRefreshToken().getName(), refreshTokenValue);
     }
 
     private void saveUserToken(User user, String jwtToken) {
@@ -120,34 +121,34 @@ public class AuthServiceImpl implements AuthService {
         tokenRepository.saveAll(validUserTokens);
     }
 
-    private void setRefreshTokenInCookie(HttpServletResponse response, String refreshToken) {
-        Cookie cookie = new Cookie("refreshToken", refreshToken);
+    private void setTokenInCookie(HttpServletResponse response, String tokenName, String tokenValue) {
+        Cookie cookie = new Cookie(tokenName, tokenValue);
 
         cookie.setHttpOnly(true);
         cookie.setSecure(false);
         cookie.setPath("/");
-        cookie.setMaxAge(7 * 24 * 60 * 60);
+        cookie.setMaxAge(jwtProperties.getMaxAge());
 
         response.addCookie(cookie);
     }
 
     @Override
-    public AuthenticationResponse refreshToken(HttpServletRequest request, HttpServletResponse response) {
-        String refreshToken = null;
+    public void refreshToken(HttpServletRequest request, HttpServletResponse response) {
+        String refreshTokenValue = null;
         if (request.getCookies() != null) {
             for (Cookie cookie : request.getCookies()) {
                 if ("refreshToken".equals(cookie.getName())) {
-                    refreshToken = cookie.getValue();
+                    refreshTokenValue = cookie.getValue();
                     break;
                 }
             }
         }
 
-        if (refreshToken == null) {
+        if (refreshTokenValue == null) {
             throw new InvalidTokenException("Refresh токен отсутствует в куки!");
         }
 
-        String userName = jwtService.extractUsername(refreshToken);
+        String userName = jwtService.extractUsername(refreshTokenValue);
 
         if (userName == null) {
             throw new InvalidTokenException("Токен недействителен или поврежден!");
@@ -156,20 +157,19 @@ public class AuthServiceImpl implements AuthService {
         User foundUser = userRepository.findByUsername(userName)
                 .orElseThrow(() -> new NotFoundException("Пользователь с именем %s не был найден!".formatted(userName)));
 
-        if (!jwtService.isTokenValid(refreshToken, foundUser)) {
+        if (!jwtService.isTokenValid(refreshTokenValue, foundUser)) {
             throw new TokenValidationException("Токен недействителен для пользователя: %s.".formatted(userName));
         }
 
-        String accessToken = jwtService.generateToken(foundUser);
-        refreshToken = jwtService.generateRefreshToken(foundUser);
+        String accessTokenValue = jwtService.generateToken(foundUser);
+        refreshTokenValue = jwtService.generateRefreshToken(foundUser);
 
         revokeAllUserTokens(foundUser);
-        saveUserToken(foundUser, accessToken);
-        setRefreshTokenInCookie(response, refreshToken);
+        saveUserToken(foundUser, accessTokenValue);
 
-        return AuthenticationResponse.builder()
-                .accessToken(accessToken)
-                .build();
+        setTokenInCookie(response, jwtProperties.getAccessToken().getName(), accessTokenValue);
+        setTokenInCookie(response, jwtProperties.getRefreshToken().getName(), refreshTokenValue);
+
     }
 
     @Override

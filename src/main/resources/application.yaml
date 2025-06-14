@@ -56,10 +56,13 @@ minio:
   bucket-name: ${MINIO_BUCKET_NAME}
 
 jwt:
+  max-age: ${REFRESH_TOKEN_EXPIRATION}
   secret-key: ${JWT_SECRET_KEY}
   access-token:
+    name: "access_token"
     expiration: ${ACCESS_TOKEN_EXPIRATION}
   refresh-token:
+    name: "refresh_token"
     expiration: ${REFRESH_TOKEN_EXPIRATION}
 
 frontend:

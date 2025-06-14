@@ -3,12 +3,15 @@ package com.arbitr.cargoway.config.security;
 import com.arbitr.cargoway.config.properties.JwtProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
-import io.jsonwebtoken.Jwts;                    // Для создания, парсинга и валидации токенов
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.WebUtils;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -71,6 +74,11 @@ public class JwtService {
                 .build();
 
         return parser.parseSignedClaims(token).getPayload();
+    }
+
+    public String getJwtFromCookies(HttpServletRequest request) {
+        Cookie access_token = WebUtils.getCookie(request, jwtProperties.getAccessToken().getName());
+        return access_token != null ? access_token.getValue() : null;
     }
 
     private SecretKey getSignInKey() {
