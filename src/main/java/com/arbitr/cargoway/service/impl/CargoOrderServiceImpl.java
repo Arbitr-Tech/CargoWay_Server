@@ -344,7 +344,7 @@ public class CargoOrderServiceImpl implements CargoOrderService {
         );
 
         Specification<Cargo> specification = CargoSpecification.withFilter(filterCargoRq, allowedStatuses);
-        Page<Cargo> filteredCargosPage = cargoRepository.findAll(specification,
+        Page<CargoOrder> filteredCargosPage = cargoOrderRepository.findAll(specification,
                 PageRequest.of(paginationRq.getPageNumber(), paginationRq.getPageSize()));
 
         List<CargoOrderRs> filteredCargoOrdersRs = filteredCargosPage.getContent().stream()

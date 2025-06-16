@@ -21,10 +21,8 @@ public interface CargoOrderMapper {
     @Mapping(source = "startExecution", target = "startExecution")
     @Mapping(source = "endExecution", target = "endExecution")
     @Mapping(source = "visibility", target = "visibilityStatus", qualifiedByName = "mapVisibilityStatus")
-    @Mapping(source = "cargo", target = "cargo", qualifiedByName = "toCargoDto")
+    @Mapping(source = "cargo", target = "cargo", qualifiedByName = "toCargoDtoWithDetails")
     @Mapping(source = "cargo.images", target = "cargo.images")
-//    @Mapping(source = "cargo", target = "cargo.route", qualifiedByName = "toRouteDto")
-//    @Mapping(source = "cargo", target = "cargo.dimensions", qualifiedByName = "toDimensionsDto")
     @Mapping(source = "executor", target = "executor", qualifiedByName = "toProfileShortDto")
     @Mapping(source = "executorTransport", target = "executorTransport")
     @Mapping(source = "owner", target = "owner", qualifiedByName = "toProfileShortDto")
@@ -37,10 +35,8 @@ public interface CargoOrderMapper {
     @Mapping(source = "cargoOrder.startExecution", target = "startExecution")
     @Mapping(source = "cargoOrder.endExecution", target = "endExecution")
     @Mapping(source = "cargoOrder.visibility", target = "visibilityStatus", qualifiedByName = "mapVisibilityStatus")
-    @Mapping(source = "cargo", target = "cargo", qualifiedByName = "toCargoDto")
+    @Mapping(source = "cargo", target = "cargo", qualifiedByName = "toCargoDtoWithDetails")
     @Mapping(source = "images", target = "cargo.images")
-//    @Mapping(source = "cargo", target = "cargo.route", qualifiedByName = "toRouteDto")
-//    @Mapping(source = "cargo", target = "cargo.dimensions", qualifiedByName = "toDimensionsDto")
     @Mapping(source = "cargoOrder.executor", target = "executor", qualifiedByName = "toProfileShortDto")
     @Mapping(source = "cargoOrder.executorTransport", target = "executorTransport")
     @Mapping(source = "cargoOrder.owner", target = "owner", qualifiedByName = "toProfileShortDto")
@@ -64,6 +60,17 @@ public interface CargoOrderMapper {
                 .readyDate(cargo.getReadyDate())
                 .deliveryDate(cargo.getDeliveryDate())
                 .build();
+    }
+
+    @Named("toCargoDtoWithDetails")
+    default CargoDto toCargoDtoWithDetails(Cargo cargo) {
+        if (cargo == null) {
+            return null;
+        }
+        CargoDto cargoDto = toCargoDto(cargo);
+        cargoDto.setRoute(toRouteDto(cargo));
+        cargoDto.setDimensions(toDimensionsDto(cargo));
+        return cargoDto;
     }
 
     @Named("toDimensionsDto")
