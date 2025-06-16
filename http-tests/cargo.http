@@ -10,7 +10,7 @@ Content-Type: application/json
 }
 
 > {%
-    client.global.set("access_token", response.body.access_token);
+    client.global.set("access_token", response.headers.valueOf("Set-Cookie"));
 %}
 
 ### Идентификатор изображений
@@ -18,7 +18,7 @@ Content-Type: application/json
 
 ### Метод для создания груза
 POST {{baseUrl}}//
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 Content-Type: application/json
 
 {
@@ -49,7 +49,7 @@ Content-Type: application/json
 
 ### Получение списка груза [INTERNAL, EXTERNAL, HISTORY]
 GET {{baseUrl}}/general/?cargoCategory=INTERNAL&pageNumber=1&pageSize=5
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 Accept: application/json
 
 ### f34f357b-ba53-454e-8f11-74e8afcf97cf
@@ -57,22 +57,22 @@ Accept: application/json
 
 ### Получение деталей груза
 GET {{baseUrl}}/{{cargo_uuid}}/
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 Accept: application/json
 
 ### Публикация записи
 PATCH {{baseUrl}}/{{cargo_uuid}}/publish/
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 Accept: application/json
 
 ### Снятие записи с публикации
 PATCH {{baseUrl}}/{{cargo_uuid}}/draft/
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 Accept: application/json
 
 ### Обновление записи о грузе
 PATCH {{baseUrl}}/{{cargo_uuid}}/
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 Content-Type: application/json
 
 {
@@ -103,7 +103,7 @@ Content-Type: application/json
 
 ### Удаление записи груза
 DELETE {{baseUrl}}/{{cargo_uuid}}/
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 Content-Type: application/json
 
 ### Запрос на получение списка записей грузов

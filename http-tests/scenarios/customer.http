@@ -25,14 +25,17 @@ Content-Type: application/json
   "password": "SecurePass456!"
 }
 
+> {%
+    client.global.set("access_token", response.headers.valueOf("Set-Cookie"));
+%}
+
 ### Идентификаторы изображений
 @cargo_image_1=bc3f151a-ee87-4058-bd0e-f7355207f133
 @cargo_image_2=d42aa53e-b3c1-49db-93c5-37bbe8e65aee
 
 ### Метод для создания груза
 POST {{cargoUrl}}//
-Set-Cookie: access_token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsb2xpazEiLCJpYXQiOjE3NDk4NDQwMjQsImV4cCI6MTc0OTg1MjY2NH0.ZyijeFvs6CNv2MdkB8SgQG8HJIW9wwtn_0saUJf_Ty0; Max-Age=60480000; Expires=Fri, 14 May 2027 19:47:04 GMT; Path=/; HttpOnly
-Set-Cookie: refresh_token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsb2xpazEiLCJpYXQiOjE3NDk4NDQwMjQsImV4cCI6MTc0OTkwNDUwNH0.zIoaIj_Wgy0t1y709IfZQh_W9E_Xabm58x62CefupBU; Max-Age=60480000; Expires=Fri, 14 May 2027 19:47:04 GMT; Path=/; HttpOnly
+Cookie: {{access_token}}
 Content-Type: application/json
 
 {
@@ -64,7 +67,7 @@ Content-Type: application/json
 
 ### Получение списка груза [INTERNAL]
 GET {{cargoUrl}}/general/?cargoCategory=INTERNAL&pageNumber=1&pageSize=5
-Set-Cookie: access_token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsb2xpazEiLCJpYXQiOjE3NDk4NDMyMzMsImV4cCI6MTc0OTg1MTg3M30.4ZnN3NB3pmrfbzZibDIeOEwRXDJIzFWj4msCq73qciQ; Max-Age=60480; Expires=Sat, 14 Jun 2025 12:21:53 GMT; Path=/; HttpOnly
+Cookie: {{access_token}}
 Accept: application/json
 
 ### [ЭТОТ ID НАДО ПЕРЕДАТЬ В СЦЕНАРИЙ В ФАЙЛЕ carrier]
@@ -72,22 +75,22 @@ Accept: application/json
 
 ### Получение деталей груза
 GET {{cargoUrl}}/{{cargo_order_id}}/
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 Accept: application/json
 
 ### Публикация записи [после ПЕРЕЙТИ В ФАЙЛ carrier И ОТКЛИКНУТЬСЯ НА ЗАКАЗ ПО ID]
 PATCH {{cargoUrl}}/{{cargo_order_id}}/publish/
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 Accept: application/json
 
 ### Снятие записи с публикации
 PATCH {{cargoUrl}}/{{cargo_order_id}}/draft/
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 Accept: application/json
 
 ### Обновление записи о грузе [ПРОВЕРКА О НЕВОЗМОЖНОСТИ ОБНОВЛЕНИЯ]
 PATCH {{cargoUrl}}/{{cargo_order_id}}/
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 Content-Type: application/json
 
 {
@@ -115,7 +118,7 @@ Content-Type: application/json
 
 ### Получение списка груза [EXTERNAL]
 GET {{cargoUrl}}/general/?cargoCategory=EXTERNAL&pageNumber=1&pageSize=5
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 Accept: application/json
 
 ### Идентификатор запроса, который выбрали
@@ -123,17 +126,17 @@ Accept: application/json
 
 ### Выбор перевозчика и начало исполнения заказа
 POST {{cargoUrl}}/{{cargo_order_id}}/response/{{response_id}}/accept/
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 Accept: application/json
 
 ### Отмена исполнения заказа
 POST {{cargoUrl}}/{{cargo_order_id}}/cancel/
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 Accept: application/json
 
 ### Подтвердить запрос на завершение исполнения заказа
 POST {{cargoUrl}}/{{cargo_order_id}}/endExecution/confirm/
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 Accept: application/json
 
 ### Идентификатор профиля, которому выставляется отзыв (комментируемый профиль)
@@ -141,7 +144,7 @@ Accept: application/json
 
 ### Метод для создания отзыва
 POST {{reviewUrl}}/profile/{{profileId}}/
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 Content-Type: application/json
 
 {

@@ -22,7 +22,7 @@ Content-Type: application/json
 }
 
 > {%
-    client.global.set("access_token", response.body.access_token);
+    client.global.set("access_token", response.headers.valueOf("Set-Cookie"));
 %}
 
 ### Идентификатор изображения
@@ -30,7 +30,7 @@ Content-Type: application/json
 
 ### Метод для создания записи о [водителе]
 POST {{driverUrl}}//
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 Content-Type: application/json
 
 {
@@ -46,22 +46,22 @@ Content-Type: application/json
 
 ### Метод для получения всех записей о водителях профиля с пагинацией
 GET {{driverUrl}}//?pageNumber=1&pageSize=5
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 
 ### Метод для получения всех записей о водителях профиля [СПИСОК БЕЗ ПАГИНАЦИИ]
 GET {{driverUrl}}/list/
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 
 ###
 @driverId=3d6e80b7-1ebd-46aa-897c-347330b4f54e
 
 ### Метод для получения данных записи водителя по id
 GET {{driverUrl}}/{{driverId}}/
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 
 ### Метод для обновления данных записи водителя по id
 PATCH {{driverUrl}}/{{driverId}}/
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 Content-Type: application/json
 
 {
@@ -77,4 +77,4 @@ Content-Type: application/json
 
 ### Метод для удаление записи о водителя по id
 DELETE {{driverUrl}}/{{driverId}}/
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}

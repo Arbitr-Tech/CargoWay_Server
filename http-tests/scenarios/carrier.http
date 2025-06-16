@@ -26,12 +26,12 @@ Content-Type: application/json
 }
 
 > {%
-    client.global.set("access_token", response.body.access_token);
+    client.global.set("access_token", response.headers.valueOf("Set-Cookie"));
 %}
 
 ### Метод для создания записи о [водителе]
 POST {{driverUrl}}//
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 Content-Type: application/json
 
 {
@@ -47,7 +47,7 @@ Content-Type: application/json
 
 ### Метод для создания записи о [прицепе]
 POST {{trailersUrl}}//
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 Content-Type: application/json
 
 {
@@ -68,7 +68,7 @@ Content-Type: application/json
 
 ### Метод для создания записи о транспорте
 POST {{transportUrl}}//
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 Content-Type: application/json
 
 {
@@ -85,7 +85,7 @@ Content-Type: application/json
 
 ### Метод для получения записи о транспортах
 GET {{transportUrl}}//?pageNumber=1&pageSize=5
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 Accept: application/json
 
 ###
@@ -93,7 +93,7 @@ Accept: application/json
 
 ### Запрос на получение списка записей грузов
 POST {{cargoUrl}}/search/?pageNumber=1&pageSize=5
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 Content-Type: application/json
 Accept: application/json
 
@@ -106,7 +106,7 @@ Accept: application/json
 
 ### Создать отклик от перевозчика на груз
 POST {{cargoUrl}}/{{cargo_order_id}}/transport/{{transport_id}}/response/
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 Accept: application/json
 
 ### Идентификатор отклика [МОЖНО ПОСМОТРЕТЬ ДЕТАЛИ ГРУЗА]
@@ -114,23 +114,23 @@ Accept: application/json
 
 ### Отменить отклик от перевозчкаи на груз
 POST {{cargoUrl}}/{{cargo_order_id}}/response/cancel/
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 Accept: application/json
 
 ### Просмотреть список записей перевозчика [ACTIVE, WAITING, HISTORY]
 GET {{cargoUrl}}/carrier/general/?cargoCategory=WAITING&pageNumber=1&pageSize=5
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 Accept: application/json
 
 ### После принятия со стороны заказчика отклика перевозчика
 ### Отмена исполнения заказа [ПЕРЕВОЗЧИК]
 POST {{cargoUrl}}/{{cargo_order_id}}/cancel/
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 Accept: application/json
 
 ### Отправить запрос на завершение исполнения заказа
 POST {{cargoUrl}}/{{cargo_order_id}}/endExecution/
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 Accept: application/json
 
 ### Идентификатор профиля, которому выставляется отзыв (комментируемый профиль)
@@ -138,7 +138,7 @@ Accept: application/json
 
 ### Метод для создания отзыва
 POST {{reviewUrl}}/profile/{{profileId}}/
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 Content-Type: application/json
 
 {

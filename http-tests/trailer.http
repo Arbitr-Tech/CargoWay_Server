@@ -22,7 +22,7 @@ Content-Type: application/json
 }
 
 > {%
-    client.global.set("access_token", response.body.access_token);
+    client.global.set("access_token", response.headers.valueOf("Set-Cookie"));
 %}
 
 ### Идентификатор изображения трейлера
@@ -30,7 +30,7 @@ Content-Type: application/json
 
 ### Метод для создания записи о [прицепе]
 POST {{trailersUrl}}//
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 Content-Type: application/json
 
 {
@@ -51,22 +51,22 @@ Content-Type: application/json
 
 ### Метод для получения всех записей о водителях профиля с пагинацией
 GET {{trailersUrl}}//?pageNumber=1&pageSize=5
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 
 ### Метод для получения всех записей о водителях профиля [СПИСОК БЕЗ ПАГИНАЦИИ]
 GET {{trailersUrl}}/list/
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 
 ###
 @trailerId=119a38ac-49ac-4239-a491-230c0e3d64a3
 
 ### Метод для получения данных о конкретной записи о прицепе по id
 GET {{trailersUrl}}/{{trailerId}}/
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 
 ### Метод для обновления записи о прицепе по id
 PATCH {{trailersUrl}}/{{trailerId}}/
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
 Content-Type: application/json
 
 {
@@ -81,4 +81,4 @@ Content-Type: application/json
 
 ### Метод удаления записи о прицепе
 DELETE {{trailersUrl}}/{{trailerId}}/
-Authorization: Bearer {{access_token}}
+Cookie: {{access_token}}
