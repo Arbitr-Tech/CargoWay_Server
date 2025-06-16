@@ -105,7 +105,7 @@ public class CargoOrderResponseServiceImpl implements CargoOrderResponseService 
                 EmailDto.builder()
                         .toEmail(newExecutor.getUser().getEmail())
                         .subject("Вас выбрали исполнителем")
-                        .body("Войдите в ЛК, чтобы узнать подробности. \nКонтактные данные для связи с заказчиком. Телефон: %s\n Email: %s, Telegram: %s"
+                        .body("Войдите в ЛК, чтобы узнать подробности. \nКонтактные данные для связи с заказчиком. \nТелефон: %s \nEmail: %s \nTelegram: %s"
                                 .formatted(ownerContactData.getPhoneNumber(), ownerProfile.getUser().getEmail(), ownerContactData.getTelegramLink()))
                         .build()
         );
@@ -114,7 +114,7 @@ public class CargoOrderResponseServiceImpl implements CargoOrderResponseService 
                 EmailDto.builder()
                         .toEmail(ownerProfile.getUser().getEmail())
                         .subject("Вы выбрали исполнителя")
-                        .body("Войдите в ЛК, чтобы узнать подробности. \nКонтактные данные для связи с перевозчиком. Телефон: %s\n Email: %s, Telegram: %s"
+                        .body("Войдите в ЛК, чтобы узнать подробности. \nКонтактные данные для связи с перевозчиком. \nТелефон: %s \nEmail: %s \nTelegram: %s"
                                 .formatted(executorContactData.getPhoneNumber(), newExecutor.getUser().getEmail(), executorContactData.getTelegramLink()))
                         .build()
         );

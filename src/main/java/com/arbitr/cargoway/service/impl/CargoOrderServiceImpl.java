@@ -9,10 +9,7 @@ import com.arbitr.cargoway.dto.rq.cargo.CargoOrderUpdateRq;
 import com.arbitr.cargoway.dto.rq.cargo.FilterCargoRq;
 import com.arbitr.cargoway.dto.rs.PaginationRs;
 import com.arbitr.cargoway.dto.rs.cargo.CargoOrderRs;
-import com.arbitr.cargoway.entity.Cargo;
-import com.arbitr.cargoway.entity.CargoOrder;
-import com.arbitr.cargoway.entity.Image;
-import com.arbitr.cargoway.entity.Profile;
+import com.arbitr.cargoway.entity.*;
 import com.arbitr.cargoway.entity.enums.CargoOrderStatus;
 import com.arbitr.cargoway.event.EmailDto;
 import com.arbitr.cargoway.exception.BadRequestException;
@@ -324,6 +321,19 @@ public class CargoOrderServiceImpl implements CargoOrderService {
 
         this.setStatusToCargoOrder(exisitingCargoOrder, CargoOrderStatus.CANCELED);
         exisitingCargoOrder.setEndExecution(LocalDateTime.now());
+
+        Profile recipientProfile = exisitingCargoOrder.getOwner().getId().equals(currentProfile.getId()) ? exisitingCargoOrder.getExecutor() : exisitingCargoOrder.getOwner();
+        ContactData currentProfileContactData = currentProfile.getContactData();
+
+        emailEventPublisher.sendEmailEvent(
+                EmailDto.builder()
+                        .toEmail(recipientProfile.getUser().getEmail())
+                        .subject("К сожаление исполнения заказа было прервано")
+                        .body("Пользователь %s прервал исполнение заказа. \nКонтактные данные для связи. \nТелефон: %s \nEmail: %s \nTelegram: %s"
+                                .formatted(currentProfile.getUser().getUsername(), currentProfileContactData.getPhoneNumber(),
+                                        currentProfile.getUser().getEmail(), currentProfileContactData.getTelegramLink()))
+                        .build()
+        );
 
         cargoOrderRepository.save(exisitingCargoOrder);
 
