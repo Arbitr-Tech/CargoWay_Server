@@ -21,7 +21,7 @@ import java.util.UUID;
         @Index(name = "idx_cargo_weight", columnList = "weight"),
         @Index(name = "idx_cargo_volume", columnList = "volume"),
         @Index(name = "idx_cargo_price", columnList = "price"),
-        @Index(name = "idx_cargo_route", columnList = "from, to"),
+        @Index(name = "idx_cargo_route", columnList = "route_from, route_to"),
         @Index(name = "idx_cargo_dates", columnList = "ready_date, deliveryDate")
 })
 public class Cargo {
@@ -63,22 +63,42 @@ public class Cargo {
     @Column(name = "delivery_date", nullable = false)
     private LocalDate deliveryDate;
 
-    @Column(name = "route_from", nullable = false)
-    private String from;
+    @Embedded
+    private Route route;
 
-    @Column(name = "route_to", nullable = false)
-    private String to;
+    @Embedded
+    private Dimensions dimensions;
 
-    @Column(name = "length", nullable = false)
-    private Integer length;
+    @Data
+    @Embeddable
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Route {
+        @Column(name = "route_from", nullable = false)
+        private String from;
 
-    @Column(name = "width", nullable = false)
-    private Integer width;
+        @Column(name = "route_to", nullable = false)
+        private String to;
+    }
 
-    @Column(name = "height", nullable = false)
-    private Integer height;
+    @Data
+    @Embeddable
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Dimensions {
+        @Column(name = "length", nullable = false)
+        private Integer length;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+        @Column(name = "width", nullable = false)
+        private Integer width;
+
+        @Column(name = "height", nullable = false)
+        private Integer height;
+    }
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "cargo_order_id", referencedColumnName = "id", nullable = false)
     private CargoOrder cargoOrder;
 

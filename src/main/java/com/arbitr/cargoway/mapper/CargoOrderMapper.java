@@ -21,7 +21,7 @@ public interface CargoOrderMapper {
     @Mapping(source = "startExecution", target = "startExecution")
     @Mapping(source = "endExecution", target = "endExecution")
     @Mapping(source = "visibility", target = "visibilityStatus", qualifiedByName = "mapVisibilityStatus")
-    @Mapping(source = "cargo", target = "cargo", qualifiedByName = "toCargoDtoWithDetails")
+    @Mapping(source = "cargo", target = "cargo", qualifiedByName = "toCargoDto")
     @Mapping(source = "cargo.images", target = "cargo.images")
     @Mapping(source = "executor", target = "executor", qualifiedByName = "toProfileShortDto")
     @Mapping(source = "executorTransport", target = "executorTransport")
@@ -35,7 +35,7 @@ public interface CargoOrderMapper {
     @Mapping(source = "cargoOrder.startExecution", target = "startExecution")
     @Mapping(source = "cargoOrder.endExecution", target = "endExecution")
     @Mapping(source = "cargoOrder.visibility", target = "visibilityStatus", qualifiedByName = "mapVisibilityStatus")
-    @Mapping(source = "cargo", target = "cargo", qualifiedByName = "toCargoDtoWithDetails")
+    @Mapping(source = "cargo", target = "cargo", qualifiedByName = "toCargoDto")
     @Mapping(source = "images", target = "cargo.images")
     @Mapping(source = "cargoOrder.executor", target = "executor", qualifiedByName = "toProfileShortDto")
     @Mapping(source = "cargoOrder.executorTransport", target = "executorTransport")
@@ -59,40 +59,29 @@ public interface CargoOrderMapper {
                 .typePay(cargo.getTypePay())
                 .readyDate(cargo.getReadyDate())
                 .deliveryDate(cargo.getDeliveryDate())
+                .route(toRouteDto(cargo.getRoute()))
+                .dimensions(toDimensionsDto(cargo.getDimensions()))
                 .build();
     }
 
-    @Named("toCargoDtoWithDetails")
-    default CargoDto toCargoDtoWithDetails(Cargo cargo) {
-        if (cargo == null) {
-            return null;
-        }
-        CargoDto cargoDto = toCargoDto(cargo);
-        cargoDto.setRoute(toRouteDto(cargo));
-        cargoDto.setDimensions(toDimensionsDto(cargo));
-        return cargoDto;
-    }
-
-    @Named("toDimensionsDto")
-    default CargoDto.DimensionsDto toDimensionsDto(Cargo cargo) {
-        if (cargo == null) {
+    default CargoDto.DimensionsDto toDimensionsDto(Cargo.Dimensions dimensions) {
+        if (dimensions == null) {
             return null;
         }
         return CargoDto.DimensionsDto.builder()
-                .width(cargo.getWidth())
-                .height(cargo.getHeight())
-                .length(cargo.getLength())
+                .width(dimensions.getWidth())
+                .height(dimensions.getHeight())
+                .length(dimensions.getLength())
                 .build();
     }
 
-    @Named("toRouteDto")
-    default CargoDto.RouteDto toRouteDto(Cargo cargo) {
-        if (cargo == null) {
+    default CargoDto.RouteDto toRouteDto(Cargo.Route route) {
+        if (route == null) {
             return null;
         }
         return CargoDto.RouteDto.builder()
-                .from(cargo.getFrom())
-                .to(cargo.getTo())
+                .from(route.getFrom())
+                .to(route.getTo())
                 .build();
     }
 
@@ -122,11 +111,15 @@ public interface CargoOrderMapper {
                 .typePay(cargoDetails.getTypePay())
                 .readyDate(cargoDetails.getReadyDate())
                 .deliveryDate(cargoDetails.getDeliveryDate())
-                .from(cargoRouteDetails.getFrom())
-                .to(cargoRouteDetails.getTo())
-                .height(cargoDimensionsDetails.getHeight())
-                .width(cargoDimensionsDetails.getWidth())
-                .length(cargoDimensionsDetails.getLength())
+                .route(Cargo.Route.builder()
+                        .from(cargoRouteDetails.getFrom())
+                        .to(cargoRouteDetails.getTo())
+                        .build())
+                .dimensions(Cargo.Dimensions.builder()
+                        .height(cargoDimensionsDetails.getHeight())
+                        .width(cargoDimensionsDetails.getWidth())
+                        .length(cargoDimensionsDetails.getLength())
+                        .build())
                 .build();
     }
 }

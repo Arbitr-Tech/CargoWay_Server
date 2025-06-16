@@ -71,7 +71,7 @@ Cookie: {{access_token}}
 Accept: application/json
 
 ### [ЭТОТ ID НАДО ПЕРЕДАТЬ В СЦЕНАРИЙ В ФАЙЛЕ carrier]
-@cargo_order_id=d8ca6d98-7364-4644-a814-a10e0f68c09d
+@cargo_order_id=4ab433d2-d8df-40f8-85f3-878444e89269
 
 ### Получение деталей груза
 GET {{cargoUrl}}/{{cargo_order_id}}/

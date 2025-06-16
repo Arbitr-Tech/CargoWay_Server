@@ -227,27 +227,33 @@ public class CargoOrderServiceImpl implements CargoOrderService {
 
         if (cargoOrderUpdateRq.getDimensions() != null) {
             CargoDto.DimensionsDto newDimensions = cargoOrderUpdateRq.getDimensions();
+            Cargo.Dimensions currentDimensions = cargoDetails.getDimensions();
 
             if (newDimensions.getLength() != null) {
-                cargoDetails.setLength(newDimensions.getLength());
+                currentDimensions.setLength(newDimensions.getLength());
             }
             if (newDimensions.getWidth() != null) {
-                cargoDetails.setWidth(newDimensions.getWidth());
+                currentDimensions.setWidth(newDimensions.getWidth());
             }
             if (newDimensions.getHeight() != null) {
-                cargoDetails.setHeight(newDimensions.getHeight());
+                currentDimensions.setHeight(newDimensions.getHeight());
             }
+
+            cargoDetails.setDimensions(currentDimensions);
         }
 
         if (cargoOrderUpdateRq.getRoute() != null) {
             CargoDto.RouteDto newRoute = cargoOrderUpdateRq.getRoute();
+            Cargo.Route currenRoute = cargoDetails.getRoute();
 
             if (newRoute.getFrom() != null) {
-                cargoDetails.setFrom(newRoute.getFrom());
+                currenRoute.setFrom(newRoute.getFrom());
             }
             if (newRoute.getTo() != null) {
-                cargoDetails.setTo(newRoute.getTo());
+                currenRoute.setTo(newRoute.getTo());
             }
+
+            cargoDetails.setRoute(currenRoute);
         }
 
         if (cargoOrderUpdateRq.getImagesIds() != null) {
@@ -344,10 +350,11 @@ public class CargoOrderServiceImpl implements CargoOrderService {
         );
 
         Specification<Cargo> specification = CargoSpecification.withFilter(filterCargoRq, allowedStatuses);
-        Page<CargoOrder> filteredCargosPage = cargoOrderRepository.findAll(specification,
+        Page<Cargo> filteredCargosPage = cargoRepository.findAll(specification,
                 PageRequest.of(paginationRq.getPageNumber(), paginationRq.getPageSize()));
 
         List<CargoOrderRs> filteredCargoOrdersRs = filteredCargosPage.getContent().stream()
+                .map(Cargo::getCargoOrder)
                 .map(cargoOrderMapper::toRsDto)
                 .toList();
 

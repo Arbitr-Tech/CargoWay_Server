@@ -21,9 +21,6 @@ import java.util.UUID;
 
 @Repository
 public interface CargoOrderRepository extends JpaRepository<CargoOrder, UUID> {
-    @NotNull
-    @EntityGraph(attributePaths = {"cargo", "cargo.images"})
-    Page<CargoOrder> findAll(Specification<Cargo> spec, @NotNull Pageable pageable);
 
     @EntityGraph(attributePaths = {"cargo", "cargo.images"})
     Optional<CargoOrder> findCargoOrderByIdAndOwner_Id(UUID id, UUID ownerId);
