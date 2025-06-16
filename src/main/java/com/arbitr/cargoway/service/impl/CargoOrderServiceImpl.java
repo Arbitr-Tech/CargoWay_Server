@@ -14,10 +14,12 @@ import com.arbitr.cargoway.entity.CargoOrder;
 import com.arbitr.cargoway.entity.Image;
 import com.arbitr.cargoway.entity.Profile;
 import com.arbitr.cargoway.entity.enums.CargoOrderStatus;
+import com.arbitr.cargoway.event.EmailDto;
 import com.arbitr.cargoway.exception.BadRequestException;
 import com.arbitr.cargoway.exception.NotFoundException;
 import com.arbitr.cargoway.exception.ResourceConflictException;
 import com.arbitr.cargoway.mapper.CargoOrderMapper;
+import com.arbitr.cargoway.publisher.EmailEventPublisher;
 import com.arbitr.cargoway.repository.CargoOrderRepository;
 import com.arbitr.cargoway.repository.CargoOrderResponseRepository;
 import com.arbitr.cargoway.repository.CargoRepository;
@@ -46,6 +48,7 @@ public class CargoOrderServiceImpl implements CargoOrderService {
     private final CargoRepository cargoRepository;
     private final CargoOrderMapper cargoOrderMapper;
     private final CargoOrderResponseRepository cargoOrderResponseRepository;
+    private final EmailEventPublisher emailEventPublisher;
 
     public PaginationRs<CargoOrderRs> getGeneralCargosByCategory(CustomerVisibilityCategory customerVisibilityCategory,
                                                                  PaginationRq  paginationRq) {

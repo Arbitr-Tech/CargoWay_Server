@@ -1,14 +1,13 @@
 package com.arbitr.cargoway.service.impl;
 
 import com.arbitr.cargoway.dto.rs.cargo.CargoOrderRs;
-import com.arbitr.cargoway.entity.CargoOrder;
-import com.arbitr.cargoway.entity.CargoOrderResponse;
-import com.arbitr.cargoway.entity.Profile;
-import com.arbitr.cargoway.entity.Transport;
+import com.arbitr.cargoway.entity.*;
 import com.arbitr.cargoway.entity.enums.CargoOrderStatus;
+import com.arbitr.cargoway.event.EmailDto;
 import com.arbitr.cargoway.exception.NotFoundException;
 import com.arbitr.cargoway.exception.ResourceConflictException;
 import com.arbitr.cargoway.mapper.CargoOrderMapper;
+import com.arbitr.cargoway.publisher.EmailEventPublisher;
 import com.arbitr.cargoway.repository.CargoOrderRepository;
 import com.arbitr.cargoway.repository.CargoOrderResponseRepository;
 import com.arbitr.cargoway.service.CargoOrderResponseService;
@@ -29,6 +28,7 @@ public class CargoOrderResponseServiceImpl implements CargoOrderResponseService 
     private final CargoOrderService cargoOrderService;
     private final TransportService transportService;
     private final CargoOrderResponseRepository cargoOrderResponseRepository;
+    private final EmailEventPublisher emailEventPublisher;
     private final CargoOrderRepository cargoOrderRepository;
     private final CargoOrderMapper cargoOrderMapper;
 
@@ -56,6 +56,17 @@ public class CargoOrderResponseServiceImpl implements CargoOrderResponseService 
                 .build();
 
         foundCargoOrder.getResponses().add(newCargoOrderResponse);
+        Cargo.Route cargoRoute = foundCargoOrder.getCargo().getRoute();
+
+        emailEventPublisher.sendEmailEvent(
+                EmailDto.builder()
+                        .toEmail(foundCargoOrder.getOwner().getUser().getEmail())
+                        .subject("Отклик на заказ по маршруту: %s - %s".formatted(cargoRoute.getFrom(), cargoRoute.getTo()))
+                        .body("Перевозчик %s откликнулся на заказ. Войдите в ЛК, чтобы узнать подробности "
+                                .formatted(currentProfile.getUser().getUsername()))
+                        .build()
+        );
+
         cargoOrderResponseRepository.save(newCargoOrderResponse);
     }
 
@@ -85,6 +96,28 @@ public class CargoOrderResponseServiceImpl implements CargoOrderResponseService 
         currentCargoOrder.setExecutor(newExecutor);
         currentCargoOrder.setExecutorTransport(newTransport);
         currentCargoOrder.setStartExecution(LocalDateTime.now());
+
+        Profile ownerProfile = currentCargoOrder.getOwner();
+        ContactData ownerContactData = ownerProfile.getContactData();
+        ContactData executorContactData = currentCargoOrder.getExecutor().getContactData();
+
+        emailEventPublisher.sendEmailEvent(
+                EmailDto.builder()
+                        .toEmail(newExecutor.getUser().getEmail())
+                        .subject("Вас выбрали исполнителем")
+                        .body("Войдите в ЛК, чтобы узнать подробности. \nКонтактные данные для связи с заказчиком. Телефон: %s\n Email: %s, Telegram: %s"
+                                .formatted(ownerContactData.getPhoneNumber(), ownerProfile.getUser().getEmail(), ownerContactData.getTelegramLink()))
+                        .build()
+        );
+
+        emailEventPublisher.sendEmailEvent(
+                EmailDto.builder()
+                        .toEmail(ownerProfile.getUser().getEmail())
+                        .subject("Вы выбрали исполнителя")
+                        .body("Войдите в ЛК, чтобы узнать подробности. \nКонтактные данные для связи с перевозчиком. Телефон: %s\n Email: %s, Telegram: %s"
+                                .formatted(executorContactData.getPhoneNumber(), newExecutor.getUser().getEmail(), executorContactData.getTelegramLink()))
+                        .build()
+        );
 
         cargoOrderRepository.save(currentCargoOrder);
 
